@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bringi_app">
    <application
-        android:label="bringi_app"
+        android:label="Bringi"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
