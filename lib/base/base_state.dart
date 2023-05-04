@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 
-abstract class BaseState<W extends StatefulWidget> extends State<W> {
+import '../service_locator/service_locator.dart';
+import 'base_navigator.dart';
+import 'base_viewmodel.dart';
+
+abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
+    N extends BaseNavigator> extends State<W> implements BaseNavigator {
+  VM viewModel = serviceLocator<VM>();
+
+  N getNavigator();
+
   Widget buildBody();
 
   Drawer? buildScreenDrawer();
@@ -16,6 +25,7 @@ abstract class BaseState<W extends StatefulWidget> extends State<W> {
   @override
   void initState() {
     loadPageData();
+    viewModel.setNavigator(getNavigator());
     super.initState();
   }
 
@@ -38,7 +48,9 @@ abstract class BaseState<W extends StatefulWidget> extends State<W> {
         ),
       );
 
-  void loadPageData({dynamic value});
+  void loadPageData({
+    dynamic value,
+  });
 
   void push({required Widget widget}) {
     Navigator.of(context)

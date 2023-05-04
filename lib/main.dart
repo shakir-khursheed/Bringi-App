@@ -1,7 +1,10 @@
-import 'package:bringi_app/splash_screen/splash.dart';
+import 'package:bringi_app/service_locator/service_locator.dart';
 import 'package:flutter/material.dart';
 
+import 'splash_screen/ui/splash_screen.dart';
+
 void main() {
+  setupServices();
   runApp(const MyApp());
 }
 

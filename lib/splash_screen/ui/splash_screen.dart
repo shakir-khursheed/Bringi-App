@@ -1,5 +1,8 @@
+import 'package:bringi_app/signup_and_login/ui/user_registration_flow/user_resgistration_flow.dart';
+import 'package:bringi_app/splash_screen/navigator/splash_navigator.dart';
+import 'package:bringi_app/splash_screen/viewmodel/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
-import '../base/base_state.dart';
+import '../../base/base_state.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -8,10 +11,17 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends BaseState<SplashScreen> {
+class _SplashScreenState
+    extends BaseState<SplashScreen, SplashviewModel, SplashNavigator>
+    implements SplashNavigator {
   @override
   AppBar? buildAppBar() {
     return null;
+  }
+
+  @override
+  SplashNavigator getNavigator() {
+    return this;
   }
 
   @override
@@ -23,11 +33,9 @@ class _SplashScreenState extends BaseState<SplashScreen> {
       children: [
         SizedBox(
           width: MediaQuery.of(context).size.width,
-          child: Image(
-            image: AssetImage(
-              "assets/images/splash_logo.png",
-            ),
-            height: 200,
+          child: getAssetImage(
+            "splash_logo.png",
+            height: 140,
           ),
         ),
         const SizedBox(
@@ -53,7 +61,14 @@ class _SplashScreenState extends BaseState<SplashScreen> {
   }
 
   @override
-  void loadPageData({value}) {}
+  void loadPageData({value}) {
+    viewModel.checkAppSession();
+  }
+
+  @override
+  void navigateToLogin() {
+    pushandRemoveUntill(widget: UserRegistrationFlow());
+  }
 
   @override
   Future<bool> provideOnWillPopScopeCallBack() {
@@ -63,5 +78,15 @@ class _SplashScreenState extends BaseState<SplashScreen> {
   @override
   Color? setBackgroundColor() {
     return HexColor.fromHex("#051E43");
+  }
+
+  @override
+  void showMessage(String message) {
+    // TODO: implement showMessage
+  }
+
+  @override
+  void showNoInternetPage() {
+    // TODO: implement showNoInternetPage
   }
 }
