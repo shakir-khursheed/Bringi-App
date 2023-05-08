@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "775364245320",
+    "project_id": "bringi-4d4ef",
+    "storage_bucket": "bringi-4d4ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775364245320:android:8ee9611b46e8995bb4e57d",
+        "android_client_info": {
+          "package_name": "com.example.bringi_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775364245320-ho7f43h85nc3j0uqvgrg2un325vvj3pq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNkAetGwyD6gPK-qFvuKPhirvuBQjX5oQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775364245320-ho7f43h85nc3j0uqvgrg2un325vvj3pq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

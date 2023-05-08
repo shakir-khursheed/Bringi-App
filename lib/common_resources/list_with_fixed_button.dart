@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 class ListWithFixedButtonAtBottom extends StatelessWidget {
   final List<Widget> children;
   final List<Widget> fixedAtBottomChild;
+  final MainAxisAlignment? mainAxisAlignment;
   final Widget? columnWidgetForfixedButton;
-  const ListWithFixedButtonAtBottom({
-    Key? key,
-    required this.children,
-    required this.fixedAtBottomChild,
-    this.columnWidgetForfixedButton,
-  }) : super(key: key);
+  const ListWithFixedButtonAtBottom(
+      {Key? key,
+      required this.children,
+      required this.fixedAtBottomChild,
+      this.columnWidgetForfixedButton,
+      this.mainAxisAlignment})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
-      physics: BouncingScrollPhysics(),
       slivers: <Widget>[
         SliverToBoxAdapter(
           child: Column(
@@ -28,8 +29,9 @@ class ListWithFixedButtonAtBottom extends StatelessWidget {
             children: [
               columnWidgetForfixedButton ?? Container(),
               Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: fixedAtBottomChild),
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: fixedAtBottomChild,
+              ),
             ],
           ),
         )

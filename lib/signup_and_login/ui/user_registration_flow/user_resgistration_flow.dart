@@ -15,6 +15,7 @@ class _UserRegistrationFlowState
     extends BaseState<UserRegistrationFlow, LoginviewModel, LoginNavigator>
     implements LoginNavigator {
   int? currentIndex;
+  final _controller = PageController();
   @override
   AppBar? buildAppBar() {
     return null;
@@ -23,13 +24,20 @@ class _UserRegistrationFlowState
   @override
   Widget buildBody() {
     return PageView(
+      physics: NeverScrollableScrollPhysics(),
+      controller: _controller,
       onPageChanged: (index) {
         setState(() {
           currentIndex = index;
         });
       },
       children: [
-        PinScreen(),
+        PinScreen(
+          onPinsubmitted: () {
+            navigateToNextPage();
+          },
+          
+        ),
       ],
     );
   }
@@ -82,5 +90,10 @@ class _UserRegistrationFlowState
   @override
   LoginNavigator getNavigator() {
     return this;
+  }
+
+  void navigateToNextPage() {
+    _controller.nextPage(
+        duration: Duration(seconds: 1), curve: Curves.fastLinearToSlowEaseIn);
   }
 }

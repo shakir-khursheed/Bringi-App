@@ -83,16 +83,6 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
       ),
     );
   }
-
-  Widget getAssetImage(String assetName,
-      {double? height, double? width, BoxFit? fit}) {
-    return Image.asset(
-      "assets/images/$assetName",
-      height: height,
-      width: width,
-      fit: fit,
-    );
-  }
 }
 
 void showDialogMethod(

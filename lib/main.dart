@@ -1,10 +1,13 @@
 import 'package:bringi_app/service_locator/service_locator.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'splash_screen/ui/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
   setupServices();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

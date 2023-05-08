@@ -3,6 +3,7 @@ import 'package:bringi_app/splash_screen/navigator/splash_navigator.dart';
 import 'package:bringi_app/splash_screen/viewmodel/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
 import '../../base/base_state.dart';
+import '../../common_resources/get_asset_image.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
