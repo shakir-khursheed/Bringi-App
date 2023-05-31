@@ -1,3 +1,4 @@
+import 'package:bringi_app/signup_and_login/ui/choose_role_page.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow/user_resgistration_flow.dart';
 import 'package:bringi_app/splash_screen/navigator/splash_navigator.dart';
 import 'package:bringi_app/splash_screen/viewmodel/splash_viewmodel.dart';
@@ -68,7 +69,7 @@ class _SplashScreenState
 
   @override
   void navigateToLogin() {
-    pushandRemoveUntill(widget: UserRegistrationFlow());
+    pushandRemoveUntill(widget: ChooseRoleScreen());
   }
 
   @override

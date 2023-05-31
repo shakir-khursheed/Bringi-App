@@ -1,19 +1,23 @@
+import 'package:bringi_app/constants/role_identifier.dart';
 import 'package:bringi_app/signup_and_login/navigator/login_navigator.dart';
+import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/enter_phone_no_screen.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/pin_screen.dart';
-import 'package:bringi_app/signup_and_login/viewmodel/login_viewmodel.dart';
+import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
 import '../../../base/base_state.dart';
 
 class UserRegistrationFlow extends StatefulWidget {
-  const UserRegistrationFlow({super.key});
+  final RoleIdentifier roleIdentifier;
+  const UserRegistrationFlow({super.key, required this.roleIdentifier});
 
   @override
   State<UserRegistrationFlow> createState() => _UserRegistrationFlowState();
 }
 
-class _UserRegistrationFlowState
-    extends BaseState<UserRegistrationFlow, LoginviewModel, LoginNavigator>
-    implements LoginNavigator {
+class _UserRegistrationFlowState extends BaseState<
+    UserRegistrationFlow,
+    UserRegistrationViewModel,
+    UserRegistrationNavigator> implements UserRegistrationNavigator {
   int? currentIndex;
   final _controller = PageController();
   @override
@@ -32,11 +36,21 @@ class _UserRegistrationFlowState
         });
       },
       children: [
+        if (widget.roleIdentifier == RoleIdentifier.MASTERDISTRIBUTOR ||
+            widget.roleIdentifier == RoleIdentifier.AGENT)
+          EnterPhoneNoScreen(
+            onPhoneNoEntered: () {
+              navigateToNextPage();
+            },
+          ),
         PinScreen(
+          roleIdentifier: widget.roleIdentifier,
+          onResendCodeClicked: () {
+            navigateTopreviousPage();
+          },
           onPinsubmitted: () {
             navigateToNextPage();
           },
-          
         ),
       ],
     );
@@ -59,7 +73,7 @@ class _UserRegistrationFlowState
 
   @override
   void loadPageData({value}) {
-    // TODO: implement loadPageData
+    print(widget.roleIdentifier);
   }
 
   @override
@@ -88,12 +102,21 @@ class _UserRegistrationFlowState
   }
 
   @override
-  LoginNavigator getNavigator() {
+  UserRegistrationNavigator getNavigator() {
     return this;
   }
 
   void navigateToNextPage() {
     _controller.nextPage(
-        duration: Duration(seconds: 1), curve: Curves.fastLinearToSlowEaseIn);
+      duration: Duration(seconds: 1),
+      curve: Curves.fastLinearToSlowEaseIn,
+    );
+  }
+
+  void navigateTopreviousPage() {
+    _controller.previousPage(
+      duration: Duration(seconds: 1),
+      curve: Curves.fastLinearToSlowEaseIn,
+    );
   }
 }

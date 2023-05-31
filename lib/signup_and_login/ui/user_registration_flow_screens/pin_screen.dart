@@ -1,12 +1,20 @@
 import 'package:bringi_app/common_resources/common_button.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
 import 'package:bringi_app/common_resources/pin_input_field.dart';
+import 'package:bringi_app/constants/role_identifier.dart';
 import 'package:flutter/material.dart';
 import '../../../common_resources/get_asset_image.dart';
 
 class PinScreen extends StatefulWidget {
   final Function onPinsubmitted;
-  const PinScreen({super.key, required this.onPinsubmitted});
+  final Function onResendCodeClicked;
+  final RoleIdentifier roleIdentifier;
+  const PinScreen({
+    super.key,
+    required this.onPinsubmitted,
+    required this.onResendCodeClicked,
+    required this.roleIdentifier,
+  });
 
   @override
   State<PinScreen> createState() => _PinScreenState();
@@ -35,7 +43,7 @@ class _PinScreenState extends State<PinScreen> {
             height: 20,
           ),
           Text(
-            "Verify Code send by distributor",
+            "Verify Code send by ${(widget.roleIdentifier == RoleIdentifier.RETAILER) ? "distributor" : "Master distributor"}",
             style: TextStyle(
               color: Colors.white,
               fontSize: 15,
@@ -59,6 +67,15 @@ class _PinScreenState extends State<PinScreen> {
           SecurityPinInputField(
             onPinCompleted: (value) {},
             fieldvalidator: (value) {},
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextButton(
+            onPressed: () {
+              widget.onResendCodeClicked();
+            },
+            child: Text("Resend code"),
           ),
         ],
         fixedAtBottomChild: [
