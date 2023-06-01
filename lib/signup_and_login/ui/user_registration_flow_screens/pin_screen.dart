@@ -9,12 +9,13 @@ class PinScreen extends StatefulWidget {
   final Function onPinsubmitted;
   final Function onResendCodeClicked;
   final RoleIdentifier roleIdentifier;
-  const PinScreen({
-    super.key,
-    required this.onPinsubmitted,
-    required this.onResendCodeClicked,
-    required this.roleIdentifier,
-  });
+  final String? mobileNo;
+  const PinScreen(
+      {super.key,
+      required this.onPinsubmitted,
+      required this.onResendCodeClicked,
+      required this.roleIdentifier,
+      this.mobileNo});
 
   @override
   State<PinScreen> createState() => _PinScreenState();
@@ -43,7 +44,10 @@ class _PinScreenState extends State<PinScreen> {
             height: 20,
           ),
           Text(
-            "Verify Code send by ${(widget.roleIdentifier == RoleIdentifier.RETAILER) ? "distributor" : "Master distributor"}",
+            (widget.roleIdentifier == RoleIdentifier.MASTERDISTRIBUTOR ||
+                    widget.roleIdentifier == RoleIdentifier.DISTRIBUTOR)
+                ? "Verify Code send on ${widget.mobileNo}"
+                : "Verify Code send by ${(widget.roleIdentifier == RoleIdentifier.RETAILER) ? "distributor" : "Master distributor"}",
             style: TextStyle(
               color: Colors.white,
               fontSize: 15,
@@ -71,11 +75,17 @@ class _PinScreenState extends State<PinScreen> {
           SizedBox(
             height: 10,
           ),
-          TextButton(
-            onPressed: () {
-              widget.onResendCodeClicked();
-            },
-            child: Text("Resend code"),
+          Visibility(
+            visible: (widget.roleIdentifier == RoleIdentifier.RETAILER ||
+                    widget.roleIdentifier == RoleIdentifier.DISTRIBUTOR)
+                ? false
+                : true,
+            child: TextButton(
+              onPressed: () {
+                widget.onResendCodeClicked();
+              },
+              child: Text("Resend code"),
+            ),
           ),
         ],
         fixedAtBottomChild: [

@@ -1,5 +1,5 @@
 import 'package:bringi_app/constants/role_identifier.dart';
-import 'package:bringi_app/signup_and_login/navigator/login_navigator.dart';
+import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/enter_phone_no_screen.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/pin_screen.dart';
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
