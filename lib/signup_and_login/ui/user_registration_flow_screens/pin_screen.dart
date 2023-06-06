@@ -45,7 +45,7 @@ class _PinScreenState extends State<PinScreen> {
           ),
           Text(
             (widget.roleIdentifier == RoleIdentifier.MASTERDISTRIBUTOR ||
-                    widget.roleIdentifier == RoleIdentifier.DISTRIBUTOR)
+                    widget.roleIdentifier == RoleIdentifier.AGENT)
                 ? "Verify Code send on ${widget.mobileNo}"
                 : "Verify Code send by ${(widget.roleIdentifier == RoleIdentifier.RETAILER) ? "distributor" : "Master distributor"}",
             style: TextStyle(

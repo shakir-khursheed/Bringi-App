@@ -1,7 +1,9 @@
 import 'package:bringi_app/constants/role_identifier.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
+import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/enter_business_detail_page.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/enter_phone_no_screen.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/pin_screen.dart';
+import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/upload_business_documents_screen.dart';
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
 import '../../../base/base_state.dart';
@@ -52,6 +54,12 @@ class _UserRegistrationFlowState extends BaseState<
             navigateToNextPage();
           },
         ),
+        AddBusinessDetailScreen(
+          onBusinessDetailsUploaded: () {
+            navigateToNextPage();
+          },
+        ),
+        UploadBusinessDocumentScreen()
       ],
     );
   }
