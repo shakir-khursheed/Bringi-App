@@ -25,9 +25,6 @@ class _AddBusinessDetailScreenState extends State<AddBusinessDetailScreen> {
       ),
       child: ListWithFixedButtonAtBottom(
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 8,
-          ),
           Center(
             child: getAssetImage(
               "splash_logo.png",
@@ -49,6 +46,11 @@ class _AddBusinessDetailScreenState extends State<AddBusinessDetailScreen> {
             height: 20,
           ),
           CommonInputField(
+            prefixIcon: Icon(
+              Icons.store,
+              color: Colors.black,
+              size: 25,
+            ),
             onTextChange: (text) {},
             labelText: "Retailer name",
             textInputType: TextInputType.name,
@@ -60,6 +62,19 @@ class _AddBusinessDetailScreenState extends State<AddBusinessDetailScreen> {
             height: 20,
           ),
           CommonInputField(
+            requireSuffixIcon: true,
+            suffixIcon: IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.location_pin,
+                color: Colors.black,
+              ),
+            ),
+            prefixIcon: Icon(
+              Icons.pin_drop_rounded,
+              color: Colors.black,
+              size: 25,
+            ),
             onTextChange: (text) {},
             labelText: "Address",
             textInputType: TextInputType.name,

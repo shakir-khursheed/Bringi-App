@@ -31,9 +31,6 @@ class _PinScreenState extends State<PinScreen> {
       ),
       child: ListWithFixedButtonAtBottom(
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 8,
-          ),
           Center(
             child: getAssetImage(
               "splash_logo.png",

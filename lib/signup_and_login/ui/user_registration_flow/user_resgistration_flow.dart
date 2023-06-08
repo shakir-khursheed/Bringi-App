@@ -1,3 +1,4 @@
+import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/constants/role_identifier.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/enter_business_detail_page.dart';
@@ -24,7 +25,14 @@ class _UserRegistrationFlowState extends BaseState<
   final _controller = PageController();
   @override
   AppBar? buildAppBar() {
-    return null;
+    return commonAppbarForScreens(
+      title: "",
+      onTap: () {
+        navigateTopreviousPage();
+      },
+      centerTitle: false,
+      backColor: Colors.white,
+    );
   }
 
   @override

@@ -4,25 +4,26 @@ import 'package:flutter/services.dart';
 import '../base/base_state.dart';
 
 class CommonInputField extends StatefulWidget {
-  const CommonInputField(
-      {Key? key,
-      required this.onTextChange,
-      required this.labelText,
-      required this.textInputType,
-      required this.fieldValidator,
-      required this.maxlength,
-      required this.isAutovalidateModeon,
-      this.suffixIcon,
-      this.initialValue,
-      this.inputFormatter,
-      this.requireSuffixIcon,
-      this.notSignUpfield,
-      this.isOrderField,
-      this.maxlines,
-      this.textCapitalization,
-      this.textEditingController,
-      this.onError})
-      : super(key: key);
+  const CommonInputField({
+    Key? key,
+    required this.onTextChange,
+    required this.labelText,
+    required this.textInputType,
+    required this.fieldValidator,
+    required this.maxlength,
+    required this.isAutovalidateModeon,
+    this.suffixIcon,
+    this.initialValue,
+    this.inputFormatter,
+    this.requireSuffixIcon,
+    this.notSignUpfield,
+    this.isOrderField,
+    this.maxlines,
+    this.textCapitalization,
+    this.textEditingController,
+    this.onError,
+    this.prefixIcon,
+  }) : super(key: key);
   final Function onTextChange;
   final String labelText;
   final TextInputType textInputType;
@@ -39,6 +40,7 @@ class CommonInputField extends StatefulWidget {
   final TextEditingController? textEditingController;
   final Widget? suffixIcon;
   final bool? onError;
+  final Widget? prefixIcon;
   @override
   State<CommonInputField> createState() => _CommonInputFieldState();
 }
@@ -78,6 +80,7 @@ class _CommonInputFieldState extends State<CommonInputField> {
           ? AutovalidateMode.onUserInteraction
           : null,
       decoration: InputDecoration(
+        prefixIcon: widget.prefixIcon,
         suffixIcon:
             (widget.requireSuffixIcon ?? false) ? widget.suffixIcon : null,
         counterText: "",
