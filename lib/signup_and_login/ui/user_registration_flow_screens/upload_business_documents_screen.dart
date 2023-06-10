@@ -11,7 +11,15 @@ import '../../../common_resources/get_asset_image.dart';
 
 class UploadBusinessDocumentScreen extends StatefulWidget {
   final UserRegistrationViewModel vm;
-  const UploadBusinessDocumentScreen({super.key, required this.vm});
+  final Function addDocument;
+  final Function removeDocument;
+  final Function removeAllDocuments;
+  const UploadBusinessDocumentScreen(
+      {super.key,
+      required this.vm,
+      required this.addDocument,
+      required this.removeDocument,
+      required this.removeAllDocuments});
 
   @override
   State<UploadBusinessDocumentScreen> createState() =>
@@ -55,120 +63,65 @@ class _UploadBusinessDocumentScreenState
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                    children: [
-                      BusinessDocumentCard(
-                        documentFile: widget.vm.getDocumentProof1,
-                        index: 1,
-                        onTap: () {
-                          showPicImageBottomSheet(
-                            onCameraPicked: () async {
-                              try {
-                                var pickedImage =
-                                    await _pickImage(ImageSource.camera);
-                                widget.vm.setDocumentProof1 =
-                                    File(pickedImage?.path ?? "");
-                              } on PathNotFoundException catch (e) {
-                                widget.vm.setDocumentProof1 = File("");
-                              }
-                            },
-                            onGalleryPicked: () async {
-                              try {
-                                var pickedImage =
-                                    await _pickImage(ImageSource.gallery);
-                                widget.vm.setDocumentProof1 =
-                                    File(pickedImage?.path ?? "");
-                              } on PathNotFoundException catch (e) {
-                                widget.vm.setDocumentProof1 = File("");
-                              }
-                            },
-                          );
-                        },
-                      ),
-                      BusinessDocumentCard(
-                        documentFile: widget.vm.getDocumentProof2,
-                        index: 2,
-                        onTap: () {
-                          showPicImageBottomSheet(
-                            onCameraPicked: () async {
-                              try {
-                                var pickedImage =
-                                    await _pickImage(ImageSource.camera);
-                                widget.vm.setDocumentProof2 =
-                                    File(pickedImage?.path ?? "");
-                              } on PathNotFoundException catch (e) {
-                                widget.vm.setDocumentProof2 = File("");
-                              }
-                            },
-                            onGalleryPicked: () async {
-                              try {
-                                var pickedImage =
-                                    await _pickImage(ImageSource.gallery);
-                                widget.vm.setDocumentProof2 =
-                                    File(pickedImage?.path ?? "");
-                              } on PathNotFoundException catch (e) {
-                                widget.vm.setDocumentProof2 = File("");
-                              }
-                            },
-                          );
-                        },
-                      ),
-                      BusinessDocumentCard(
-                        documentFile: widget.vm.getDocumentProof3,
-                        index: 3,
-                        onTap: () {
-                          showPicImageBottomSheet(
-                            onCameraPicked: () async {
-                              try {
-                                var pickedImage =
-                                    await _pickImage(ImageSource.camera);
-                                widget.vm.setDocumentProof3 =
-                                    File(pickedImage?.path ?? "");
-                              } on PathNotFoundException catch (e) {
-                                widget.vm.setDocumentProof3 = File("");
-                              }
-                            },
-                            onGalleryPicked: () async {
-                              try {
-                                var pickedImage =
-                                    await _pickImage(ImageSource.gallery);
-                                widget.vm.setDocumentProof3 =
-                                    File(pickedImage?.path ?? "");
-                              } on PathNotFoundException catch (e) {
-                                widget.vm.setDocumentProof3 = File("");
-                              }
-                            },
-                          );
-                        },
-                      ),
-                    ],
+                  child: GridView.builder(
+                    itemCount: widget.vm.documentProofs.length + 1,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder: (context, index) {
+                      return (index == 0)
+                          ? InkWell(
+                              onTap: () {
+                                (widget.vm.documentProofs.length >= 4)
+                                    ? widget.removeAllDocuments()
+                                    : showPicImageBottomSheet(
+                                        onCameraPicked: () async {
+                                          final pickedImage = await _pickImage(
+                                              ImageSource.camera);
+                                          widget.addDocument(
+                                              File(pickedImage?.path ?? ""));
+                                        },
+                                        onGalleryPicked: () async {
+                                          final pickedImage = await _pickImage(
+                                              ImageSource.gallery);
+                                          widget.addDocument(
+                                              File(pickedImage?.path ?? ""));
+                                        },
+                                      );
+                              },
+                              child: Card(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      (widget.vm.documentProofs.length >= 4)
+                                          ? Icons.remove_circle
+                                          : Icons.add_circle,
+                                      size: 50,
+                                      color: Colors.black,
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text((widget.vm.documentProofs.length >= 4)
+                                        ? "Remove all"
+                                        : "Add document")
+                                  ],
+                                ),
+                              ),
+                            )
+                          : BusinessDocumentCard(
+                              index: index - 1,
+                              documentFile: widget.vm.documentProofs,
+                              onLongPress: () {
+                                widget.removeDocument(index);
+                              });
+                    },
                   ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Visibility(
-                  visible: ((widget.vm.getDocumentProof1?.path != "" &&
-                              widget.vm.getDocumentProof1 != null) ||
-                          (widget.vm.getDocumentProof2?.path != "" &&
-                              widget.vm.getDocumentProof2 != null) ||
-                          (widget.vm.getDocumentProof3?.path != "" &&
-                              widget.vm.getDocumentProof3 != null))
-                      ? true
-                      : false,
-                  child: TextButton.icon(
-                    onPressed: () {
-                      widget.vm.setDocumentProof1 = File("");
-                      widget.vm.setDocumentProof2 = File("");
-                      widget.vm.setDocumentProof3 = File("");
-                    },
-                    icon: Icon(Icons.remove_circle),
-                    label: Text("Remove documents"),
-                  ),
-                )
               ],
             ),
           ),
@@ -192,17 +145,16 @@ class _UploadBusinessDocumentScreenState
   }
 
   BusinessDocumentCard(
-      {int? index, required Function onTap, File? documentFile}) {
+      {int? index, List<File?>? documentFile, required Function onLongPress}) {
     return InkWell(
-      onTap: () {
-        print(documentFile?.path);
-        onTap();
+      onLongPress: () {
+        onLongPress();
       },
       child: Card(
-        child: (documentFile != null)
-            ? (documentFile.path != "")
+        child: (documentFile?.length != 0)
+            ? (documentFile?[index ?? 0]?.path != "")
                 ? Image(
-                    image: FileImage(documentFile),
+                    image: FileImage(documentFile![index ?? 0]!),
                     fit: BoxFit.cover,
                   )
                 : Center(

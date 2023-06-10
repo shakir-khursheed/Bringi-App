@@ -50,11 +50,16 @@ class _UserRegistrationFlowState extends BaseState<
       children: [
         if (widget.roleIdentifier == RoleIdentifier.MASTERDISTRIBUTOR ||
             widget.roleIdentifier == RoleIdentifier.AGENT)
-          EnterPhoneNoScreen(
-            onPhoneNoEntered: (value) {
-              mobileNo = value;
-              navigateToNextPage();
-            },
+          Consumer<UserRegistrationViewModel>(
+            builder: (context, vm, child) => EnterPhoneNoScreen(
+              onPhoneNoEntered: (value) {
+                mobileNo = value;
+                vm.userCredentials.addAll({
+                  "mobile": "+91$mobileNo",
+                });
+                navigateToNextPage();
+              },
+            ),
           ),
         PinScreen(
           mobileNo: mobileNo,
@@ -66,14 +71,31 @@ class _UserRegistrationFlowState extends BaseState<
             navigateToNextPage();
           },
         ),
-        AddBusinessDetailScreen(
-          roleIdentifier: widget.roleIdentifier,
-          onBusinessDetailsUploaded: () {
-            navigateToNextPage();
-          },
+        Consumer<UserRegistrationViewModel>(
+          builder: (context, vm, child) => AddBusinessDetailScreen(
+            roleIdentifier: widget.roleIdentifier,
+            onBusinessDetailsUploaded: (name, address) {
+              vm.userCredentials.addAll({
+                "shopName": name,
+                "address": address,
+              });
+              navigateToNextPage();
+            },
+          ),
         ),
         Consumer<UserRegistrationViewModel>(
-          builder: (context, vm, child) => UploadBusinessDocumentScreen(vm: vm),
+          builder: (context, vm, child) => UploadBusinessDocumentScreen(
+            removeAllDocuments: () {
+              vm.removeAllDocuments();
+            },
+            addDocument: (value) {
+              vm.addDocuments(value);
+            },
+            removeDocument: (index) {
+              vm.removeDocument(index - 1);
+            },
+            vm: vm,
+          ),
         )
       ],
     );

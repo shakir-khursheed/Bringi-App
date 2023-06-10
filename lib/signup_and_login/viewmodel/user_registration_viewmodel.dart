@@ -7,32 +7,40 @@ import 'package:bringi_app/signup_and_login/repo/user_registration_repo.dart';
 
 class UserRegistrationViewModel
     extends BaseViewModel<UserRegistrationNavigator, UserRegistrationRepo> {
-  File? _documentProof1;
-  File? _documentProof2;
-  File? _documentProof3;
+  List<File> documentProofs = [];
   UserModel? _userModel;
+  Map<String, dynamic> userCredentials = Map<String, dynamic>();
 
 //getter & setters
-
-  File? get getDocumentProof1 => _documentProof1;
-  set setDocumentProof1(File? value) {
-    _documentProof1 = value;
+  void addDocuments(value) {
+    documentProofs.add(value);
     notifyListeners();
   }
 
-  File? get getDocumentProof2 => _documentProof2;
-  set setDocumentProof2(File? value) {
-    _documentProof2 = value;
+  void removeDocument(index) {
+    documentProofs.removeAt(index);
     notifyListeners();
   }
 
-  File? get getDocumentProof3 => _documentProof3;
-  set setDocumentProof3(File? value) {
-    _documentProof3 = value;
+  void removeAllDocuments() {
+    documentProofs.clear();
     notifyListeners();
   }
+
+  void uploadDocumentProof() async {}
 
   Future<void> registerUser() async {
+    UserModel(
+      mobileNo: userCredentials['mobileNo'],
+      shopName: userCredentials['shopName'],
+      address: userCredentials['address'],
+      docProof1Url: userCredentials['docProof1Url'],
+      docProof2Url: userCredentials['docProof2Url'],
+      docProof3Url: userCredentials['docProof3Url'],
+      role: userCredentials['role'],
+      createdAt: userCredentials['createdAt'],
+    );
+    showLoading = true;
     try {
       await repository
           .registerUser(
@@ -49,6 +57,8 @@ class UserRegistrationViewModel
       getNavigator().showMessage(e.message);
     } catch (e) {
       getNavigator().showMessage("error registering user!");
+    } finally {
+      showLoading = false;
     }
   }
 

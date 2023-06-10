@@ -26,6 +26,7 @@ class _ButtonWithLoaderState extends State<ButtonWithLoader> {
             onTap: (widget.isdisabled ?? false)
                 ? () {}
                 : () {
+                    FocusScope.of(context).unfocus();
                     widget.onPressed();
                   },
             child: Container(
