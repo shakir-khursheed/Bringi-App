@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../service_locator/service_locator.dart';
 import 'base_navigator.dart';
@@ -41,7 +42,10 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
             drawer: buildScreenDrawer(),
             appBar: buildAppBar(),
             backgroundColor: setBackgroundColor() ?? Colors.white,
-            body: buildBody(),
+            body: ChangeNotifierProvider.value(
+              value: viewModel,
+              child: buildBody(),
+            ),
             floatingActionButton: buildFloatingActionButton(),
             bottomNavigationBar: buildBottomNavbar(),
           ),

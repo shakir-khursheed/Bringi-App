@@ -7,6 +7,7 @@ import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/pi
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/upload_business_documents_screen.dart';
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../base/base_state.dart';
 
 class UserRegistrationFlow extends StatefulWidget {
@@ -23,6 +24,7 @@ class _UserRegistrationFlowState extends BaseState<
     UserRegistrationNavigator> implements UserRegistrationNavigator {
   int? currentIndex;
   final _controller = PageController();
+  String? mobileNo;
   @override
   AppBar? buildAppBar() {
     return commonAppbarForScreens(
@@ -49,11 +51,13 @@ class _UserRegistrationFlowState extends BaseState<
         if (widget.roleIdentifier == RoleIdentifier.MASTERDISTRIBUTOR ||
             widget.roleIdentifier == RoleIdentifier.AGENT)
           EnterPhoneNoScreen(
-            onPhoneNoEntered: () {
+            onPhoneNoEntered: (value) {
+              mobileNo = value;
               navigateToNextPage();
             },
           ),
         PinScreen(
+          mobileNo: mobileNo,
           roleIdentifier: widget.roleIdentifier,
           onResendCodeClicked: () {
             navigateTopreviousPage();
@@ -63,11 +67,14 @@ class _UserRegistrationFlowState extends BaseState<
           },
         ),
         AddBusinessDetailScreen(
+          roleIdentifier: widget.roleIdentifier,
           onBusinessDetailsUploaded: () {
             navigateToNextPage();
           },
         ),
-        UploadBusinessDocumentScreen()
+        Consumer<UserRegistrationViewModel>(
+          builder: (context, vm, child) => UploadBusinessDocumentScreen(vm: vm),
+        )
       ],
     );
   }

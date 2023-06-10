@@ -22,80 +22,98 @@ class PinScreen extends StatefulWidget {
 }
 
 class _PinScreenState extends State<PinScreen> {
+  final _formKey = GlobalKey<FormState>();
+  String? code;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 30,
-      ),
-      child: ListWithFixedButtonAtBottom(
-        children: [
-          Center(
-            child: getAssetImage(
-              "splash_logo.png",
-              height: 100,
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 30,
+        ),
+        child: ListWithFixedButtonAtBottom(
+          children: [
+            Center(
+              child: getAssetImage(
+                "splash_logo.png",
+                height: 100,
+              ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-            (widget.roleIdentifier == RoleIdentifier.MASTERDISTRIBUTOR ||
-                    widget.roleIdentifier == RoleIdentifier.AGENT)
-                ? "Verify Code send on ${widget.mobileNo}"
-                : "Verify Code send by ${(widget.roleIdentifier == RoleIdentifier.RETAILER) ? "distributor" : "Master distributor"}",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w300,
+            SizedBox(
+              height: 20,
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-            "Enter code",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
+            Text(
+              (widget.roleIdentifier == RoleIdentifier.MASTERDISTRIBUTOR ||
+                      widget.roleIdentifier == RoleIdentifier.AGENT)
+                  ? "Verify Code send on ${widget.mobileNo}"
+                  : "Verify Code send by ${(widget.roleIdentifier == RoleIdentifier.RETAILER) ? "distributor" : "Master distributor"}",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w300,
+              ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          SecurityPinInputField(
-            onPinCompleted: (value) {},
-            fieldvalidator: (value) {},
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Visibility(
-            visible: (widget.roleIdentifier == RoleIdentifier.RETAILER ||
-                    widget.roleIdentifier == RoleIdentifier.DISTRIBUTOR)
-                ? false
-                : true,
-            child: TextButton(
-              onPressed: () {
-                widget.onResendCodeClicked();
-              },
-              child: Text("Resend code"),
+            SizedBox(
+              height: 20,
             ),
-          ),
-        ],
-        fixedAtBottomChild: [
-          Expanded(
-            child: ButtonFactory.buildUniversalButtonWithText(
-              "VERIFY",
-              context,
-              () {
+            Text(
+              "Enter code",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            SecurityPinInputField(
+              onPinCompleted: (value) {
+                code = value;
                 widget.onPinsubmitted();
               },
+              fieldvalidator: (value) {
+                if (value.toString().length < 6 &&
+                    value.toString().isNotEmpty) {
+                  return "Code should be 6 digits";
+                }
+                if (value.toString().isEmpty) {
+                  return "Code cannot be empty";
+                }
+              },
             ),
-          )
-        ],
+            SizedBox(
+              height: 10,
+            ),
+            Visibility(
+              visible: (widget.roleIdentifier == RoleIdentifier.RETAILER ||
+                      widget.roleIdentifier == RoleIdentifier.DISTRIBUTOR)
+                  ? false
+                  : true,
+              child: TextButton(
+                onPressed: () {
+                  widget.onResendCodeClicked();
+                },
+                child: Text("Resend code"),
+              ),
+            ),
+          ],
+          fixedAtBottomChild: [
+            Expanded(
+              child: ButtonFactory.buildUniversalButtonWithText(
+                "VERIFY",
+                context,
+                () {
+                  if (_formKey.currentState!.validate()) {
+                    widget.onPinsubmitted();
+                  }
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
