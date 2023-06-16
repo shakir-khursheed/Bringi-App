@@ -1,5 +1,6 @@
 import 'package:bringi_app/common_resources/common_input_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../common_resources/common_button.dart';
 import '../../../common_resources/get_asset_image.dart';
@@ -7,7 +8,9 @@ import '../../../common_resources/list_with_fixed_button.dart';
 
 class EnterPhoneNoScreen extends StatefulWidget {
   final Function onPhoneNoEntered;
-  const EnterPhoneNoScreen({super.key, required this.onPhoneNoEntered});
+  final bool showLoading;
+  const EnterPhoneNoScreen(
+      {super.key, required this.onPhoneNoEntered, required this.showLoading});
 
   @override
   State<EnterPhoneNoScreen> createState() => _EnterPhoneNoScreenState();
@@ -35,10 +38,21 @@ class _EnterPhoneNoScreenState extends State<EnterPhoneNoScreen> {
               ),
             ),
             SizedBox(
+              height: 30,
+            ),
+            Text(
+              "Login to Continue in Bringi",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            SizedBox(
               height: 20,
             ),
             Text(
-              "Enter mobile no",
+              "Mobile no",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -49,6 +63,11 @@ class _EnterPhoneNoScreenState extends State<EnterPhoneNoScreen> {
               height: 20,
             ),
             CommonInputField(
+              inputFormatter: [
+                FilteringTextInputFormatter.allow(
+                  RegExp("[0-9]"),
+                )
+              ],
               onTextChange: (text) {
                 mobileNo = text;
               },
@@ -77,6 +96,7 @@ class _EnterPhoneNoScreenState extends State<EnterPhoneNoScreen> {
                     widget.onPhoneNoEntered(mobileNo);
                   }
                 },
+                showLoading: widget.showLoading,
               ),
             )
           ],

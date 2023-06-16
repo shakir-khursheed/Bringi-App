@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "775364245320-qamdjm63m019jjneevci41j3p7722527.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bringi_app",
+            "certificate_hash": "3a5ddfe7d2f1995dbe08e67da9c1d418c62f4f23"
+          }
+        },
+        {
           "client_id": "775364245320-ho7f43h85nc3j0uqvgrg2un325vvj3pq.apps.googleusercontent.com",
           "client_type": 3
         }

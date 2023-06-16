@@ -7,7 +7,7 @@ import 'package:bringi_app/splash_screen/repo/splash_repo.dart';
 class SplashviewModel extends BaseViewModel<SplashNavigator, SplashRepo> {
   void checkAppSession() {
     Timer(const Duration(seconds: 1), () {
-      getNavigator().navigateToLogin();
+      getNavigator().navigateToVerifyUserFlow();
     });
   }
 }

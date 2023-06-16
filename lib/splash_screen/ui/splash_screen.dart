@@ -1,5 +1,5 @@
-import 'package:bringi_app/signup_and_login/ui/choose_role_page.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow/user_resgistration_flow.dart';
+import 'package:bringi_app/signup_and_login/ui/verify_user_flow/verify_user_flow.dart';
 import 'package:bringi_app/splash_screen/navigator/splash_navigator.dart';
 import 'package:bringi_app/splash_screen/viewmodel/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -68,8 +68,10 @@ class _SplashScreenState
   }
 
   @override
-  void navigateToLogin() {
-    pushandRemoveUntill(widget: ChooseRoleScreen());
+  void navigateToVerifyUserFlow() {
+    pushandRemoveUntill(
+      widget: VerifyUserFlow(),
+    );
   }
 
   @override
@@ -80,11 +82,6 @@ class _SplashScreenState
   @override
   Color? setBackgroundColor() {
     return HexColor.fromHex("#051E43");
-  }
-
-  @override
-  void showMessage(String message) {
-    // TODO: implement showMessage
   }
 
   @override

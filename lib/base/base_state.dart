@@ -31,6 +31,17 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
   }
 
   @override
+  void showMessage(String message, {Color? color}) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 2),
+        backgroundColor: (color != null) ? color : HexColor.fromHex("#000000"),
+        content: Text(message),
+      ));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) => WillPopScope(
         onWillPop: provideOnWillPopScopeCallBack,
         child: GestureDetector(

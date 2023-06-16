@@ -1,18 +1,18 @@
 import 'package:bringi_app/common_resources/common_input_field.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
-import 'package:bringi_app/constants/role_identifier.dart';
+import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/map_screen.dart';
+import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common_resources/common_button.dart';
 import '../../../common_resources/get_asset_image.dart';
 
 class AddBusinessDetailScreen extends StatefulWidget {
   final Function onBusinessDetailsUploaded;
-  final RoleIdentifier roleIdentifier;
   const AddBusinessDetailScreen({
     super.key,
     required this.onBusinessDetailsUploaded,
-    required this.roleIdentifier,
   });
 
   @override
@@ -24,11 +24,9 @@ class _AddBusinessDetailScreenState extends State<AddBusinessDetailScreen> {
   final _formKey = GlobalKey<FormState>();
   String? name;
   String? address;
-  String? role;
 
   @override
   void initState() {
-    checkRole();
     super.initState();
   }
 
@@ -63,28 +61,30 @@ class _AddBusinessDetailScreenState extends State<AddBusinessDetailScreen> {
             SizedBox(
               height: 20,
             ),
-            CommonInputField(
-              prefixIcon: Icon(
-                Icons.store,
-                color: Colors.black,
-                size: 25,
+            Consumer<UserRegistrationViewModel>(
+              builder: (context, vm, child) => CommonInputField(
+                prefixIcon: Icon(
+                  Icons.store,
+                  color: Colors.black,
+                  size: 25,
+                ),
+                onTextChange: (text) {
+                  name = text;
+                },
+                labelText: "${vm.role} name",
+                textInputType: TextInputType.name,
+                fieldValidator: (value) {
+                  if (value.toString().length <= 2 &&
+                      value.toString().isNotEmpty) {
+                    return "Please enter value name atleast 4 characters";
+                  }
+                  if (value.toString().isEmpty) {
+                    return "Name cannot be empty";
+                  }
+                },
+                maxlength: 30,
+                isAutovalidateModeon: false,
               ),
-              onTextChange: (text) {
-                name = text;
-              },
-              labelText: "$role name",
-              textInputType: TextInputType.name,
-              fieldValidator: (value) {
-                if (value.toString().length <= 2 &&
-                    value.toString().isNotEmpty) {
-                  return "Please enter value name atleast 4 characters";
-                }
-                if (value.toString().isEmpty) {
-                  return "Name cannot be empty";
-                }
-              },
-              maxlength: 30,
-              isAutovalidateModeon: false,
             ),
             SizedBox(
               height: 20,
@@ -92,7 +92,13 @@ class _AddBusinessDetailScreenState extends State<AddBusinessDetailScreen> {
             CommonInputField(
               requireSuffixIcon: true,
               suffixIcon: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MapScreen(),
+                      ));
+                },
                 icon: Icon(
                   Icons.location_pin,
                   color: Colors.black,
@@ -137,30 +143,5 @@ class _AddBusinessDetailScreenState extends State<AddBusinessDetailScreen> {
         ),
       ),
     );
-  }
-
-  void checkRole() {
-    switch (widget.roleIdentifier) {
-      case RoleIdentifier.RETAILER:
-        {
-          role = "Retailer";
-          break;
-        }
-      case RoleIdentifier.DISTRIBUTOR:
-        {
-          role = "Distributor";
-          break;
-        }
-      case RoleIdentifier.MASTERDISTRIBUTOR:
-        {
-          role = "Master-Distributor";
-          break;
-        }
-      case RoleIdentifier.AGENT:
-        {
-          role = "Agent";
-          break;
-        }
-    }
   }
 }

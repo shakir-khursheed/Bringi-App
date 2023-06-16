@@ -1,29 +1,27 @@
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
-import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/enter_business_detail_page.dart';
-import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/upload_business_documents_screen.dart';
-import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/verify_referel_code_page.dart';
+import 'package:bringi_app/signup_and_login/ui/user_registration_flow/user_resgistration_flow.dart';
+import 'package:bringi_app/signup_and_login/ui/verify_user_flow_screens/enter_phone_no_screen.dart';
+import 'package:bringi_app/signup_and_login/ui/verify_user_flow_screens/verify_otp_screen.dart';
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../base/base_state.dart';
 
-class UserRegistrationFlow extends StatefulWidget {
-  const UserRegistrationFlow({
-    super.key,
-  });
+class VerifyUserFlow extends StatefulWidget {
+  const VerifyUserFlow({super.key});
 
   @override
-  State<UserRegistrationFlow> createState() => _UserRegistrationFlowState();
+  State<VerifyUserFlow> createState() => _VerifyUserFlowState();
 }
 
-class _UserRegistrationFlowState extends BaseState<
-    UserRegistrationFlow,
+class _VerifyUserFlowState extends BaseState<
+    VerifyUserFlow,
     UserRegistrationViewModel,
     UserRegistrationNavigator> implements UserRegistrationNavigator {
   int? currentIndex;
   final _controller = PageController();
-  String? mobileNo;
+  String? mobile;
   @override
   AppBar? buildAppBar() {
     return commonAppbarForScreens(
@@ -48,37 +46,27 @@ class _UserRegistrationFlowState extends BaseState<
       },
       children: [
         Consumer<UserRegistrationViewModel>(
-          builder: (context, vm, child) => VerifyReferrelCodeScreen(
-            onPinsubmitted: (code) {
-              vm.checkRefferelCode(code);
-            },
-          ),
-        ),
-        Consumer<UserRegistrationViewModel>(
-          builder: (context, vm, child) => AddBusinessDetailScreen(
-            onBusinessDetailsUploaded: (name, address) {
-              vm.userCredentials.addAll({
-                "shopName": name,
-                "address": address,
-              });
+          builder: (context, vm, child) => EnterPhoneNoScreen(
+            showLoading: vm.showLoading,
+            onPhoneNoEntered: (value) {
+              mobile = "+91$value";
+              vm.verifyUser(mobile ?? "");
               navigateToNextPage();
             },
           ),
         ),
         Consumer<UserRegistrationViewModel>(
-          builder: (context, vm, child) => UploadBusinessDocumentScreen(
-            removeAllDocuments: () {
-              vm.removeAllDocuments();
+          builder: (context, vm, child) => VerifyOTPScreen(
+            showLoading: vm.showLoading,
+            mobileNo: mobile,
+            onPinsubmitted: (code) {
+              vm.VerifyOTP(code);
             },
-            addDocument: (value) {
-              vm.addDocuments(value);
+            onResendCodeClicked: () {
+              navigateTopreviousPage();
             },
-            removeDocument: (index) {
-              vm.removeDocument(index - 1);
-            },
-            vm: vm,
           ),
-        )
+        ),
       ],
     );
   }
@@ -100,11 +88,6 @@ class _UserRegistrationFlowState extends BaseState<
 
   @override
   void loadPageData({value}) {}
-
-  @override
-  void navigateToLogin() {
-    // TODO: implement navigateToLogin
-  }
 
   @override
   Future<bool> provideOnWillPopScopeCallBack() {
@@ -147,16 +130,16 @@ class _UserRegistrationFlowState extends BaseState<
 
   @override
   void onRefferelCodeMatch() {
-    navigateToNextPage();
+    // TODO: implement onRefferelCodeMatch
   }
-  
+
   @override
   void navigateToDashboard() {
     // TODO: implement navigateToDashboard
   }
-  
+
   @override
   void navigateToUserRegistrationFlow() {
-    // TODO: implement navigateToUserRegistrationFlow
+    pushandRemoveUntill(widget: UserRegistrationFlow());
   }
 }

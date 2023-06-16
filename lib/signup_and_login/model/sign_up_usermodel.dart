@@ -3,9 +3,7 @@ class UserModel {
   final String mobileNo;
   final String shopName;
   final String address;
-  final String docProof1Url;
-  final String? docProof2Url;
-  final String? docProof3Url;
+  final List<DocumentProof> documentProofs;
   final String role;
   final String createdAt;
   const UserModel({
@@ -13,9 +11,7 @@ class UserModel {
     required this.mobileNo,
     required this.shopName,
     required this.address,
-    required this.docProof1Url,
-    this.docProof2Url,
-    this.docProof3Url,
+    required this.documentProofs,
     required this.role,
     required this.createdAt,
   });
@@ -24,9 +20,8 @@ class UserModel {
         mobileNo: json?["mobileNo"],
         shopName: json?["shopName"],
         address: json?["address"],
-        docProof1Url: json?["docProof1Url"],
-        docProof2Url: json?["docProof2Url"],
-        docProof3Url: json?["docProof3Url"],
+        documentProofs: List<DocumentProof>.from(
+            json?["documentUrl"].map((x) => DocumentProof.fromJson(x))),
         role: json?["role"],
         createdAt: json?["createdAt"],
       );
@@ -35,10 +30,20 @@ class UserModel {
         "mobileNo": mobileNo,
         "shopName": shopName,
         "address": address,
-        "docProof1Url": docProof1Url,
-        "docProof2Url": docProof2Url,
-        "docProof3Url": docProof3Url,
+        "documentProofs":
+            List<dynamic>.from(documentProofs.map((e) => e.toJson())),
         "role": role,
         "createdAt": createdAt,
+      };
+}
+
+class DocumentProof {
+  String? documentUrl;
+  DocumentProof({this.documentUrl});
+  factory DocumentProof.fromJson(Map<String, dynamic>? json) => DocumentProof(
+        documentUrl: json?["documentUrl"],
+      );
+  Map<String?, dynamic> toJson() => {
+        "documentUrl": documentUrl,
       };
 }

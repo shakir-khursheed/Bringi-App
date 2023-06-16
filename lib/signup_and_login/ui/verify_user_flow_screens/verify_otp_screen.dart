@@ -5,23 +5,23 @@ import 'package:bringi_app/constants/role_identifier.dart';
 import 'package:flutter/material.dart';
 import '../../../common_resources/get_asset_image.dart';
 
-class PinScreen extends StatefulWidget {
+class VerifyOTPScreen extends StatefulWidget {
   final Function onPinsubmitted;
   final Function onResendCodeClicked;
-  final RoleIdentifier roleIdentifier;
   final String? mobileNo;
-  const PinScreen(
+  final bool showLoading;
+  const VerifyOTPScreen(
       {super.key,
       required this.onPinsubmitted,
       required this.onResendCodeClicked,
-      required this.roleIdentifier,
+      required this.showLoading,
       this.mobileNo});
 
   @override
-  State<PinScreen> createState() => _PinScreenState();
+  State<VerifyOTPScreen> createState() => _VerifyOTPScreenState();
 }
 
-class _PinScreenState extends State<PinScreen> {
+class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
   final _formKey = GlobalKey<FormState>();
   String? code;
   @override
@@ -45,10 +45,7 @@ class _PinScreenState extends State<PinScreen> {
               height: 20,
             ),
             Text(
-              (widget.roleIdentifier == RoleIdentifier.MASTERDISTRIBUTOR ||
-                      widget.roleIdentifier == RoleIdentifier.AGENT)
-                  ? "Verify Code send on ${widget.mobileNo}"
-                  : "Verify Code send by ${(widget.roleIdentifier == RoleIdentifier.RETAILER) ? "distributor" : "Master distributor"}",
+              "Verify code send on ${widget.mobileNo}",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -72,7 +69,7 @@ class _PinScreenState extends State<PinScreen> {
             SecurityPinInputField(
               onPinCompleted: (value) {
                 code = value;
-                widget.onPinsubmitted();
+                widget.onPinsubmitted(value);
               },
               fieldvalidator: (value) {
                 if (value.toString().length < 6 &&
@@ -87,17 +84,11 @@ class _PinScreenState extends State<PinScreen> {
             SizedBox(
               height: 10,
             ),
-            Visibility(
-              visible: (widget.roleIdentifier == RoleIdentifier.RETAILER ||
-                      widget.roleIdentifier == RoleIdentifier.DISTRIBUTOR)
-                  ? false
-                  : true,
-              child: TextButton(
-                onPressed: () {
-                  widget.onResendCodeClicked();
-                },
-                child: Text("Resend code"),
-              ),
+            TextButton(
+              onPressed: () {
+                widget.onResendCodeClicked();
+              },
+              child: Text("Resend code"),
             ),
           ],
           fixedAtBottomChild: [
@@ -107,9 +98,10 @@ class _PinScreenState extends State<PinScreen> {
                 context,
                 () {
                   if (_formKey.currentState!.validate()) {
-                    widget.onPinsubmitted();
+                    widget.onPinsubmitted(code);
                   }
                 },
+                showLoading: widget.showLoading,
               ),
             )
           ],

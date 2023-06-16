@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bringi_app/common_resources/common_bottom_sheet.dart';
 import 'package:bringi_app/common_resources/common_button.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
+import 'package:bringi_app/constants/role_identifier.dart';
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,12 +15,13 @@ class UploadBusinessDocumentScreen extends StatefulWidget {
   final Function addDocument;
   final Function removeDocument;
   final Function removeAllDocuments;
-  const UploadBusinessDocumentScreen(
-      {super.key,
-      required this.vm,
-      required this.addDocument,
-      required this.removeDocument,
-      required this.removeAllDocuments});
+  const UploadBusinessDocumentScreen({
+    super.key,
+    required this.vm,
+    required this.addDocument,
+    required this.removeDocument,
+    required this.removeAllDocuments,
+  });
 
   @override
   State<UploadBusinessDocumentScreen> createState() =>
@@ -28,12 +30,18 @@ class UploadBusinessDocumentScreen extends StatefulWidget {
 
 class _UploadBusinessDocumentScreenState
     extends State<UploadBusinessDocumentScreen> {
+  String? role;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
-        vertical: 30,
+        vertical: 20,
       ),
       child: ListWithFixedButtonAtBottom(
         children: [
@@ -55,6 +63,17 @@ class _UploadBusinessDocumentScreenState
             ),
           ),
           SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Add business documents for KYC verification (note: remove document by long press)",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.w200,
+            ),
+          ),
+          SizedBox(
             height: 20,
           ),
           SizedBox(
@@ -67,6 +86,8 @@ class _UploadBusinessDocumentScreenState
                     itemCount: widget.vm.documentProofs.length + 1,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
                     ),
                     itemBuilder: (context, index) {
                       return (index == 0)
@@ -89,7 +110,8 @@ class _UploadBusinessDocumentScreenState
                                         },
                                       );
                               },
-                              child: Card(
+                              child: Container(
+                                color: Colors.white,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -103,9 +125,12 @@ class _UploadBusinessDocumentScreenState
                                     SizedBox(
                                       height: 20,
                                     ),
-                                    Text((widget.vm.documentProofs.length >= 4)
-                                        ? "Remove all"
-                                        : "Add document")
+                                    Text(
+                                      (widget.vm.documentProofs.length >= 4)
+                                          ? "Remove all"
+                                          : "Add document",
+                                      style: TextStyle(color: Colors.black),
+                                    )
                                   ],
                                 ),
                               ),
@@ -136,6 +161,7 @@ class _UploadBusinessDocumentScreenState
                 "Submit",
                 context,
                 () {},
+                showLoading: vm.showLoading,
               ),
             ),
           ),
@@ -147,24 +173,15 @@ class _UploadBusinessDocumentScreenState
   BusinessDocumentCard(
       {int? index, List<File?>? documentFile, required Function onLongPress}) {
     return InkWell(
-      onLongPress: () {
-        onLongPress();
-      },
-      child: Card(
-        child: (documentFile?.length != 0)
-            ? (documentFile?[index ?? 0]?.path != "")
-                ? Image(
-                    image: FileImage(documentFile![index ?? 0]!),
-                    fit: BoxFit.cover,
-                  )
-                : Center(
-                    child: Text("Doc $index"),
-                  )
-            : Center(
-                child: Text("Doc $index"),
-              ),
-      ),
-    );
+        onLongPress: () {
+          onLongPress();
+        },
+        child: (documentFile?[index ?? 0]?.path != "")
+            ? Image(
+                image: FileImage(documentFile![index ?? 0]!),
+                fit: BoxFit.cover,
+              )
+            : null);
   }
 
   void showPicImageBottomSheet(
