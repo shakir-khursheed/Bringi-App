@@ -31,6 +31,7 @@ class _VerifyUserFlowState extends BaseState<
       },
       centerTitle: false,
       backColor: Colors.white,
+      requireBackButton: false,
     );
   }
 
@@ -49,8 +50,10 @@ class _VerifyUserFlowState extends BaseState<
           builder: (context, vm, child) => EnterPhoneNoScreen(
             showLoading: vm.showLoading,
             onPhoneNoEntered: (value) {
+              vm.showLoading = true;
               mobile = "+91$value";
               vm.verifyUser(mobile ?? "");
+              vm.startTimerFunc();
               navigateToNextPage();
             },
           ),
@@ -63,6 +66,7 @@ class _VerifyUserFlowState extends BaseState<
               vm.VerifyOTP(code);
             },
             onResendCodeClicked: () {
+              vm.resendCode();
               navigateTopreviousPage();
             },
           ),
@@ -141,5 +145,10 @@ class _VerifyUserFlowState extends BaseState<
   @override
   void navigateToUserRegistrationFlow() {
     pushandRemoveUntill(widget: UserRegistrationFlow());
+  }
+
+  @override
+  void navigateTonextPage() {
+    navigateToNextPage();
   }
 }

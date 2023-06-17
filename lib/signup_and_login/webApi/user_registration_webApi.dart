@@ -39,6 +39,7 @@ class UserRegistrationWebApiImpl implements UserRegistrationWebApi {
       phoneNumber: mobile,
       verificationCompleted: (PhoneAuthCredential credentails) =>
           onVerificationCompleted!(credentails),
+      timeout: Duration(seconds: 30),
       verificationFailed: (FirebaseAuthException e) => onVerificationFailed!(e),
       codeSent: (String verificationId, int? resendToken) =>
           onCodeSent!(verificationId, resendToken),

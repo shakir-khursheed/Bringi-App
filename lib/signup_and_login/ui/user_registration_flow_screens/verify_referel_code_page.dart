@@ -39,21 +39,26 @@ class _VerifyReferrelCodeScreenState extends State<VerifyReferrelCodeScreen> {
               ),
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
-            Text(
-              "Verify refferel code",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w300,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Refferel code verification",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ],
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             Text(
-              "Enter code",
+              "Enter refferel code",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 15,

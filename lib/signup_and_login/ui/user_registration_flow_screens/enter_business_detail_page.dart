@@ -71,7 +71,8 @@ class _AddBusinessDetailScreenState extends State<AddBusinessDetailScreen> {
                 onTextChange: (text) {
                   name = text;
                 },
-                labelText: "${vm.role} name",
+                labelText:
+                    "${vm.role?.substring(0, 1)}${vm.role?.substring(1).toLowerCase()} name",
                 textInputType: TextInputType.name,
                 fieldValidator: (value) {
                   if (value.toString().length <= 2 &&

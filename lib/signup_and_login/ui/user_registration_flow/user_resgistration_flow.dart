@@ -33,6 +33,8 @@ class _UserRegistrationFlowState extends BaseState<
       },
       centerTitle: false,
       backColor: Colors.white,
+      requireBackButton:
+          (currentIndex == 0 || currentIndex == 1) ? false : true,
     );
   }
 
@@ -149,14 +151,19 @@ class _UserRegistrationFlowState extends BaseState<
   void onRefferelCodeMatch() {
     navigateToNextPage();
   }
-  
+
   @override
   void navigateToDashboard() {
     // TODO: implement navigateToDashboard
   }
-  
+
   @override
   void navigateToUserRegistrationFlow() {
     // TODO: implement navigateToUserRegistrationFlow
+  }
+
+  @override
+  void navigateTonextPage() {
+    // TODO: implement navigateTonextPage
   }
 }

@@ -1,18 +1,20 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:bringi_app/base/base_viewmodel.dart';
 import 'package:bringi_app/signup_and_login/model/refferel_code_model.dart';
+import 'package:bringi_app/signup_and_login/model/sign_up_usermodel.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/repo/user_registration_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:pinput/pinput.dart';
 
 class UserRegistrationViewModel
     extends BaseViewModel<UserRegistrationNavigator, UserRegistrationRepo> {
   List<File> documentProofs = [];
+  List<DocumentProof> documenturls = [];
   Map<String, dynamic> userCredentials = Map<String, dynamic>();
   CollectionReference? Imgref;
   RefferalCodeModel? refferalCodeModelResponse;
@@ -20,6 +22,31 @@ class UserRegistrationViewModel
   firebase_storage.Reference? ref;
   String? recievedVerificationId;
   String? role;
+  Timer? timer;
+  int startTimer = 30;
+  String time = '00.00';
+
+  void startTimerFunc() {
+    timer = Timer.periodic(Duration(seconds: 1), (_) {
+      if (startTimer > 0) {
+        startTimer--;
+        int minutes = startTimer ~/ 60;
+        int seconds = startTimer % 60;
+        time = minutes.toString().padLeft(2, "0") +
+            ":" +
+            seconds.toString().padLeft(2, "0");
+        notifyListeners();
+      } else {
+        timer?.cancel();
+      }
+    });
+  }
+
+  void resendCode() {
+    startTimer = 30;
+    notifyListeners();
+  }
+
 //getter & setters
   void addDocuments(value) {
     documentProofs.add(value);
@@ -36,6 +63,10 @@ class UserRegistrationViewModel
     notifyListeners();
   }
 
+  void uploadDocuments() {
+    userCredentials.addAll({});
+  }
+
   void verifyUser(String mobileNo) async {
     showLoading = true;
     try {
@@ -47,7 +78,10 @@ class UserRegistrationViewModel
               });
         },
         onVerificationFailed: (e) {
-          getNavigator().showMessage(e.toString(), color: Colors.red);
+          getNavigator().showMessage(
+            e.toString(),
+            color: Colors.red[900],
+          );
         },
         onCodeSent: (verificationId, resendToken) {
           recievedVerificationId = verificationId;
@@ -55,7 +89,7 @@ class UserRegistrationViewModel
         codeAutoRetrivalTimeOut: (verificationId) {},
       );
     } catch (e) {
-      getNavigator().showMessage(e.toString(), color: Colors.red);
+      getNavigator().showMessage(e.toString(), color: Colors.red[900]);
     } finally {
       showLoading = false;
     }
@@ -78,8 +112,8 @@ class UserRegistrationViewModel
             })
         .catchError((error, stackTrace) => {
               getNavigator().showMessage(
-                error.toString(),
-                color: Colors.red,
+                "Invalid OTP ${error}",
+                color: Colors.red[900],
               )
             });
     showLoading = false;

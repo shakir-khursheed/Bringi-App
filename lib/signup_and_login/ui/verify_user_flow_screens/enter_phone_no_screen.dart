@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:bringi_app/common_resources/common_input_field.dart';
+import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common_resources/common_button.dart';
 import '../../../common_resources/get_asset_image.dart';
@@ -38,18 +42,23 @@ class _EnterPhoneNoScreenState extends State<EnterPhoneNoScreen> {
               ),
             ),
             SizedBox(
-              height: 30,
+              height: 20,
             ),
-            Text(
-              "Login to Continue in Bringi",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w300,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Login to continue in Bringi",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ],
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             Text(
               "Mobile no",
@@ -87,18 +96,20 @@ class _EnterPhoneNoScreenState extends State<EnterPhoneNoScreen> {
             )
           ],
           fixedAtBottomChild: [
-            Expanded(
-              child: ButtonFactory.buildUniversalButtonWithText(
-                "NEXT",
-                context,
-                () {
-                  if (_formKey.currentState!.validate()) {
-                    widget.onPhoneNoEntered(mobileNo);
-                  }
-                },
-                showLoading: widget.showLoading,
+            Consumer<UserRegistrationViewModel>(
+              builder: (context, vm, child) => Expanded(
+                child: ButtonFactory.buildUniversalButtonWithText(
+                  "NEXT",
+                  context,
+                  () {
+                    if (_formKey.currentState!.validate()) {
+                      widget.onPhoneNoEntered(mobileNo);
+                    }
+                  },
+                  showLoading: vm.showLoading,
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),

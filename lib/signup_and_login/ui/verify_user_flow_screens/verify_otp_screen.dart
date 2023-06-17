@@ -2,7 +2,9 @@ import 'package:bringi_app/common_resources/common_button.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
 import 'package:bringi_app/common_resources/pin_input_field.dart';
 import 'package:bringi_app/constants/role_identifier.dart';
+import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../common_resources/get_asset_image.dart';
 
 class VerifyOTPScreen extends StatefulWidget {
@@ -44,19 +46,26 @@ class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
             SizedBox(
               height: 20,
             ),
-            Text(
-              "Verify code send on ${widget.mobileNo}",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w300,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Text(
+                    "Verify code send on ${widget.mobileNo}",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ),
+              ],
             ),
             SizedBox(
               height: 20,
             ),
             Text(
-              "Enter code",
+              "Enter SMS code",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 15,
@@ -74,21 +83,40 @@ class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
               fieldvalidator: (value) {
                 if (value.toString().length < 6 &&
                     value.toString().isNotEmpty) {
-                  return "Code should be 6 digits";
+                  return "SMS code should be 6 digits";
                 }
                 if (value.toString().isEmpty) {
-                  return "Code cannot be empty";
+                  return "SMS code cannot be empty";
                 }
               },
             ),
             SizedBox(
               height: 10,
             ),
-            TextButton(
-              onPressed: () {
-                widget.onResendCodeClicked();
-              },
-              child: Text("Resend code"),
+            Consumer<UserRegistrationViewModel>(
+              builder: (context, vm, child) => TextButton(
+                onPressed: (vm.startTimer != 0)
+                    ? () {}
+                    : () {
+                        widget.onResendCodeClicked();
+                      },
+                child: Row(
+                  children: [
+                    Text(
+                      "Resend code",
+                      style: TextStyle(
+                          color:
+                              (vm.startTimer != 0) ? Colors.grey : Colors.blue),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Visibility(
+                        visible: (vm.startTimer != 0) ? true : false,
+                        child: Text("${vm.time}")),
+                  ],
+                ),
+              ),
             ),
           ],
           fixedAtBottomChild: [

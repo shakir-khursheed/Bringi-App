@@ -35,7 +35,7 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         duration: const Duration(seconds: 2),
-        backgroundColor: (color != null) ? color : HexColor.fromHex("#000000"),
+        backgroundColor: (color != null) ? color : Colors.green[900],
         content: Text(message),
       ));
     }

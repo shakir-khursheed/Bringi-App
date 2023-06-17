@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pinput/pinput.dart';
 
 class SecurityPinInputField extends StatefulWidget {
@@ -42,6 +43,11 @@ class _SecurityPinInputFieldState extends State<SecurityPinInputField> {
       controller: widget.controller,
       androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsUserConsentApi,
       listenForMultipleSmsOnAndroid: true,
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(
+          RegExp("[0-9]"),
+        )
+      ],
       defaultPinTheme: defaultPinTheme,
       validator: (value) => widget.fieldvalidator(value),
       hapticFeedbackType: HapticFeedbackType.heavyImpact,

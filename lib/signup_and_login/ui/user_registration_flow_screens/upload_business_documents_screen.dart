@@ -160,7 +160,9 @@ class _UploadBusinessDocumentScreenState
               child: ButtonFactory.buildUniversalButtonWithText(
                 "Submit",
                 context,
-                () {},
+                () {
+                  vm.uploadDocuments();
+                },
                 showLoading: vm.showLoading,
               ),
             ),

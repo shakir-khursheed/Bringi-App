@@ -4,4 +4,5 @@ abstract class UserRegistrationNavigator extends BaseNavigator {
   void onRefferelCodeMatch();
   void navigateToUserRegistrationFlow();
   void navigateToDashboard();
+  void navigateTonextPage();
 }
