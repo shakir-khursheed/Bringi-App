@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:bringi_app/common_resources/common_bottom_sheet.dart';
 import 'package:bringi_app/common_resources/common_button.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
-import 'package:bringi_app/constants/role_identifier.dart';
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

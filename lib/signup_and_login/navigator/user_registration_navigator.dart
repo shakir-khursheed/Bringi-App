@@ -5,4 +5,5 @@ abstract class UserRegistrationNavigator extends BaseNavigator {
   void navigateToUserRegistrationFlow();
   void navigateToDashboard();
   void navigateTonextPage();
+  void navigateTOKYCscreen();
 }

@@ -1,6 +1,7 @@
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/enter_business_detail_page.dart';
+import 'package:bringi_app/signup_and_login/ui/kyc_approved_or_rejected_page.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/upload_business_documents_screen.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow_screens/verify_referel_code_page.dart';
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
@@ -9,8 +10,10 @@ import 'package:provider/provider.dart';
 import '../../../base/base_state.dart';
 
 class UserRegistrationFlow extends StatefulWidget {
+  final int? Index;
   const UserRegistrationFlow({
     super.key,
+    this.Index,
   });
 
   @override
@@ -22,20 +25,28 @@ class _UserRegistrationFlowState extends BaseState<
     UserRegistrationViewModel,
     UserRegistrationNavigator> implements UserRegistrationNavigator {
   int? currentIndex;
-  final _controller = PageController();
+  final _controller = PageController(
+    initialPage: 0,
+  );
   String? mobileNo;
   @override
   AppBar? buildAppBar() {
     return commonAppbarForScreens(
       title: "",
       onTap: () {
-        navigateTopreviousPage();
+        navigateTofirstPage();
       },
       centerTitle: false,
       backColor: Colors.white,
       requireBackButton:
-          (currentIndex == 0 || currentIndex == 1) ? false : true,
+          (currentIndex == 0 || currentIndex == 1 || currentIndex == 3)
+              ? false
+              : true,
     );
+  }
+
+  void navigateTofirstPage() {
+    _controller.jumpToPage(1);
   }
 
   @override
@@ -80,7 +91,7 @@ class _UserRegistrationFlowState extends BaseState<
             },
             vm: vm,
           ),
-        )
+        ),
       ],
     );
   }
@@ -102,11 +113,6 @@ class _UserRegistrationFlowState extends BaseState<
 
   @override
   void loadPageData({value}) {}
-
-  @override
-  void navigateToLogin() {
-    // TODO: implement navigateToLogin
-  }
 
   @override
   Future<bool> provideOnWillPopScopeCallBack() {
@@ -164,6 +170,14 @@ class _UserRegistrationFlowState extends BaseState<
 
   @override
   void navigateTonextPage() {
-    // TODO: implement navigateTonextPage
+    _controller.nextPage(
+      duration: Duration(seconds: 1),
+      curve: Curves.fastLinearToSlowEaseIn,
+    );
+  }
+
+  @override
+  void navigateTOKYCscreen() {
+    pushandRemoveUntill(widget: KYCstatusPage());
   }
 }

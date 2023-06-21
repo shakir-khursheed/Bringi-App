@@ -3,28 +3,28 @@ import 'dart:io';
 
 import 'package:bringi_app/base/base_viewmodel.dart';
 import 'package:bringi_app/signup_and_login/model/refferel_code_model.dart';
-import 'package:bringi_app/signup_and_login/model/sign_up_usermodel.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/repo/user_registration_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class UserRegistrationViewModel
     extends BaseViewModel<UserRegistrationNavigator, UserRegistrationRepo> {
   List<File> documentProofs = [];
-  List<DocumentProof> documenturls = [];
+  List<String> documenturls = [];
   Map<String, dynamic> userCredentials = Map<String, dynamic>();
   CollectionReference? Imgref;
   RefferalCodeModel? refferalCodeModelResponse;
   FirebaseAuth _auth = FirebaseAuth.instance;
-  firebase_storage.Reference? ref;
+  FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   String? recievedVerificationId;
   String? role;
   Timer? timer;
   int startTimer = 30;
   String time = '00.00';
+  String? KYCstatus;
 
   void startTimerFunc() {
     timer = Timer.periodic(Duration(seconds: 1), (_) {
@@ -63,8 +63,29 @@ class UserRegistrationViewModel
     notifyListeners();
   }
 
-  void uploadDocuments() {
-    userCredentials.addAll({});
+  void uploadDocuments() async {
+    var uid = await repository.getUid();
+    showLoading = true;
+    try {
+      for (int i = 0; i < documentProofs.length; i++) {
+        await _firebaseStorage
+            .ref()
+            .child("KYC-Documents/$uid/${documentProofs[i]}")
+            .putFile(documentProofs[i])
+            .then((p0) async {
+          return p0.ref.getDownloadURL().then((downloadurl) async {
+            return documenturls.add(downloadurl);
+          });
+        });
+      }
+      getNavigator().showMessage("Documents uploaded successfully");
+      userCredentials.addAll({
+        "createdAt": DateTime.now().toString(),
+      });
+      registerUser();
+    } catch (e) {
+      print(e);
+    }
   }
 
   void verifyUser(String mobileNo) async {
@@ -88,6 +109,29 @@ class UserRegistrationViewModel
         },
         codeAutoRetrivalTimeOut: (verificationId) {},
       );
+    } catch (e) {
+      getNavigator().showMessage(e.toString(), color: Colors.red[900]);
+    } finally {
+      showLoading = false;
+    }
+  }
+
+  void registerUser() async {
+    showLoading = true;
+    try {
+      await repository.registerUser(
+        mobileNo: "",
+        name: userCredentials["shopName"],
+        address: userCredentials["address"],
+        downloadUrl: documenturls,
+        createdAt: userCredentials["createdAt"],
+        role: await repository.getUserRole(),
+      );
+      getNavigator().navigateTOKYCscreen();
+      getNavigator().showMessage(
+        "User registered successfully. wait for KYC to be approved",
+      );
+      repository.setKYCSTATUS("PENDING");
     } catch (e) {
       getNavigator().showMessage(e.toString(), color: Colors.red[900]);
     } finally {
@@ -138,5 +182,20 @@ class UserRegistrationViewModel
       showLoading = false;
     }
   }
+
+  void checkKYCstatus() async {
+    showLoading = true;
+    try {
+      var response = await repository.checkKYCstatus();
+      KYCstatus = response.kycStatus;
+      repository.setKYCSTATUS(KYCstatus ?? "PENDING");
+      notifyListeners();
+    } catch (e) {
+      getNavigator().showMessage(e.toString(), color: Colors.red.shade900);
+    } finally {
+      showLoading = false;
+    }
+  }
+
 //end
 }

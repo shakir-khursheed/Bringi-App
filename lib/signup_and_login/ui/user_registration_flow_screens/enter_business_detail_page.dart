@@ -135,7 +135,7 @@ class _AddBusinessDetailScreenState extends State<AddBusinessDetailScreen> {
                 context,
                 () {
                   if (_formKey.currentState!.validate()) {
-                    widget.onBusinessDetailsUploaded(address, name);
+                    widget.onBusinessDetailsUploaded(name, address);
                   }
                 },
               ),

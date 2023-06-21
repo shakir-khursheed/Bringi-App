@@ -151,4 +151,9 @@ class _VerifyUserFlowState extends BaseState<
   void navigateTonextPage() {
     navigateToNextPage();
   }
+  
+  @override
+  void navigateTOKYCscreen() {
+    // TODO: implement navigateTOKYCscreen
+  }
 }

@@ -14,8 +14,17 @@ abstract class BaseRepo<W extends BaseWebApi> {
     _authTokenStorage.mSetUID(uid);
   }
 
+  void setKYCSTATUS(String status) {
+    _authTokenStorage.mSetKYCSTATUS(status);
+  }
+
   Future<String?> getUid() async {
     var response = await _authTokenStorage.mGetUid();
+    return response;
+  }
+
+  Future<String?> getKYCSTATUS() async {
+    var response = await _authTokenStorage.mGetKYCSTATUS();
     return response;
   }
 

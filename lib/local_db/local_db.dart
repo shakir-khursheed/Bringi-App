@@ -6,6 +6,7 @@ abstract class AuthTokenStorage {
   static const String USER = "PREF_KEY_USER";
   static const String UID = "UID";
   static const String ROLE = "ROLE";
+  static const String KYCSTATUS = "KYCSTATUS";
 
   Future<Box> openHiveBox(String boxName) async {
     if (!kIsWeb && !Hive.isBoxOpen(boxName)) {
@@ -19,9 +20,19 @@ abstract class AuthTokenStorage {
     box.put(ROLE, role);
   }
 
+  void mSetKYCSTATUS(var status) async {
+    var box = await openHiveBox(USER);
+    box.put(KYCSTATUS, status);
+  }
+
   void mSetUID(var uid) async {
     var box = await openHiveBox(USER);
     box.put(UID, uid);
+  }
+
+  Future<String?> mGetKYCSTATUS() async {
+    var box = await openHiveBox(USER);
+    return box.get(KYCSTATUS) as String?;
   }
 
   Future<String?> mGetUserRole() async {
