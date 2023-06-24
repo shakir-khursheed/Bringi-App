@@ -1,3 +1,4 @@
+import 'package:bringi_app/RETAILER_%20APP_FLOW/dashboard/ui/retailer_dashboard.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow/user_resgistration_flow.dart';
@@ -139,7 +140,9 @@ class _VerifyUserFlowState extends BaseState<
 
   @override
   void navigateToDashboard() {
-    // TODO: implement navigateToDashboard
+    pushandRemoveUntill(
+      widget: RetailerDashboard(),
+    );
   }
 
   @override
@@ -151,7 +154,7 @@ class _VerifyUserFlowState extends BaseState<
   void navigateTonextPage() {
     navigateToNextPage();
   }
-  
+
   @override
   void navigateTOKYCscreen() {
     // TODO: implement navigateTOKYCscreen

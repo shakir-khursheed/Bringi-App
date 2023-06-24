@@ -160,7 +160,7 @@ class _UserRegistrationFlowState extends BaseState<
 
   @override
   void navigateToDashboard() {
-    // TODO: implement navigateToDashboard
+    
   }
 
   @override

@@ -147,19 +147,21 @@ class UserRegistrationViewModel
       smsCode: smsCode,
     );
 
-    await _auth
-        .signInWithCredential(credential)
-        .then((value) => {
-              repository.setUid(value.user!.uid),
-              getNavigator().showMessage("OTP verified successfully"),
-              getNavigator().navigateToUserRegistrationFlow()
-            })
-        .catchError((error, stackTrace) => {
-              getNavigator().showMessage(
-                "Invalid OTP ${error}",
-                color: Colors.red[900],
-              )
-            });
+    await _auth.signInWithCredential(credential).then((value) async {
+      repository.setUid(value.user!.uid);
+      getNavigator().showMessage("OTP verified successfully");
+      var doesUserExist = await checkDoesUserExists();
+      if (doesUserExist) {
+        getNavigator().navigateToDashboard();
+      } else {
+        getNavigator().navigateToUserRegistrationFlow();
+      }
+    }).catchError((error, stackTrace) {
+      getNavigator().showMessage(
+        "Invalid OTP ${error}",
+        color: Colors.red[900],
+      );
+    });
     showLoading = false;
   }
 
@@ -195,6 +197,24 @@ class UserRegistrationViewModel
     } finally {
       showLoading = false;
     }
+  }
+
+  Future<bool> checkDoesUserExists() async {
+    var uid = await repository.getUid();
+    try {
+      var response = await repository.checkKYCstatus();
+      var responseUid = response.uid;
+      if (uid != null && uid == responseUid) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      showLoading = false;
+    }
+    return false;
   }
 
 //end

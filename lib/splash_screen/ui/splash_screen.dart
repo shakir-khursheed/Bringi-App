@@ -1,3 +1,4 @@
+import 'package:bringi_app/RETAILER_%20APP_FLOW/dashboard/ui/retailer_dashboard.dart';
 import 'package:bringi_app/signup_and_login/ui/kyc_approved_or_rejected_page.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow/user_resgistration_flow.dart';
 import 'package:bringi_app/signup_and_login/ui/verify_user_flow/verify_user_flow.dart';
@@ -92,7 +93,7 @@ class _SplashScreenState
 
   @override
   void navigateToDashboard() {
-    // TODO: implement navigateToDashboard
+    pushandRemoveUntill(widget: RetailerDashboard());
   }
 
   @override

@@ -23,6 +23,7 @@ abstract class UserRegistrationWebApi extends BaseWebApi {
     String? role,
   });
   Future<UserModel> checkKYCstatus({String? uid});
+  Future<UserModel> checkDoesUserExists({String? uid});
 }
 
 class UserRegistrationWebApiImpl implements UserRegistrationWebApi {
@@ -85,6 +86,11 @@ class UserRegistrationWebApiImpl implements UserRegistrationWebApi {
 
   @override
   Future<UserModel> checkKYCstatus({String? uid}) async {
+    var response = await _db.collection("Users").doc(uid).get();
+    return UserModel.fromJson(response);
+  }
+
+  Future<UserModel> checkDoesUserExists({String? uid}) async {
     var response = await _db.collection("Users").doc(uid).get();
     return UserModel.fromJson(response);
   }

@@ -50,4 +50,10 @@ class UserRegistrationRepo extends BaseRepo<UserRegistrationWebApi> {
       uid: await getUid(),
     );
   }
+
+  Future<UserModel> checkDoesUserExists() async {
+    return webApi.checkDoesUserExists(
+      uid: await getUid(),
+    );
+  }
 }
