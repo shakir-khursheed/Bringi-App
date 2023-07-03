@@ -10,7 +10,12 @@ class SplashviewModel extends BaseViewModel<SplashNavigator, SplashRepo> {
     String? kycStatus = await repository.getKYCSTATUS();
     Timer(const Duration(seconds: 1), () {
       print(kycStatus);
-      if (uid != null && uid.isNotEmpty) {
+      if (uid != null &&
+          uid.isNotEmpty &&
+          role != null &&
+          role.isNotEmpty &&
+          kycStatus != null &&
+          kycStatus.isNotEmpty) {
         switch (role) {
           case "RETAILER":
             {
@@ -18,7 +23,7 @@ class SplashviewModel extends BaseViewModel<SplashNavigator, SplashRepo> {
                   ? (kycStatus == "REJECTED")
                       ? print("KYC REJECTED")
                       : getNavigator().navigateToKYCscreen()
-                  : getNavigator().navigateToDashboard();
+                  : getNavigator().navigateToDashboard(role);
               break;
             }
           case "DISTRIBUTOR":
@@ -27,7 +32,7 @@ class SplashviewModel extends BaseViewModel<SplashNavigator, SplashRepo> {
                   ? (kycStatus == "REJECTED")
                       ? print("KYC REJECTED")
                       : getNavigator().navigateToKYCscreen()
-                  : getNavigator().navigateToDashboard();
+                  : getNavigator().navigateToDashboard(role);
               break;
             }
           case "M-DISTRIBUTOR":
@@ -36,7 +41,7 @@ class SplashviewModel extends BaseViewModel<SplashNavigator, SplashRepo> {
                   ? (kycStatus == "REJECTED")
                       ? print("KYC REJECTED")
                       : getNavigator().navigateToKYCscreen()
-                  : getNavigator().navigateToDashboard();
+                  : getNavigator().navigateToDashboard(role);
               break;
             }
           case "AGENT":
@@ -45,7 +50,7 @@ class SplashviewModel extends BaseViewModel<SplashNavigator, SplashRepo> {
                   ? (kycStatus == "REJECTED")
                       ? print("KYC REJECTED")
                       : getNavigator().navigateToKYCscreen()
-                  : getNavigator().navigateToDashboard();
+                  : getNavigator().navigateToDashboard(role);
               break;
             }
         }

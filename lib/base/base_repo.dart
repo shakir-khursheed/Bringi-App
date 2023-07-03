@@ -18,6 +18,16 @@ abstract class BaseRepo<W extends BaseWebApi> {
     _authTokenStorage.mSetKYCSTATUS(status);
   }
 
+  void setRole(String role) {
+    _authTokenStorage.mSetUserRole(role);
+  }
+
+  void setPhoneNo(String mobileNo) {
+    _authTokenStorage.mSetPhoneNo(mobileNo);
+  }
+
+  //GETTERS
+
   Future<String?> getUid() async {
     var response = await _authTokenStorage.mGetUid();
     return response;
@@ -28,17 +38,19 @@ abstract class BaseRepo<W extends BaseWebApi> {
     return response;
   }
 
-  void setRole(String role) {
-    _authTokenStorage.mSetUserRole(role);
-  }
-
   Future<String?> getUserRole() async {
     var response = await _authTokenStorage.mGetUserRole();
+    return response;
+  }
+
+  Future<String?> getPhoneNo() async {
+    var response = await _authTokenStorage.mGetPhoneNo();
     return response;
   }
 
   deleteSession() {
     _authTokenStorage.deleteROLE();
     _authTokenStorage.deleteUid();
+    _authTokenStorage.deletePhoneNo();
   }
 }

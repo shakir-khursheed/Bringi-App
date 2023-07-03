@@ -106,6 +106,7 @@ class UserRegistrationViewModel
         },
         onCodeSent: (verificationId, resendToken) {
           recievedVerificationId = verificationId;
+          repository.setPhoneNo(mobileNo);
         },
         codeAutoRetrivalTimeOut: (verificationId) {},
       );
@@ -117,10 +118,11 @@ class UserRegistrationViewModel
   }
 
   void registerUser() async {
+    var mobileNo = await repository.getPhoneNo();
     showLoading = true;
     try {
       await repository.registerUser(
-        mobileNo: "",
+        mobileNo: mobileNo,
         name: userCredentials["shopName"],
         address: userCredentials["address"],
         downloadUrl: documenturls,
@@ -149,10 +151,11 @@ class UserRegistrationViewModel
 
     await _auth.signInWithCredential(credential).then((value) async {
       repository.setUid(value.user!.uid);
+      role = await repository.getUserRole();
       getNavigator().showMessage("OTP verified successfully");
       var doesUserExist = await checkDoesUserExists();
       if (doesUserExist) {
-        getNavigator().navigateToDashboard();
+        getNavigator().navigateToDashboard(role ?? '');
       } else {
         getNavigator().navigateToUserRegistrationFlow();
       }
@@ -190,6 +193,7 @@ class UserRegistrationViewModel
     try {
       var response = await repository.checkKYCstatus();
       KYCstatus = response.kycStatus;
+      role = response.role;
       repository.setKYCSTATUS(KYCstatus ?? "PENDING");
       notifyListeners();
     } catch (e) {

@@ -159,7 +159,7 @@ class _UserRegistrationFlowState extends BaseState<
   }
 
   @override
-  void navigateToDashboard() {
+  void navigateToDashboard(String role) {
     
   }
 

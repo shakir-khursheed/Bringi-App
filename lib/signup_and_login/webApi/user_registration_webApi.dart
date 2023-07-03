@@ -5,7 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class UserRegistrationWebApi extends BaseWebApi {
-  Future<RefferalCodeModel> checkRefferelCode();
+  Future<RefferalCodeModel> checkRefferelCode(
+    String? mobileNO,
+  );
   Future<void> verfyUser({
     String? mobile,
     Function? onVerificationCompleted,
@@ -31,9 +33,15 @@ class UserRegistrationWebApiImpl implements UserRegistrationWebApi {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
-  Future<RefferalCodeModel> checkRefferelCode() async {
-    var response =
-        await _db.collection("refferel_codes").doc("Refferelcode").get();
+  Future<RefferalCodeModel> checkRefferelCode(
+    String? mobileNO,
+  ) async {
+    var response = await _db
+        .collection("refferel_codes")
+        .doc(
+          mobileNO,
+        )
+        .get();
     return RefferalCodeModel.fromDocument(response);
   }
 

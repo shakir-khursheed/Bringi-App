@@ -1,4 +1,7 @@
-import 'package:bringi_app/RETAILER_%20APP_FLOW/dashboard/ui/retailer_dashboard.dart';
+import 'package:bringi_app/AGENT_FLOW/dashboard/ui/agent_dashboard.dart';
+import 'package:bringi_app/DISTRIBUTOR_FLOW/dashboard/ui/distributor_dashboard.dart';
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/M-distributor_dashboard.dart';
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/retailer_dashboard.dart';
 import 'package:bringi_app/signup_and_login/ui/kyc_approved_or_rejected_page.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow/user_resgistration_flow.dart';
 import 'package:bringi_app/signup_and_login/ui/verify_user_flow/verify_user_flow.dart';
@@ -92,8 +95,29 @@ class _SplashScreenState
   }
 
   @override
-  void navigateToDashboard() {
-    pushandRemoveUntill(widget: RetailerDashboard());
+  void navigateToDashboard(String role) {
+    switch (role) {
+      case "RETAILER":
+        {
+          pushandRemoveUntill(widget: RetailerDashboard());
+          break;
+        }
+      case "DISTRIBUTOR":
+        {
+          pushandRemoveUntill(widget: DistributorDashboard());
+          break;
+        }
+      case "M-DISTRIBUTOR":
+        {
+          pushandRemoveUntill(widget: MDistributorDashboard());
+          break;
+        }
+      case "AGENT":
+        {
+          pushandRemoveUntill(widget: AgentDashboard());
+          break;
+        }
+    }
   }
 
   @override

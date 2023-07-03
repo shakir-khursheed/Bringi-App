@@ -1,20 +1,20 @@
-import 'package:bringi_app/RETAILER_%20APP_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
-import 'package:bringi_app/RETAILER_%20APP_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
 import 'package:bringi_app/common_resources/common_input_field.dart';
 import 'package:flutter/material.dart';
 import '../../../base/base_state.dart';
+import '../navigator/distributor_dashboard_navigator.dart';
+import '../viewmodel/distributor_dashboard_viewmodel.dart';
 
-class RetailerDashboard extends StatefulWidget {
-  const RetailerDashboard({super.key});
+class DistributorDashboard extends StatefulWidget {
+  const DistributorDashboard({super.key});
 
   @override
-  State<RetailerDashboard> createState() => _RetailerDashboardState();
+  State<DistributorDashboard> createState() => _DistributorDashboardState();
 }
 
-class _RetailerDashboardState extends BaseState<
-    RetailerDashboard,
-    RetailerDashboardViewModel,
-    RetailerDashboardNavigator> implements RetailerDashboardNavigator {
+class _DistributorDashboardState extends BaseState<
+    DistributorDashboard,
+    DistributorDashboardViewModel,
+    DistributorDashboardNavigator> implements DistributorDashboardNavigator {
   ScrollController? _scrollController;
   @override
   AppBar? buildAppBar() {
@@ -132,11 +132,6 @@ class _RetailerDashboardState extends BaseState<
   }
 
   @override
-  RetailerDashboardNavigator getNavigator() {
-    return this;
-  }
-
-  @override
   void loadPageData({value}) {
     // TODO: implement loadPageData
   }
@@ -159,5 +154,10 @@ class _RetailerDashboardState extends BaseState<
   @override
   void showNoInternetPage() {
     // TODO: implement showNoInternetPage
+  }
+
+  @override
+  DistributorDashboardNavigator getNavigator() {
+    return this;
   }
 }
