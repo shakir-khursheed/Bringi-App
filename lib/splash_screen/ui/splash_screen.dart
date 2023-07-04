@@ -1,9 +1,8 @@
 import 'package:bringi_app/AGENT_FLOW/dashboard/ui/agent_dashboard.dart';
 import 'package:bringi_app/DISTRIBUTOR_FLOW/dashboard/ui/distributor_dashboard.dart';
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/M-distributor_dashboard.dart';
-import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/retailer_dashboard.dart';
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import 'package:bringi_app/signup_and_login/ui/kyc_approved_or_rejected_page.dart';
-import 'package:bringi_app/signup_and_login/ui/user_registration_flow/user_resgistration_flow.dart';
 import 'package:bringi_app/signup_and_login/ui/verify_user_flow/verify_user_flow.dart';
 import 'package:bringi_app/splash_screen/navigator/splash_navigator.dart';
 import 'package:bringi_app/splash_screen/viewmodel/splash_viewmodel.dart';
@@ -99,7 +98,7 @@ class _SplashScreenState
     switch (role) {
       case "RETAILER":
         {
-          pushandRemoveUntill(widget: RetailerDashboard());
+          pushandRemoveUntill(widget: BottomNavbarViewDashboard());
           break;
         }
       case "DISTRIBUTOR":

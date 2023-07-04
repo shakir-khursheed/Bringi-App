@@ -1,4 +1,4 @@
-import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/retailer_dashboard.dart';
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
@@ -161,7 +161,7 @@ class _KYCstatusPageState extends BaseState<
     switch (role) {
       case "RETAILER":
         {
-          pushandRemoveUntill(widget: RetailerDashboard());
+          pushandRemoveUntill(widget: BottomNavbarViewDashboard());
           break;
         }
       case "DISTRIBUTOR":

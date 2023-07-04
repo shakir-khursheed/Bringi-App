@@ -1,8 +1,10 @@
 import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
-import 'package:bringi_app/common_resources/common_input_field.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+
 import '../../../base/base_state.dart';
+import '../../../common_resources/common_input_field.dart';
 
 class RetailerDashboard extends StatefulWidget {
   const RetailerDashboard({super.key});
@@ -36,14 +38,8 @@ class _RetailerDashboardState extends BaseState<
                 onTap: () {},
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.card_travel,
-                      ),
-                      Text("Smart\nsupply")
-                    ],
+                  child: Icon(
+                    Icons.card_travel,
                   ),
                 ),
               ),
@@ -89,28 +85,152 @@ class _RetailerDashboardState extends BaseState<
             backgroundColor: HexColor.fromHex("051E43"),
             title: Padding(
               padding: const EdgeInsets.only(
-                left: 30,
+                left: 10,
               ),
               child: SizedBox(
                 height: 45,
-                child: CommonInputField(
-                  onTextChange: (text) {},
-                  labelText: "Search products",
-                  textInputType: TextInputType.text,
-                  fieldValidator: (value) {},
-                  maxlength: 30,
-                  isAutovalidateModeon: false,
+                child: TextFormField(
+                  onChanged: (text) {},
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "Search Products",
+                    hintStyle: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
                 ),
               ),
             ),
           )
         ];
       },
-      body: Container(
-        child: Center(
-          child: Text(
-            "DASHBOARD",
-          ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20),
+        child: Column(
+          children: [
+            CarouselSlider(
+              items: [
+                Container(
+                  child: Center(
+                    child: Text("BINGI"),
+                  ),
+                  decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(
+                        5,
+                      )),
+                ),
+              ],
+              options: CarouselOptions(
+                height: 150,
+                padEnds: true,
+                enlargeCenterPage: true,
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Products",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.keyboard_arrow_down,
+                  ),
+                  label: Text("Default sort"),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: GridView.builder(
+                itemCount: 10,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  mainAxisExtent: 210.0,
+                ),
+                itemBuilder: (context, index) => Card(
+                  elevation: 5,
+                  shadowColor: Colors.grey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Image(
+                        image: AssetImage("assets/images/splash_logo.png"),
+                        height: 50,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "PRIMIUM PACK(1L)",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "PRICE ₹ 2000",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "MRP ₹ 1000",
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        color: Colors.grey.withOpacity(.5),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(
+                            "Margin ₹ 1000",
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

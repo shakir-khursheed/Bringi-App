@@ -16,6 +16,7 @@ class SplashviewModel extends BaseViewModel<SplashNavigator, SplashRepo> {
           role.isNotEmpty &&
           kycStatus != null &&
           kycStatus.isNotEmpty) {
+        print(role);
         switch (role) {
           case "RETAILER":
             {
