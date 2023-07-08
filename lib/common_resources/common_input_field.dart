@@ -103,14 +103,12 @@ class _CommonInputFieldState extends State<CommonInputField> {
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: (widget.notSignUpfield ?? false)
-                ? Colors.grey
-                : Colors.black.withOpacity(.5),
+            color: Colors.black.withOpacity(.5),
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ),

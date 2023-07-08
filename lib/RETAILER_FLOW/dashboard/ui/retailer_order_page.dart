@@ -142,4 +142,9 @@ class _RetailerHelpState extends BaseState<
   void showNoInternetPage() {
     // TODO: implement showNoInternetPage
   }
+
+  @override
+  void onAddressSavedSucessfully() {
+    // TODO: implement onAddressSavedSucessfully
+  }
 }

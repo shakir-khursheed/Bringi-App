@@ -76,7 +76,7 @@ class _BottomNavbarViewState extends BaseState<
 
   @override
   void loadPageData({value}) {
-    // TODO: implement loadPageData
+    
   }
 
   @override
@@ -97,5 +97,10 @@ class _BottomNavbarViewState extends BaseState<
   @override
   void showNoInternetPage() {
     // TODO: implement showNoInternetPage
+  }
+  
+  @override
+  void onAddressSavedSucessfully() {
+    // TODO: implement onAddressSavedSucessfully
   }
 }

@@ -68,4 +68,9 @@ class _RetailerInventoryState extends BaseState<
   void showNoInternetPage() {
     // TODO: implement showNoInternetPage
   }
+  
+  @override
+  void onAddressSavedSucessfully() {
+    // TODO: implement onAddressSavedSucessfully
+  }
 }

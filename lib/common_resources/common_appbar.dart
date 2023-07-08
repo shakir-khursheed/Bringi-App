@@ -1,3 +1,4 @@
+import 'package:bringi_app/base/base_state.dart';
 import 'package:flutter/material.dart';
 
 AppBar commonAppbarForScreens({
@@ -13,11 +14,11 @@ AppBar commonAppbarForScreens({
     title: Text(
       title,
       style: const TextStyle(
-        color: Colors.black,
-        fontSize: 15,
+        color: Colors.white,
+        fontSize: 20,
       ),
     ),
-    backgroundColor: Colors.transparent,
+    backgroundColor: HexColor.fromHex("051E43"),
     elevation: 0,
     leading: (requireBackButton ?? true)
         ? IconButton(
@@ -26,7 +27,7 @@ AppBar commonAppbarForScreens({
             },
             icon: Icon(
               Icons.arrow_back_ios,
-              color: (backColor != null) ? backColor : Colors.black,
+              color: Colors.white,
               size: 20,
             ),
           )

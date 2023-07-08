@@ -1,10 +1,11 @@
 import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/create_order_process/product_details.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../base/base_state.dart';
-import '../../../common_resources/common_input_field.dart';
 
 class RetailerDashboard extends StatefulWidget {
   const RetailerDashboard({super.key});
@@ -119,13 +120,17 @@ class _RetailerDashboardState extends BaseState<
               items: [
                 Container(
                   child: Center(
-                    child: Text("BINGI"),
-                  ),
+                      child: Image(
+                    image: AssetImage(
+                      "assets/images/splash_logo.png",
+                    ),
+                  )),
                   decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(
-                        5,
-                      )),
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(
+                      5,
+                    ),
+                  ),
                 ),
               ],
               options: CarouselOptions(
@@ -158,80 +163,128 @@ class _RetailerDashboardState extends BaseState<
             SizedBox(
               height: 10,
             ),
-            Expanded(
-              child: GridView.builder(
-                itemCount: 10,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  mainAxisExtent: 210.0,
-                ),
-                itemBuilder: (context, index) => Card(
-                  elevation: 5,
-                  shadowColor: Colors.grey,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Image(
-                        image: AssetImage("assets/images/splash_logo.png"),
-                        height: 50,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "PRIMIUM PACK(1L)",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "PRICE ₹ 2000",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "MRP ₹ 1000",
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        color: Colors.grey.withOpacity(.5),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            "Margin ₹ 1000",
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
+            Consumer<RetailerDashboardViewModel>(
+              builder: (context, vm, child) => (!vm.showLoading)
+                  ? (vm.productList.length != 0)
+                      ? Expanded(
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              onRefresh();
+                            },
+                            child: GridView.builder(
+                              itemCount: vm.productList.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                mainAxisExtent: 280.0,
+                              ),
+                              itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  push(
+                                      widget: ProductDetailPage(
+                                    productId: vm.productList[index].userid,
+                                  ));
+                                },
+                                child: ProductItem(
+                                  vm,
+                                  index,
+                                  () {},
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                        )
+                      : Center(
+                          child: Text("No products Found"),
+                        )
+                  : CircularProgressIndicator(),
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Card ProductItem(
+      RetailerDashboardViewModel vm, int index, Function addTocart) {
+    return Card(
+      elevation: 5,
+      shadowColor: Colors.grey,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Stack(
+        alignment: AlignmentDirectional.topEnd,
+        children: [
+          Center(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                Image(
+                  image: NetworkImage(vm.productList[index].imageUrls.first),
+                  height: 120,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  vm.productList[index].productName,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "PRICE ₹ ${vm.productList[index].price}",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "MRP ₹ ${vm.productList[index].mrp}",
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  color: Colors.grey.withOpacity(.5),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      "Margin ₹ ${vm.productList[index].margin}",
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              addTocart();
+            },
+            icon: Icon(
+              Icons.add_circle,
+              size: 40,
+            ),
+          )
+        ],
       ),
     );
   }
@@ -258,7 +311,7 @@ class _RetailerDashboardState extends BaseState<
 
   @override
   void loadPageData({value}) {
-    // TODO: implement loadPageData
+    viewModel.getProducts();
   }
 
   @override
@@ -279,5 +332,14 @@ class _RetailerDashboardState extends BaseState<
   @override
   void showNoInternetPage() {
     // TODO: implement showNoInternetPage
+  }
+
+  void onRefresh() {
+    viewModel.getProducts();
+  }
+  
+  @override
+  void onAddressSavedSucessfully() {
+    // TODO: implement onAddressSavedSucessfully
   }
 }

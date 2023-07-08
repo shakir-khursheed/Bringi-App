@@ -1,4 +1,4 @@
-import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/retailer_dashboard.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow/user_resgistration_flow.dart';
@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../../AGENT_FLOW/dashboard/ui/agent_dashboard.dart';
 import '../../../DISTRIBUTOR_FLOW/dashboard/ui/distributor_dashboard.dart';
 import '../../../M_DISTRIBUTOR_FLOW/dashboard/ui/M-distributor_dashboard.dart';
+import '../../../RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import '../../../base/base_state.dart';
 
 class VerifyUserFlow extends StatefulWidget {
@@ -154,7 +155,7 @@ class _VerifyUserFlowState extends BaseState<
           pushandRemoveUntill(widget: DistributorDashboard());
           break;
         }
-      case "M-DISTRIBUTOR":
+      case "MASTER DISTRIBUTOR":
         {
           pushandRemoveUntill(widget: MDistributorDashboard());
           break;

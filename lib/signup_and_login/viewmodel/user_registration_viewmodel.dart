@@ -151,11 +151,11 @@ class UserRegistrationViewModel
 
     await _auth.signInWithCredential(credential).then((value) async {
       repository.setUid(value.user!.uid);
-      role = await repository.getUserRole();
       getNavigator().showMessage("OTP verified successfully");
       var doesUserExist = await checkDoesUserExists();
       if (doesUserExist) {
-        getNavigator().navigateToDashboard(role ?? '');
+        getNavigator()
+            .navigateToDashboard(await repository.getUserRole() ?? "");
       } else {
         getNavigator().navigateToUserRegistrationFlow();
       }
@@ -209,6 +209,8 @@ class UserRegistrationViewModel
       var response = await repository.checkKYCstatus();
       var responseUid = response.uid;
       if (uid != null && uid == responseUid) {
+        repository.setRole(response.role);
+        role = response.role;
         return true;
       } else {
         return false;

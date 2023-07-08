@@ -49,6 +49,7 @@ dependencies:
   hive: ^2.2.3
   pinput: ^2.2.31
   carousel_slider: ^4.2.1
+  fluttertoast: ^8.2.1
 
 dev_dependencies:
   flutter_test:

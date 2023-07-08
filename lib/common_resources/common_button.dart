@@ -7,11 +7,13 @@ class ButtonWithLoader extends StatefulWidget {
   final bool showLoading;
   final String label;
   final bool? isdisabled;
+  final Color? buttonColor;
   const ButtonWithLoader(
       {Key? key,
       required this.onPressed,
       required this.showLoading,
       required this.label,
+      this.buttonColor,
       this.isdisabled})
       : super(key: key);
   @override
@@ -33,7 +35,9 @@ class _ButtonWithLoaderState extends State<ButtonWithLoader> {
               decoration: BoxDecoration(
                 color: (widget.isdisabled ?? false)
                     ? HexColor.fromHex("#C9C9C9")
-                    : HexColor.fromHex("#FFFFFF"),
+                    : (widget.buttonColor != null)
+                        ? widget.buttonColor
+                        : HexColor.fromHex("#FFFFFF"),
               ),
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Column(
@@ -61,12 +65,13 @@ class _ButtonWithLoaderState extends State<ButtonWithLoader> {
 class ButtonFactory {
   static Widget buildUniversalButtonWithText(
       String label, BuildContext context, Function onPressed,
-      {bool isdisabled = false, bool showLoading = false}) {
+      {bool isdisabled = false, bool showLoading = false, Color? buttonColor}) {
     return ButtonWithLoader(
       onPressed: onPressed,
       showLoading: showLoading,
       label: label,
       isdisabled: isdisabled,
+      buttonColor: buttonColor,
     );
   }
 }
