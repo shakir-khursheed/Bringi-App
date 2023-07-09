@@ -1,7 +1,8 @@
 import 'package:bringi_app/base/base_repo.dart';
-import 'package:bringi_app/signup_and_login/model/refferel_code_model.dart';
 import 'package:bringi_app/signup_and_login/model/usermodel.dart';
 import 'package:bringi_app/signup_and_login/webApi/user_registration_webApi.dart';
+
+import '../model/refferel_code_model.dart';
 
 class UserRegistrationRepo extends BaseRepo<UserRegistrationWebApi> {
   Future<RefferalCodeModel> checkRefferelCode() async {

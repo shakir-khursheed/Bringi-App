@@ -1,8 +1,9 @@
 import 'package:bringi_app/base/base_webApi.dart';
-import 'package:bringi_app/signup_and_login/model/refferel_code_model.dart';
 import 'package:bringi_app/signup_and_login/model/usermodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../model/refferel_code_model.dart';
 
 abstract class UserRegistrationWebApi extends BaseWebApi {
   Future<RefferalCodeModel> checkRefferelCode(
@@ -37,7 +38,7 @@ class UserRegistrationWebApiImpl implements UserRegistrationWebApi {
     String? mobileNO,
   ) async {
     var response = await _db
-        .collection("refferel_codes")
+        .collection("referral_codes")
         .doc(
           mobileNO,
         )

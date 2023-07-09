@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bringi_app/base/base_viewmodel.dart';
-import 'package:bringi_app/signup_and_login/model/refferel_code_model.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/repo/user_registration_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
+import '../model/refferel_code_model.dart';
 
 class UserRegistrationViewModel
     extends BaseViewModel<UserRegistrationNavigator, UserRegistrationRepo> {

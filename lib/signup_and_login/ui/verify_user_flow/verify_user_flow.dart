@@ -7,7 +7,8 @@ import 'package:bringi_app/signup_and_login/ui/verify_user_flow_screens/verify_o
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../AGENT_FLOW/dashboard/ui/agent_dashboard.dart';
+
+import '../../../AGENT_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import '../../../DISTRIBUTOR_FLOW/dashboard/ui/distributor_dashboard.dart';
 import '../../../M_DISTRIBUTOR_FLOW/dashboard/ui/M-distributor_dashboard.dart';
 import '../../../base/base_state.dart';
@@ -162,7 +163,7 @@ class _VerifyUserFlowState extends BaseState<
       case "AGENT":
         {
           pushandRemoveUntill(
-            widget: AgentDashboard(),
+            widget: BottomNavbarView(),
           );
           break;
         }
