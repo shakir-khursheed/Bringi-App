@@ -1,4 +1,7 @@
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/account_page.dart';
+import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import '../../../base/base_state.dart';
 import '../navigator/M-distributor_dashboard_navigator.dart';
 import '../viewmodel/M-distributor_dashboard_viewmodel.dart';
@@ -16,12 +19,237 @@ class _MDistributorDashboardState extends BaseState<
     MDistributorDashboardNavigator> implements MDistributorDashboardNavigator {
   @override
   AppBar? buildAppBar() {
-    return null;
+    return commonAppbarForScreens(
+        title: "Areeb Malik",
+        onTap: () {},
+        centerTitle: true,
+        requireBackButton: false,
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.notifications,
+              ))
+        ]);
   }
 
   @override
   Widget buildBody() {
-    return Container();
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 10.0,
+        horizontal: 10,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Help",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Gap(10),
+          Expanded(
+            child: GridView.count(
+              mainAxisSpacing: 10,
+              crossAxisCount: 3,
+              crossAxisSpacing: 10,
+              children: [
+                helpGridCard(
+                  Hexcolor: "EDA944",
+                  count: Text(
+                    "0",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  label: "All Help",
+                ),
+                helpGridCard(
+                  Hexcolor: "4872A4",
+                  count: Text(
+                    "0",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  label: "Processing",
+                ),
+                helpGridCard(
+                  Hexcolor: "000000",
+                  count: Text(
+                    "0",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  label: "pickup help",
+                ),
+                helpGridCard(
+                  Hexcolor: "48742C",
+                  count: Text(
+                    "0",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  label: "Delivered",
+                ),
+                helpGridCard(
+                  Hexcolor: "AA1C13",
+                  count: Text(
+                    "0",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  label: "cancelled",
+                ),
+              ],
+            ),
+          ),
+          Gap(20),
+          Expanded(
+            flex: 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Help List",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Gap(5),
+                helpListCard(
+                  Hexcolor: "4872A4",
+                  count: Text(
+                    "0",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  label: "Help",
+                ),
+              ],
+            ),
+          ),
+          Gap(10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Master Management",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Gap(10),
+                helpListCard(
+                  Hexcolor: "4872A4",
+                  count: Icon(Icons.people),
+                  label: "Manage inventory",
+                ),
+                helpListCard(
+                  Hexcolor: "B694A6",
+                  count: Icon(Icons.people),
+                  label: "Manage agents",
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget helpGridCard({
+    String? Hexcolor,
+    required Widget count,
+    String? label,
+    Function? onTap,
+  }) {
+    return InkWell(
+      onTap: () {
+        onTap!();
+      },
+      child: Card(
+        color: HexColor.fromHex("$Hexcolor"),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        elevation: 5,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Gap(20),
+            Expanded(
+              child: count,
+            ),
+            Row(
+              children: [
+                Expanded(
+                    child: Divider(
+                  thickness: 2,
+                  color: Colors.white,
+                )),
+              ],
+            ),
+            Expanded(
+                child: Text(
+              "$label",
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Card helpListCard({String? Hexcolor, Widget? count, String? label}) {
+    return Card(
+      color: HexColor.fromHex("$Hexcolor"),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 5,
+      child: ListTile(
+        leading: count,
+        title: Text(
+          "$label",
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        trailing: Icon(
+          Icons.keyboard_arrow_right,
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 
   @override
