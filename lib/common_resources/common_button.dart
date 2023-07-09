@@ -75,3 +75,19 @@ class ButtonFactory {
     );
   }
 }
+
+MaterialButton buttonForPasswordSentDialog(
+    {Function? onTap, Widget? buttonLabel, Color? buttonColor}) {
+  return MaterialButton(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(
+        8,
+      ),
+    ),
+    color: buttonColor,
+    onPressed: () {
+      onTap!();
+    },
+    child: buttonLabel,
+  );
+}

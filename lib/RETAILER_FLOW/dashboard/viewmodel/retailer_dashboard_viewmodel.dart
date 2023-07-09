@@ -246,11 +246,17 @@ class RetailerDashboardViewModel
         updatedAt: updatedAt,
       );
       getNavigator().onOrderCreatedSuccessfully();
+      getNavigator().showMessage("Order created successfully");
     } on SocketException {
     } catch (e) {
       getNavigator().showMessage("$e", color: Colors.red[900]);
     } finally {
       showLoading = false;
     }
+  }
+
+  void logout() {
+    repository.deleteSession();
+    getNavigator().navigateToVerifyUserFlow();
   }
 }

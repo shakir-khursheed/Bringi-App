@@ -5,6 +5,7 @@ import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../base/base_state.dart';
+import '../../../common_resources/common_dialog.dart';
 
 class RetailerAccountPage extends StatefulWidget {
   const RetailerAccountPage({super.key});
@@ -140,26 +141,42 @@ class _AccountPageState extends BaseState<
                 profileListItem(
                     label: "FAQ'S",
                     onTap: () {
-                      // push(
-                      //   widget: FAQScreen(),
-                      // );
+                      launchExternalUrl(
+                        uri: Uri.parse(
+                          "https://bringispringwater.com/contact/",
+                        ),
+                      );
                     },
                     icon: Icons.help_outline),
                 profileListItem(
                     label: "Help & Support",
                     onTap: () {
-                      // push(
-                      //   widget: SupportPage(),
-                      // );
+                      launchExternalUrl(
+                        uri: Uri.parse(
+                          "https://bringispringwater.com/contact/",
+                        ),
+                      );
                     },
                     icon: Icons.support_agent),
                 profileListItem(
                     label: "Terms & Conditions",
-                    onTap: () {},
+                    onTap: () {
+                      launchExternalUrl(
+                        uri: Uri.parse(
+                          "https://bringispringwater.com/terms-conditions",
+                        ),
+                      );
+                    },
                     icon: Icons.file_copy),
                 profileListItem(
                     label: "Privacy Policy",
-                    onTap: () {},
+                    onTap: () {
+                      launchExternalUrl(
+                        uri: Uri.parse(
+                          "https://bringispringwater.com/privacy-policy",
+                        ),
+                      );
+                    },
                     icon: Icons.privacy_tip_outlined),
                 SizedBox(
                   height: 10,
@@ -170,7 +187,51 @@ class _AccountPageState extends BaseState<
                 ),
                 profileListItem(
                   label: "Logout",
-                  onTap: () {},
+                  onTap: () {
+                    showDialogMethod(
+                      context: context,
+                      builder: GestureDetector(
+                        onTap: () {
+                          pop();
+                        },
+                        child: ProcessCompletionDialog(
+                          closeButtonLabel: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          requireCloseButton: true,
+                          buttonLabel: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            // ignore: prefer_const_literals_to_create_immutables
+                            children: [
+                              Text(
+                                "Logout",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Icon(
+                                Icons.logout,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                          buttoncolor: Colors.red,
+                          title: "Are you leaving?",
+                          subtitle: "Do you want to log out?",
+                          path: "assets/logout.png",
+                          onTap: () {
+                            viewModel.logout();
+                          },
+                        ),
+                      ),
+                    );
+                  },
                   icon: Icons.logout_outlined,
                 ),
                 SizedBox(
@@ -208,11 +269,6 @@ class _AccountPageState extends BaseState<
   void loadPageData({value}) async {
     uid = await viewModel.getuid();
     setState(() {});
-  }
-
-  @override
-  void navigateToVerifyUserFlow() {
-    // TODO: implement navigateToVerifyUserFlow
   }
 
   @override

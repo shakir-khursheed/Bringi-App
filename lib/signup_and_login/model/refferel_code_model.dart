@@ -7,11 +7,11 @@ class RefferalCodeModel {
   factory RefferalCodeModel.fromDocument(
           DocumentSnapshot<Map<String, dynamic>>? json) =>
       RefferalCodeModel(
-        refferalCode: json?["refferel_code"],
+        refferalCode: json?["referral_code"],
         role: json?["role"],
       );
   Map<String, dynamic> toJson() => {
-        "refferel_code": refferalCode,
+        "referral_code": refferalCode,
         "role": role,
       };
 }

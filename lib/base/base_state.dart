@@ -1,6 +1,8 @@
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/create_order_process/Thank_u_screen.dart';
+import 'package:bringi_app/signup_and_login/ui/verify_user_flow/verify_user_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../service_locator/service_locator.dart';
 import 'base_navigator.dart';
@@ -50,6 +52,11 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
   }
 
   @override
+  void navigateToVerifyUserFlow() {
+    pushandRemoveUntill(widget: VerifyUserFlow());
+  }
+
+  @override
   Widget build(BuildContext context) => WillPopScope(
         onWillPop: provideOnWillPopScopeCallBack,
         child: GestureDetector(
@@ -86,6 +93,17 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
         context,
         MaterialPageRoute(builder: (_) => widget),
         (route) => false).then((value) => loadPageData());
+  }
+
+  void launchExternalUrl({required Uri uri, LaunchMode? mode}) async {
+    if (!uri.hasEmptyPath) {
+      await launchUrl(
+        uri,
+        mode: mode ?? LaunchMode.inAppWebView,
+      );
+    } else {
+      showMessage("couldn't launch a $uri");
+    }
   }
 
   void pop({dynamic result}) {

@@ -1,6 +1,3 @@
-import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
-import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
-import 'package:bringi_app/common_resources/common_input_field.dart';
 import 'package:flutter/material.dart';
 import '../../../base/base_state.dart';
 import '../navigator/M-distributor_dashboard_navigator.dart';
@@ -17,7 +14,6 @@ class _MDistributorDashboardState extends BaseState<
     MDistributorDashboard,
     MDistributorDashboardViewModel,
     MDistributorDashboardNavigator> implements MDistributorDashboardNavigator {
-  ScrollController? _scrollController;
   @override
   AppBar? buildAppBar() {
     return null;
@@ -25,97 +21,7 @@ class _MDistributorDashboardState extends BaseState<
 
   @override
   Widget buildBody() {
-    return NestedScrollView(
-      controller: _scrollController,
-      headerSliverBuilder: (context, innerBoxIsScrolled) {
-        return <Widget>[
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            titleSpacing: 0.0,
-            actions: [
-              InkWell(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.card_travel,
-                      ),
-                      Text("Smart\nsupply")
-                    ],
-                  ),
-                ),
-              ),
-            ],
-            elevation: 0.0,
-            pinned: true,
-            floating: true,
-            backgroundColor: HexColor.fromHex("051E43"),
-            title: Text(
-              "Areeb Enterprisis",
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 1,
-              ),
-            ),
-          ),
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            titleSpacing: 0.0,
-            actions: [
-              SizedBox(
-                width: 10,
-              ),
-              Icon(
-                Icons.mic,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Icon(
-                Icons.notifications,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-            ],
-            elevation: 0.0,
-            pinned: true,
-            floating: false,
-            backgroundColor: HexColor.fromHex("051E43"),
-            title: Padding(
-              padding: const EdgeInsets.only(
-                left: 30,
-              ),
-              child: SizedBox(
-                height: 45,
-                child: CommonInputField(
-                  onTextChange: (text) {},
-                  labelText: "Search products",
-                  textInputType: TextInputType.text,
-                  fieldValidator: (value) {},
-                  maxlength: 30,
-                  isAutovalidateModeon: false,
-                ),
-              ),
-            ),
-          )
-        ];
-      },
-      body: Container(
-        child: Center(
-          child: Text(
-            "DASHBOARD",
-          ),
-        ),
-      ),
-    );
+    return Container();
   }
 
   @override
@@ -160,7 +66,6 @@ class _MDistributorDashboardState extends BaseState<
 
   @override
   MDistributorDashboardNavigator getNavigator() {
-    // TODO: implement getNavigator
-    throw UnimplementedError();
+    return this;
   }
 }

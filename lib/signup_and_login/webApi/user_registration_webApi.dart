@@ -37,7 +37,7 @@ class UserRegistrationWebApiImpl implements UserRegistrationWebApi {
     String? mobileNO,
   ) async {
     var response = await _db
-        .collection("refferel_codes")
+        .collection("referral_codes")
         .doc(
           mobileNO,
         )
