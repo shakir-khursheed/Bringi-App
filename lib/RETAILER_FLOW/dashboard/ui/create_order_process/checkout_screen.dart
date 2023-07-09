@@ -4,6 +4,7 @@ import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/common_resources/common_button.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +29,7 @@ class _CheckoutPageState extends BaseState<
     CheckoutPage,
     RetailerDashboardViewModel,
     RetailerDashboardNavigator> implements RetailerDashboardNavigator {
+  String? uid;
   @override
   AppBar? buildAppBar() {
     return commonAppbarForScreens(
@@ -56,11 +58,24 @@ class _CheckoutPageState extends BaseState<
             SizedBox(
               height: 10,
             ),
-            (!vm.showLoading)
-                ? addressCard(vm, 0)
-                : Center(
-                    child: CircularProgressIndicator(),
-                  ),
+            StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("Addresses")
+                    .doc(uid)
+                    .collection("SavedAddress")
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> vm) {
+                  if (vm.data?.docs.length == 0) {
+                    return Text("Used Default address");
+                  }
+                  if (vm.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (vm.hasError) {
+                    print(vm.hasError);
+                  }
+                  return addressCard(vm, 0);
+                }),
             SizedBox(
               height: 10,
             ),
@@ -74,17 +89,28 @@ class _CheckoutPageState extends BaseState<
             SizedBox(
               height: 10,
             ),
-            (!vm.showLoading)
-                ? addressCard(vm, 0)
-                : Center(
-                    child: CircularProgressIndicator(),
-                  ),
+            StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("Addresses")
+                    .doc(uid)
+                    .collection("SavedAddress")
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> vm) {
+                  if (vm.data?.docs.length == 0) {
+                    return Text("Used Default address");
+                  }
+                  if (vm.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (vm.hasError) {
+                    print(vm.hasError);
+                  }
+                  return addressCard(vm, 0);
+                }),
             SizedBox(
               height: 10,
             ),
-            Consumer<RetailerDashboardViewModel>(
-              builder: (context, value, child) => productDetailCard(),
-            ),
+            productDetailCard(),
           ],
           fixedAtBottomChild: [
             Consumer<RetailerDashboardViewModel>(
@@ -94,7 +120,9 @@ class _CheckoutPageState extends BaseState<
                   context,
                   () {
                     vm.addToCheckout(
-                      address: vm.savedAddresses.first.address,
+                      address: (vm.savedAddresses.length != 0)
+                          ? vm.savedAddresses.first.address
+                          : vm.defaultAddress,
                       totalAmount: widget.Amount,
                       productName: widget.productName,
                     );
@@ -242,8 +270,10 @@ class _CheckoutPageState extends BaseState<
   }
 
   @override
-  void loadPageData({value}) {
-    viewModel.getSavedAddress();
+  void loadPageData({value}) async {
+    viewModel.getDefaultAddress();
+    uid = await viewModel.getuid();
+    setState(() {});
   }
 
   @override
@@ -269,7 +299,7 @@ class _CheckoutPageState extends BaseState<
   @override
   void onAddressSavedSucessfully() {}
 
-  Card addressCard(RetailerDashboardViewModel vm, int index) {
+  Card addressCard(AsyncSnapshot<QuerySnapshot> vm, int index) {
     return Card(
       elevation: 5,
       child: Padding(
@@ -279,7 +309,7 @@ class _CheckoutPageState extends BaseState<
           children: [
             Icon(
               Icons.location_pin,
-              size: 25,
+              size: 30,
               color: Colors.red,
             ),
             SizedBox(
@@ -292,20 +322,20 @@ class _CheckoutPageState extends BaseState<
                   height: 10,
                 ),
                 Text(
-                  "${vm.savedAddresses[index].address}",
+                  "${vm.data?.docs[index].get("Address")}",
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(
                   height: 5,
                 ),
-                Text("${vm.savedAddresses[index].city}"),
+                Text("${vm.data?.docs[index].get("city")}"),
                 SizedBox(
                   height: 5,
                 ),
-                Text("${vm.savedAddresses[index].pincode}"),
+                Text("${vm.data?.docs[index].get("pincode")}"),
                 SizedBox(
                   height: 10,
                 ),

@@ -23,7 +23,6 @@ class _BottomNavbarViewState extends BaseState<
   final screens = [
     HelpScreen(),
     HelpHistory(),
-    Account(),
     RetailerAccountPage(),
   ];
   @override
@@ -54,9 +53,7 @@ class _BottomNavbarViewState extends BaseState<
         BottomNavigationBarItem(
             icon: Icon(Icons.inventory), label: "Help History"),
         BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag), label: "Account"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle), label: "Logout"),
+            icon: Icon(Icons.account_circle), label: "Account"),
       ],
     );
   }

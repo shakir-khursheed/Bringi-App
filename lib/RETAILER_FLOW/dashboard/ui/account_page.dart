@@ -38,11 +38,11 @@ class _AccountPageState extends BaseState<
             height: 10,
           ),
           CircleAvatar(
-            radius: 80,
+            radius: 60,
             backgroundColor: HexColor.fromHex("051E43"),
             child: Icon(
               Icons.account_circle,
-              size: 100,
+              size: 80,
             ),
           ),
           SizedBox(

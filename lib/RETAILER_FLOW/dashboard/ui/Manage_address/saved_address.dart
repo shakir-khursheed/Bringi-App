@@ -1,9 +1,10 @@
 import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
+import 'package:bringi_app/common_resources/no_item_found.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../base/base_state.dart';
 
@@ -18,6 +19,7 @@ class _SavedAddressPageState extends BaseState<
     SavedAddressPage,
     RetailerDashboardViewModel,
     RetailerDashboardNavigator> implements RetailerDashboardNavigator {
+  String? uid;
   @override
   AppBar? buildAppBar() {
     return commonAppbarForScreens(
@@ -31,21 +33,35 @@ class _SavedAddressPageState extends BaseState<
   @override
   Widget buildBody() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Consumer<RetailerDashboardViewModel>(
-        builder: (context, vm, child) => ListView.builder(
-          itemCount: vm.savedAddresses.length,
-          itemBuilder: (context, index) => (!vm.showLoading)
-              ? (vm.savedAddresses.length != 0)
-                  ? addressCard(vm, index)
-                  : Text("No address found")
-              : CircularProgressIndicator(),
-        ),
-      ),
-    );
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection("Addresses")
+                .doc(uid)
+                .collection("SavedAddress")
+                .snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> vm) {
+              if (vm.data?.docs.length == 0) {
+                return Center(
+                    child: NoitemFoundPage(title: "No address found"));
+              }
+              if (vm.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (vm.hasError) {
+                print(vm.hasError);
+              }
+              return ListView.separated(
+                itemBuilder: (context, index) => addressCard(vm, index),
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 10,
+                ),
+                itemCount: vm.data?.docs.length ?? 0,
+              );
+            }));
   }
 
-  Card addressCard(RetailerDashboardViewModel vm, int index) {
+  Card addressCard(AsyncSnapshot<QuerySnapshot> vm, int index) {
     return Card(
       elevation: 5,
       child: Padding(
@@ -68,7 +84,7 @@ class _SavedAddressPageState extends BaseState<
                   height: 10,
                 ),
                 Text(
-                  "${vm.savedAddresses[index].address}",
+                  "${vm.data?.docs[index].get("Address")}",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -77,11 +93,11 @@ class _SavedAddressPageState extends BaseState<
                 SizedBox(
                   height: 5,
                 ),
-                Text("${vm.savedAddresses[index].city}"),
+                Text("${vm.data?.docs[index].get("city")}"),
                 SizedBox(
                   height: 5,
                 ),
-                Text("${vm.savedAddresses[index].pincode}"),
+                Text("${vm.data?.docs[index].get("pincode")}"),
                 SizedBox(
                   height: 10,
                 ),
@@ -114,8 +130,9 @@ class _SavedAddressPageState extends BaseState<
   }
 
   @override
-  void loadPageData({value}) {
-    viewModel.getSavedAddress();
+  void loadPageData({value}) async {
+    uid = await viewModel.getuid();
+    setState(() {});
   }
 
   @override

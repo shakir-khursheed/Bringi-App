@@ -12,13 +12,13 @@ class RetailerDashboardRepo extends BaseRepo<RetailerDashboardWebApi> {
   Future<void> saveAddress({List<Map<String, dynamic>>? address}) async {
     return await webApi.saveAddress(
       address: address,
-      uid: await getUid(),
+      uid: await getPhoneNo(),
     );
   }
 
   Future<SavedAddressResponse> getSavedAddress() async {
     return await webApi.getSavedAddress(
-      uid: await getUid(),
+      uid: await getPhoneNo(),
     );
   }
 
@@ -33,13 +33,13 @@ class RetailerDashboardRepo extends BaseRepo<RetailerDashboardWebApi> {
       productName: productName,
       amount: amount,
       address: address,
-      uid: await getUid(),
+      uid: await getPhoneNo(),
     );
   }
 
   Future<CheckoutProductResponse> getcheckedOutProduct() async {
     return await webApi.getcheckedOutProduct(
-      uid: await getUid(),
+      uid: await getPhoneNo(),
     );
   }
 
@@ -66,8 +66,7 @@ class RetailerDashboardRepo extends BaseRepo<RetailerDashboardWebApi> {
       AssignedTo: AssignedTo,
       createdAt: createdAt,
       updatedAt: updatedAt,
-      uid: await getUid(),
+      uid: await getPhoneNo(),
     );
   }
-
 }
