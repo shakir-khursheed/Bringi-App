@@ -49,11 +49,24 @@ class _MDistriButorBottomNavbarViewState extends BaseState<
       unselectedItemColor: Colors.white,
       type: BottomNavigationBarType.fixed,
       items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(
-            icon: Icon(Icons.inventory), label: "Retailers"),
+          icon: Icon(
+            Icons.home,
+          ),
+          label: "Home",
+        ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle), label: "Account"),
+          icon: Icon(
+            Icons.people,
+          ),
+          label: "Retailers",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.account_circle,
+          ),
+          label: "Account",
+        ),
       ],
     );
   }

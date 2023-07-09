@@ -23,12 +23,10 @@ class _AccountPageState extends BaseState<
   @override
   AppBar? buildAppBar() {
     return commonAppbarForScreens(
-      title: "Account Settings",
-      onTap: () {
-        pop();
-      },
-      centerTitle: true,
-    );
+        title: "Account Settings",
+        onTap: () {},
+        centerTitle: true,
+        requireBackButton: false);
   }
 
   @override

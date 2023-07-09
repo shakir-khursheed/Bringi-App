@@ -1,3 +1,4 @@
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/Help_screen.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/account_page.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +69,7 @@ class _MDistributorDashboardState extends BaseState<
                     ),
                   ),
                   label: "All Help",
+                  onTap: () {},
                 ),
                 helpGridCard(
                   Hexcolor: "4872A4",
@@ -80,6 +82,7 @@ class _MDistributorDashboardState extends BaseState<
                     ),
                   ),
                   label: "Processing",
+                  onTap: () {},
                 ),
                 helpGridCard(
                   Hexcolor: "000000",
@@ -92,6 +95,7 @@ class _MDistributorDashboardState extends BaseState<
                     ),
                   ),
                   label: "pickup help",
+                  onTap: () {},
                 ),
                 helpGridCard(
                   Hexcolor: "48742C",
@@ -104,6 +108,7 @@ class _MDistributorDashboardState extends BaseState<
                     ),
                   ),
                   label: "Delivered",
+                  onTap: () {},
                 ),
                 helpGridCard(
                   Hexcolor: "AA1C13",
@@ -116,6 +121,7 @@ class _MDistributorDashboardState extends BaseState<
                     ),
                   ),
                   label: "cancelled",
+                  onTap: () {},
                 ),
               ],
             ),
@@ -145,6 +151,11 @@ class _MDistributorDashboardState extends BaseState<
                     ),
                   ),
                   label: "Help",
+                  onTap: () {
+                    push(
+                      widget: HelpList(),
+                    );
+                  },
                 ),
               ],
             ),
@@ -164,13 +175,21 @@ class _MDistributorDashboardState extends BaseState<
                 Gap(10),
                 helpListCard(
                   Hexcolor: "4872A4",
-                  count: Icon(Icons.people),
+                  count: Icon(
+                    Icons.inventory,
+                    color: Colors.white,
+                  ),
                   label: "Manage inventory",
+                  onTap: () {},
                 ),
                 helpListCard(
                   Hexcolor: "B694A6",
-                  count: Icon(Icons.people),
+                  count: Icon(
+                    Icons.people,
+                    color: Colors.white,
+                  ),
                   label: "Manage agents",
+                  onTap: () {},
                 ),
               ],
             ),
@@ -227,26 +246,32 @@ class _MDistributorDashboardState extends BaseState<
     );
   }
 
-  Card helpListCard({String? Hexcolor, Widget? count, String? label}) {
-    return Card(
-      color: HexColor.fromHex("$Hexcolor"),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      elevation: 5,
-      child: ListTile(
-        leading: count,
-        title: Text(
-          "$label",
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
+  Widget helpListCard(
+      {String? Hexcolor, Widget? count, String? label, Function? onTap}) {
+    return InkWell(
+      onTap: () {
+        onTap!();
+      },
+      child: Card(
+        color: HexColor.fromHex("$Hexcolor"),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        elevation: 5,
+        child: ListTile(
+          leading: count,
+          title: Text(
+            "$label",
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          trailing: Icon(
+            Icons.keyboard_arrow_right,
             color: Colors.white,
           ),
-        ),
-        trailing: Icon(
-          Icons.keyboard_arrow_right,
-          color: Colors.white,
         ),
       ),
     );

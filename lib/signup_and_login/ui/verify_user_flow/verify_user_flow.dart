@@ -1,3 +1,4 @@
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/Mbottom_navbar_view.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/retailer_dashboard.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
@@ -153,12 +154,14 @@ class _VerifyUserFlowState extends BaseState<
         }
       case "DISTRIBUTOR":
         {
-          pushandRemoveUntill(widget: DistributorDashboard());
+          pushandRemoveUntill(
+            widget: DistributorDashboard(),
+          );
           break;
         }
       case "MASTER DISTRIBUTOR":
         {
-          pushandRemoveUntill(widget: MDistributorDashboard());
+          pushandRemoveUntill(widget: MDistriButorBottomNavbarView());
           break;
         }
       case "AGENT":
@@ -173,7 +176,9 @@ class _VerifyUserFlowState extends BaseState<
 
   @override
   void navigateToUserRegistrationFlow() {
-    pushandRemoveUntill(widget: UserRegistrationFlow());
+    pushandRemoveUntill(
+      widget: UserRegistrationFlow(),
+    );
   }
 
   @override

@@ -1,4 +1,3 @@
-import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/account_page.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/common_resources/no_item_found.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,24 +7,23 @@ import '../../../base/base_state.dart';
 import '../navigator/M-distributor_dashboard_navigator.dart';
 import '../viewmodel/M-distributor_dashboard_viewmodel.dart';
 
-class RetailerList extends StatefulWidget {
-  const RetailerList({super.key});
+class HelpList extends StatefulWidget {
+  const HelpList({super.key});
 
   @override
-  State<RetailerList> createState() => _RetailerListState();
+  State<HelpList> createState() => _HelpListState();
 }
 
-class _RetailerListState extends BaseState<
-    RetailerList,
-    MDistributorDashboardViewModel,
+class _HelpListState extends BaseState<HelpList, MDistributorDashboardViewModel,
     MDistributorDashboardNavigator> implements MDistributorDashboardNavigator {
   @override
   AppBar? buildAppBar() {
     return commonAppbarForScreens(
-      title: "Retailers",
-      onTap: () {},
+      title: "Help",
+      onTap: () {
+        pop();
+      },
       centerTitle: true,
-      requireBackButton: false,
     );
   }
 
@@ -35,17 +33,17 @@ class _RetailerListState extends BaseState<
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection("Users")
-              .where('role', isEqualTo: "RETAILER")
+              .collection("Retailer")
+              .doc()
+              .collection("orders")
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.data?.docs.length == 0) {
-              return NoitemFoundPage(title: "No retailers found");
+              return Center(child: NoitemFoundPage(title: "No Help found"));
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }
-            if (snapshot.hasError) {}
             return ListView.builder(
               itemCount: snapshot.data?.docs.length,
               itemBuilder: (context, index) => Card(
@@ -60,7 +58,7 @@ class _RetailerListState extends BaseState<
                           Icon(Icons.person),
                           Gap(10),
                           Text(
-                            snapshot.data?.docs[index].get("ShopName"),
+                            snapshot.data?.docs[index].get("OrderId"),
                           ),
                         ],
                       ),
@@ -72,7 +70,7 @@ class _RetailerListState extends BaseState<
                           Icon(Icons.mobile_screen_share),
                           Gap(10),
                           Text(
-                            snapshot.data?.docs[index].get("mobileNo"),
+                            snapshot.data?.docs[index].get("productName"),
                           ),
                         ],
                       ),
@@ -84,7 +82,7 @@ class _RetailerListState extends BaseState<
                           Icon(Icons.location_pin),
                           Gap(10),
                           Text(
-                            snapshot.data?.docs[index].get("Address"),
+                            snapshot.data?.docs[index].get("orderAmount"),
                           ),
                         ],
                       )
