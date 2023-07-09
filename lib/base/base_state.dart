@@ -1,5 +1,8 @@
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/create_order_process/Thank_u_screen.dart';
+import 'package:bringi_app/signup_and_login/ui/verify_user_flow/verify_user_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../service_locator/service_locator.dart';
 import 'base_navigator.dart';
@@ -24,6 +27,13 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
   AppBar? buildAppBar();
 
   @override
+  void onOrderCreatedSuccessfully() {
+    push(
+      widget: ThankUPage(),
+    );
+  }
+
+  @override
   void initState() {
     loadPageData();
     viewModel.setNavigator(getNavigator());
@@ -39,6 +49,11 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
         content: Text(message),
       ));
     }
+  }
+
+  @override
+  void navigateToVerifyUserFlow() {
+    pushandRemoveUntill(widget: VerifyUserFlow());
   }
 
   @override
@@ -80,6 +95,17 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
         (route) => false).then((value) => loadPageData());
   }
 
+  void launchExternalUrl({required Uri uri, LaunchMode? mode}) async {
+    if (!uri.hasEmptyPath) {
+      await launchUrl(
+        uri,
+        mode: mode ?? LaunchMode.inAppWebView,
+      );
+    } else {
+      showMessage("couldn't launch a $uri");
+    }
+  }
+
   void pop({dynamic result}) {
     Navigator.of(context).pop();
   }
@@ -99,6 +125,8 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
     );
   }
 }
+
+void onOrderCreatedSuccessfully() {}
 
 void showDialogMethod(
     {required BuildContext context,

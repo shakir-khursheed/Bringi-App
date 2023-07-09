@@ -6,9 +6,7 @@ import '../model/refferel_code_model.dart';
 
 class UserRegistrationRepo extends BaseRepo<UserRegistrationWebApi> {
   Future<RefferalCodeModel> checkRefferelCode() async {
-    print(
-      await getPhoneNo(),
-    );
+    print(await getPhoneNo());
     return await webApi.checkRefferelCode(
       await getPhoneNo(),
     );

@@ -1,13 +1,17 @@
 import 'package:bringi_app/DISTRIBUTOR_FLOW/dashboard/ui/distributor_dashboard.dart';
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/M-distributor_dashboard.dart';
-import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/retailer_dashboard.dart';
 import 'package:bringi_app/signup_and_login/ui/kyc_approved_or_rejected_page.dart';
 import 'package:bringi_app/signup_and_login/ui/verify_user_flow/verify_user_flow.dart';
 import 'package:bringi_app/splash_screen/navigator/splash_navigator.dart';
 import 'package:bringi_app/splash_screen/viewmodel/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 
 import '../../AGENT_FLOW/dashboard/ui/bottom_navbar_view.dart';
+=======
+import '../../RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
+>>>>>>> e1eaab2d52fbac95700c1ea65ad35c371c5964d8
 import '../../base/base_state.dart';
 import '../../common_resources/get_asset_image.dart';
 
@@ -107,7 +111,7 @@ class _SplashScreenState
           pushandRemoveUntill(widget: DistributorDashboard());
           break;
         }
-      case "M-DISTRIBUTOR":
+      case "MASTER DISTRIBUTOR":
         {
           pushandRemoveUntill(widget: MDistributorDashboard());
           break;
@@ -123,5 +127,10 @@ class _SplashScreenState
   @override
   void navigateToKYCscreen() {
     pushandRemoveUntill(widget: KYCstatusPage());
+  }
+  
+  @override
+  void onOrderCreatedSuccessfully() {
+    // TODO: implement onOrderCreatedSuccessfully
   }
 }

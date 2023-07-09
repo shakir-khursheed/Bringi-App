@@ -180,4 +180,9 @@ class _UserRegistrationFlowState extends BaseState<
   void navigateTOKYCscreen() {
     pushandRemoveUntill(widget: KYCstatusPage());
   }
+  
+  @override
+  void onOrderCreatedSuccessfully() {
+    // TODO: implement onOrderCreatedSuccessfully
+  }
 }

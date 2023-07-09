@@ -1,10 +1,13 @@
 import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/create_order_process/product_details.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
+import 'package:bringi_app/common_resources/no_item_found.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../base/base_state.dart';
-import '../../../common_resources/common_input_field.dart';
 
 class RetailerDashboard extends StatefulWidget {
   const RetailerDashboard({super.key});
@@ -18,6 +21,7 @@ class _RetailerDashboardState extends BaseState<
     RetailerDashboardViewModel,
     RetailerDashboardNavigator> implements RetailerDashboardNavigator {
   ScrollController? _scrollController;
+  String? uid;
   @override
   AppBar? buildAppBar() {
     return null;
@@ -48,15 +52,32 @@ class _RetailerDashboardState extends BaseState<
             pinned: true,
             floating: true,
             backgroundColor: HexColor.fromHex("051E43"),
-            title: Text(
-              "Areeb Enterprisis",
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 1,
-              ),
-            ),
+            title: StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("Users")
+                    .doc(uid)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.data == null) {
+                    return Text(
+                      "Bringi Retailer",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 25,
+                      ),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                  }
+                  return Text(
+                    "${snapshot.data?.get("ShopName")}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 25,
+                    ),
+                  );
+                }),
           ),
           SliverAppBar(
             automaticallyImplyLeading: false,
@@ -92,11 +113,12 @@ class _RetailerDashboardState extends BaseState<
                 child: TextFormField(
                   onChanged: (text) {},
                   decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(25),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(25),
                     ),
                     filled: true,
                     fillColor: Colors.white,
@@ -119,19 +141,24 @@ class _RetailerDashboardState extends BaseState<
               items: [
                 Container(
                   child: Center(
-                    child: Text("BINGI"),
-                  ),
+                      child: Image(
+                    image: AssetImage(
+                      "assets/images/splash_logo.png",
+                    ),
+                  )),
                   decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(
-                        5,
-                      )),
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(
+                      5,
+                    ),
+                  ),
                 ),
               ],
               options: CarouselOptions(
                 height: 150,
                 padEnds: true,
                 enlargeCenterPage: true,
+                autoPlay: true,
               ),
             ),
             SizedBox(
@@ -158,81 +185,135 @@ class _RetailerDashboardState extends BaseState<
             SizedBox(
               height: 10,
             ),
-            Expanded(
-              child: GridView.builder(
-                itemCount: 10,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  mainAxisExtent: 210.0,
-                ),
-                itemBuilder: (context, index) => Card(
-                  elevation: 5,
-                  shadowColor: Colors.grey,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Image(
-                        image: AssetImage("assets/images/splash_logo.png"),
-                        height: 50,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "PRIMIUM PACK(1L)",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "PRICE ₹ 2000",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "MRP ₹ 1000",
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        color: Colors.grey.withOpacity(.5),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            "Margin ₹ 1000",
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
+            Consumer<RetailerDashboardViewModel>(
+              builder: (context, vm, child) => (!vm.showLoading)
+                  ? (vm.productList.length != 0)
+                      ? Expanded(
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              onRefresh();
+                            },
+                            child: GridView.builder(
+                              itemCount: vm.productList.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                mainAxisExtent: 290.0,
+                              ),
+                              itemBuilder: (context, index) => InkWell(
+                                onTap: () {
+                                  push(
+                                      widget: ProductDetailPage(
+                                    productId: vm.productList[index].userid,
+                                  ));
+                                },
+                                child: ProductItem(
+                                  vm,
+                                  index,
+                                  () {
+                                    vm.addToInventory(
+                                      productName:
+                                          vm.productList[index].productName,
+                                      amount: vm.productList[index].price,
+                                      count: 1,
+                                      imageUrl: vm
+                                          .productList[index].imageUrls[index],
+                                      productId: vm.productList[index].userid,
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                        )
+                      : NoitemFoundPage(title: "No products found")
+                  : Center(child: CircularProgressIndicator()),
             )
           ],
         ),
       ),
+    );
+  }
+
+  Card ProductItem(
+      RetailerDashboardViewModel vm, int index, Function addTocart) {
+    return Card(
+      elevation: 5,
+      shadowColor: Colors.grey,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Stack(alignment: AlignmentDirectional.topEnd, children: [
+        Center(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Image(
+                image: NetworkImage(vm.productList[index].imageUrls.first),
+                height: 120,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                vm.productList[index].productName,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "PRICE ₹ ${vm.productList[index].price}",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "MRP ₹ ${vm.productList[index].mrp}",
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                color: Colors.grey.withOpacity(.5),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    "Margin ₹ ${vm.productList[index].margin}",
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            addTocart();
+          },
+          icon: Icon(
+            Icons.add_circle,
+            size: 30,
+            color: Colors.yellow[600],
+          ),
+        )
+      ]),
     );
   }
 
@@ -257,8 +338,10 @@ class _RetailerDashboardState extends BaseState<
   }
 
   @override
-  void loadPageData({value}) {
-    // TODO: implement loadPageData
+  void loadPageData({value}) async {
+    viewModel.getProducts();
+    uid = await viewModel.getuid();
+    setState(() {});
   }
 
   @override
@@ -279,5 +362,14 @@ class _RetailerDashboardState extends BaseState<
   @override
   void showNoInternetPage() {
     // TODO: implement showNoInternetPage
+  }
+
+  void onRefresh() {
+    viewModel.getProducts();
+  }
+
+  @override
+  void onAddressSavedSucessfully() {
+    // TODO: implement onAddressSavedSucessfully
   }
 }

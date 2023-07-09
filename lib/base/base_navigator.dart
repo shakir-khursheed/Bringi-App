@@ -5,4 +5,5 @@ abstract class BaseNavigator {
   void navigateToVerifyUserFlow();
   void pop();
   void showNoInternetPage();
+  void onOrderCreatedSuccessfully();
 }

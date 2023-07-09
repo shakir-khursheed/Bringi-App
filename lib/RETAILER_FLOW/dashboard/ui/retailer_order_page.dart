@@ -1,8 +1,10 @@
 import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
+import 'package:bringi_app/common_resources/no_item_found.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../base/base_state.dart';
-import '../../../common_resources/common_input_field.dart';
 
 class RetailerHelp extends StatefulWidget {
   const RetailerHelp({super.key});
@@ -16,6 +18,7 @@ class _RetailerHelpState extends BaseState<
     RetailerDashboardViewModel,
     RetailerDashboardNavigator> implements RetailerDashboardNavigator {
   ScrollController? _scrollController;
+  String? uid;
   @override
   AppBar? buildAppBar() {
     return null;
@@ -75,11 +78,12 @@ class _RetailerHelpState extends BaseState<
                 child: TextFormField(
                   onChanged: (text) {},
                   decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(25),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(25),
                     ),
                     filled: true,
                     fillColor: Colors.white,
@@ -94,7 +98,98 @@ class _RetailerHelpState extends BaseState<
           )
         ];
       },
-      body: SizedBox(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 20,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("Retailer")
+                  .doc("${uid}")
+                  .collection("orders")
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.data?.docs.length == 0) {
+                  return NoitemFoundPage(title: "No Help Found");
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+                if (snapshot.hasError) {
+                  print("${snapshot.error}");
+                }
+                return Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      onRefresh();
+                    },
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) => SizedBox(
+                        height: 10,
+                      ),
+                      itemCount: snapshot.data?.docs.length ?? 0,
+                      itemBuilder: (context, index) => Card(
+                        elevation: 5,
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                "Order ID",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                  "${snapshot.data?.docs[index].get("OrderId")}"),
+                              trailing: Container(
+                                decoration: BoxDecoration(
+                                  color: HexColor.fromHex("F2C357")
+                                      .withOpacity(.3),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                padding: EdgeInsets.only(
+                                  left: 20,
+                                  right: 20,
+                                  top: 5,
+                                  bottom: 5,
+                                ),
+                                child: Text(
+                                  "${snapshot.data?.docs[index].get("orderStatus")}",
+                                  style: TextStyle(
+                                    color: HexColor.fromHex("EDA944"),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            ListTile(
+                              title: Text(
+                                "₹ ${snapshot.data?.docs[index].get("orderAmount")}",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Text(
+                                  "${snapshot.data?.docs[index].get("productName")}"),
+                              trailing: Text(
+                                  "${snapshot.data?.docs[index].get("createdAt")}"),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -119,8 +214,9 @@ class _RetailerHelpState extends BaseState<
   }
 
   @override
-  void loadPageData({value}) {
-    // TODO: implement loadPageData
+  void loadPageData({value}) async {
+    uid = await viewModel.getuid();
+    setState(() {});
   }
 
   @override
@@ -142,4 +238,11 @@ class _RetailerHelpState extends BaseState<
   void showNoInternetPage() {
     // TODO: implement showNoInternetPage
   }
+
+  @override
+  void onAddressSavedSucessfully() {
+    // TODO: implement onAddressSavedSucessfully
+  }
+
+  void onRefresh() {}
 }
