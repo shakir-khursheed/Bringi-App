@@ -1,3 +1,4 @@
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/create_order_process/Thank_u_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,13 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
   Widget? buildBottomNavbar();
 
   AppBar? buildAppBar();
+
+  @override
+  void onOrderCreatedSuccessfully() {
+    push(
+      widget: ThankUPage(),
+    );
+  }
 
   @override
   void initState() {
@@ -99,6 +107,8 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel,
     );
   }
 }
+
+void onOrderCreatedSuccessfully() {}
 
 void showDialogMethod(
     {required BuildContext context,

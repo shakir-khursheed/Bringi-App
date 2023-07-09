@@ -224,4 +224,9 @@ class _KYCstatusPageState extends BaseState<
   void navigateTOKYCscreen() {
     // TODO: implement navigateTOKYCscreen
   }
+  
+  @override
+  void onOrderCreatedSuccessfully() {
+    // TODO: implement onOrderCreatedSuccessfully
+  }
 }

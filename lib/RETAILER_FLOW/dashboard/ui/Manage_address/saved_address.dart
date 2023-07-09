@@ -37,40 +37,57 @@ class _SavedAddressPageState extends BaseState<
           itemCount: vm.savedAddresses.length,
           itemBuilder: (context, index) => (!vm.showLoading)
               ? (vm.savedAddresses.length != 0)
-                  ? Card(
-                      elevation: 5,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "${vm.savedAddresses[index].address}",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text("${vm.savedAddresses[index].city}"),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text("${vm.savedAddresses[index].pincode}"),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
+                  ? addressCard(vm, index)
                   : Text("No address found")
               : CircularProgressIndicator(),
+        ),
+      ),
+    );
+  }
+
+  Card addressCard(RetailerDashboardViewModel vm, int index) {
+    return Card(
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.location_pin,
+              size: 30,
+              color: Colors.red,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "${vm.savedAddresses[index].address}",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text("${vm.savedAddresses[index].city}"),
+                SizedBox(
+                  height: 5,
+                ),
+                Text("${vm.savedAddresses[index].pincode}"),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

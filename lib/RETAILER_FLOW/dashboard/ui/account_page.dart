@@ -2,6 +2,7 @@ import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/Manage_address/add_address.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/Manage_address/saved_address.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../base/base_state.dart';
 
@@ -16,6 +17,7 @@ class _AccountPageState extends BaseState<
     RetailerAccountPage,
     RetailerDashboardViewModel,
     RetailerDashboardNavigator> implements RetailerDashboardNavigator {
+  String? uid;
   @override
   AppBar? buildAppBar() {
     return AppBar(
@@ -45,18 +47,62 @@ class _AccountPageState extends BaseState<
           SizedBox(
             height: 10,
           ),
-          Text(
-            "Areeb Malik",
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
-              fontSize: 25,
-            ),
-          ),
+          StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("Users")
+                  .doc(uid)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.data == null) {
+                  return Text(
+                    "Bringi Retailer",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 25,
+                    ),
+                  );
+                }
+                if (snapshot.hasError) {
+                  print(snapshot.error);
+                }
+                return Text(
+                  "${snapshot.data?.get("ShopName")}",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 25,
+                  ),
+                );
+              }),
           SizedBox(
             height: 10,
           ),
-          Text("Indo kashmir"),
+          StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("Users")
+                  .doc(uid)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.data == null) {
+                  return Text(
+                    "Not available",
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text("Loading");
+                }
+                if (snapshot.hasError) {
+                  print(snapshot.error);
+                }
+                return Text(
+                  "${snapshot.data?.get("Address")}",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                  ),
+                );
+              }),
           SizedBox(
             height: 20,
           ),
@@ -159,8 +205,9 @@ class _AccountPageState extends BaseState<
   }
 
   @override
-  void loadPageData({value}) {
-    // TODO: implement loadPageData
+  void loadPageData({value}) async {
+    uid = await viewModel.getuid();
+    setState(() {});
   }
 
   @override

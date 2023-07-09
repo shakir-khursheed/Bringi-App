@@ -1,4 +1,5 @@
 import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/create_order_process/checkout_screen.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
@@ -19,6 +20,8 @@ class _ProductDetailPageState extends BaseState<
     RetailerDashboardViewModel,
     RetailerDashboardNavigator> implements RetailerDashboardNavigator {
   final PageController _controller = PageController();
+  String? orderAmount;
+  String? productQuantity;
   @override
   AppBar? buildAppBar() {
     return commonAppbarForScreens(
@@ -149,25 +152,89 @@ class _ProductDetailPageState extends BaseState<
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: Text("Pack of 12"),
+                      InkWell(
+                        onTap: () {
+                          orderAmount = vm.product?.packOf12;
+                          productQuantity = "PACK OF 12";
+                          vm.setIs60Selected = false;
+                          vm.setIs120Selected = false;
+                          vm.setIs24Selected = false;
+                          vm.setIs12Selected = true;
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            width: 2,
+                            color: (vm.is12Selected ?? false)
+                                ? Colors.green
+                                : Colors.grey,
+                          )),
+                          child: Text("Pack of 12"),
+                        ),
                       ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: Text("Pack of 24"),
+                      InkWell(
+                        onTap: () {
+                          orderAmount = vm.product?.packOf24;
+                          productQuantity = "PACK OF 24";
+                          vm.setIs60Selected = false;
+                          vm.setIs120Selected = false;
+                          vm.setIs24Selected = true;
+                          vm.setIs12Selected = false;
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            width: 2,
+                            color: (vm.is24Selected ?? false)
+                                ? Colors.green
+                                : Colors.grey,
+                          )),
+                          child: Text("Pack of 24"),
+                        ),
                       ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: Text("Pack of 60"),
+                      InkWell(
+                        onTap: () {
+                          orderAmount = vm.product?.packOf60;
+                          productQuantity = "PACK OF 60";
+                          vm.setIs60Selected = true;
+                          vm.setIs120Selected = false;
+                          vm.setIs24Selected = false;
+                          vm.setIs12Selected = false;
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            width: 2,
+                            color: (vm.is60Selected ?? false)
+                                ? Colors.green
+                                : Colors.grey,
+                          )),
+                          child: Text("Pack of 60"),
+                        ),
                       ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: Text("Pack of 120"),
+                      InkWell(
+                        onTap: () {
+                          orderAmount = vm.product?.packOf120;
+                          productQuantity = "PACK OF 120";
+                          vm.setIs60Selected = false;
+                          vm.setIs120Selected = true;
+                          vm.setIs24Selected = false;
+                          vm.setIs12Selected = false;
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            width: 2,
+                            color: (vm.is120Selected ?? false)
+                                ? Colors.green
+                                : Colors.grey,
+                          )),
+                          child: Text("Pack of 120"),
+                        ),
                       ),
                     ],
                   ),
@@ -175,13 +242,16 @@ class _ProductDetailPageState extends BaseState<
                     height: 30,
                   ),
                   Text(
-                    " ₹ ${vm.product?.price}",
+                    " ₹ ${(orderAmount != null) ? orderAmount : vm.product?.price}",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 25,
                       color: Colors.green,
                     ),
-                  )
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
                 ],
                 fixedAtBottomChild: [
                   Expanded(
@@ -189,18 +259,49 @@ class _ProductDetailPageState extends BaseState<
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         MaterialButton(
-                          padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
-                          color: HexColor.fromHex("F2C357"),
-                          onPressed: () {},
-                          child: Text("Add to inventory"),
-                        ),
+                            padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                            color: HexColor.fromHex("F2C357"),
+                            onPressed: () {
+                              vm.addToInventory(
+                                productName: vm.product?.productName,
+                                amount: orderAmount ?? vm.product?.price ?? "",
+                                count: 1,
+                                imageUrl: vm.product?.imageUrls.first,
+                                productId: vm.product?.userid,
+                              );
+                            },
+                            child: (!vm.loading)
+                                ? Text(
+                                    "Add to inventory",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.black,
+                                    ),
+                                  )),
                         MaterialButton(
-                          padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
+                          padding: EdgeInsets.fromLTRB(40, 20, 40, 20),
                           color: HexColor.fromHex("F2C357"),
                           onPressed: () {
-                            
+                            push(
+                              widget: CheckoutPage(
+                                productQuantity: productQuantity ?? "1",
+                                productName: vm.product?.productName ?? "",
+                                Amount: orderAmount ?? vm.product?.price ?? "",
+                              ),
+                            );
                           },
-                          child: Text("Checkout"),
+                          child: Text(
+                            "Checkout",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -255,12 +356,8 @@ class _ProductDetailPageState extends BaseState<
   }
 
   @override
-  void showNoInternetPage() {
-    // TODO: implement showNoInternetPage
-  }
-  
+  void showNoInternetPage() {}
+
   @override
-  void onAddressSavedSucessfully() {
-    // TODO: implement onAddressSavedSucessfully
-  }
+  void onAddressSavedSucessfully() {}
 }

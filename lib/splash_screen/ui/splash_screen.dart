@@ -124,4 +124,9 @@ class _SplashScreenState
   void navigateToKYCscreen() {
     pushandRemoveUntill(widget: KYCstatusPage());
   }
+  
+  @override
+  void onOrderCreatedSuccessfully() {
+    // TODO: implement onOrderCreatedSuccessfully
+  }
 }

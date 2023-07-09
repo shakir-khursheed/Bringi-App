@@ -1,7 +1,9 @@
 import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/create_order_process/product_details.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
+import 'package:bringi_app/common_resources/no_item_found.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +21,7 @@ class _RetailerDashboardState extends BaseState<
     RetailerDashboardViewModel,
     RetailerDashboardNavigator> implements RetailerDashboardNavigator {
   ScrollController? _scrollController;
+  String? uid;
   @override
   AppBar? buildAppBar() {
     return null;
@@ -49,15 +52,32 @@ class _RetailerDashboardState extends BaseState<
             pinned: true,
             floating: true,
             backgroundColor: HexColor.fromHex("051E43"),
-            title: Text(
-              "Areeb Enterprisis",
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 1,
-              ),
-            ),
+            title: StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("Users")
+                    .doc(uid)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.data == null) {
+                    return Text(
+                      "Bringi Retailer",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 25,
+                      ),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                  }
+                  return Text(
+                    "${snapshot.data?.get("ShopName")}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 25,
+                    ),
+                  );
+                }),
           ),
           SliverAppBar(
             automaticallyImplyLeading: false,
@@ -93,11 +113,12 @@ class _RetailerDashboardState extends BaseState<
                 child: TextFormField(
                   onChanged: (text) {},
                   decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(25),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(25),
                     ),
                     filled: true,
                     fillColor: Colors.white,
@@ -137,6 +158,7 @@ class _RetailerDashboardState extends BaseState<
                 height: 150,
                 padEnds: true,
                 enlargeCenterPage: true,
+                autoPlay: true,
               ),
             ),
             SizedBox(
@@ -178,7 +200,7 @@ class _RetailerDashboardState extends BaseState<
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 10,
                                 mainAxisSpacing: 10,
-                                mainAxisExtent: 280.0,
+                                mainAxisExtent: 290.0,
                               ),
                               itemBuilder: (context, index) => InkWell(
                                 onTap: () {
@@ -190,16 +212,24 @@ class _RetailerDashboardState extends BaseState<
                                 child: ProductItem(
                                   vm,
                                   index,
-                                  () {},
+                                  () {
+                                    vm.addToInventory(
+                                      productName:
+                                          vm.productList[index].productName,
+                                      amount: vm.productList[index].price,
+                                      count: 1,
+                                      imageUrl: vm
+                                          .productList[index].imageUrls[index],
+                                      productId: vm.productList[index].userid,
+                                    );
+                                  },
                                 ),
                               ),
                             ),
                           ),
                         )
-                      : Center(
-                          child: Text("No products Found"),
-                        )
-                  : CircularProgressIndicator(),
+                      : NoitemFoundPage(title: "No products found")
+                  : Center(child: CircularProgressIndicator()),
             )
           ],
         ),
@@ -213,79 +243,77 @@ class _RetailerDashboardState extends BaseState<
       elevation: 5,
       shadowColor: Colors.grey,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Stack(
-        alignment: AlignmentDirectional.topEnd,
-        children: [
-          Center(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
+      child: Stack(alignment: AlignmentDirectional.topEnd, children: [
+        Center(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Image(
+                image: NetworkImage(vm.productList[index].imageUrls.first),
+                height: 120,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                vm.productList[index].productName,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
                 ),
-                Image(
-                  image: NetworkImage(vm.productList[index].imageUrls.first),
-                  height: 120,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "PRICE ₹ ${vm.productList[index].price}",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
                 ),
-                SizedBox(
-                  height: 20,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "MRP ₹ ${vm.productList[index].mrp}",
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
                 ),
-                Text(
-                  vm.productList[index].productName,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "PRICE ₹ ${vm.productList[index].price}",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "MRP ₹ ${vm.productList[index].mrp}",
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  color: Colors.grey.withOpacity(.5),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text(
-                      "Margin ₹ ${vm.productList[index].margin}",
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                      ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                color: Colors.grey.withOpacity(.5),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    "Margin ₹ ${vm.productList[index].margin}",
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          IconButton(
-            onPressed: () {
-              addTocart();
-            },
-            icon: Icon(
-              Icons.add_circle,
-              size: 40,
-            ),
-          )
-        ],
-      ),
+        ),
+        IconButton(
+          onPressed: () {
+            addTocart();
+          },
+          icon: Icon(
+            Icons.add_circle,
+            size: 30,
+            color: Colors.yellow[600],
+          ),
+        )
+      ]),
     );
   }
 
@@ -310,8 +338,10 @@ class _RetailerDashboardState extends BaseState<
   }
 
   @override
-  void loadPageData({value}) {
+  void loadPageData({value}) async {
     viewModel.getProducts();
+    uid = await viewModel.getuid();
+    setState(() {});
   }
 
   @override
@@ -337,7 +367,7 @@ class _RetailerDashboardState extends BaseState<
   void onRefresh() {
     viewModel.getProducts();
   }
-  
+
   @override
   void onAddressSavedSucessfully() {
     // TODO: implement onAddressSavedSucessfully
