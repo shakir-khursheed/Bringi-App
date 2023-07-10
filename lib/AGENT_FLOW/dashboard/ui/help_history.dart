@@ -14,7 +14,6 @@ class HelpHistory extends StatefulWidget {
 
 class _HelpHistoryState extends BaseState<HelpHistory, AgentDashboardViewModel,
     AgentDashboardNavigator> implements AgentDashboardNavigator {
-  ScrollController? _scrollController;
   @override
   AppBar? buildAppBar() {
     return null;

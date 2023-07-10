@@ -1,24 +1,22 @@
-import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
-import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
+import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/common_resources/no_item_found.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:gap/gap.dart';
 import '../../../base/base_state.dart';
+import '../navigator/M-distributor_dashboard_navigator.dart';
+import '../viewmodel/M-distributor_dashboard_viewmodel.dart';
 
-class RetailerHelp extends StatefulWidget {
-  const RetailerHelp({super.key});
+class HelpList extends StatefulWidget {
+  const HelpList({super.key});
 
   @override
-  State<RetailerHelp> createState() => _RetailerHelpState();
+  State<HelpList> createState() => _HelpListState();
 }
 
-class _RetailerHelpState extends BaseState<
-    RetailerHelp,
-    RetailerDashboardViewModel,
-    RetailerDashboardNavigator> implements RetailerDashboardNavigator {
+class _HelpListState extends BaseState<HelpList, MDistributorDashboardViewModel,
+    MDistributorDashboardNavigator> implements MDistributorDashboardNavigator {
   ScrollController? _scrollController;
-  String? uid;
   @override
   AppBar? buildAppBar() {
     return null;
@@ -31,7 +29,16 @@ class _RetailerHelpState extends BaseState<
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return <Widget>[
           SliverAppBar(
-            automaticallyImplyLeading: false,
+            leading: IconButton(
+              onPressed: () {
+                pop();
+              },
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
             titleSpacing: 0.0,
             actions: [
               InkWell(
@@ -53,7 +60,7 @@ class _RetailerHelpState extends BaseState<
               child: Text(
                 "Help",
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 18,
                   color: Colors.white,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 1,
@@ -121,9 +128,7 @@ class _RetailerHelpState extends BaseState<
                 }
                 return Expanded(
                   child: RefreshIndicator(
-                    onRefresh: () async {
-                      onRefresh();
-                    },
+                    onRefresh: () async {},
                     child: ListView.separated(
                       separatorBuilder: (context, index) => SizedBox(
                         height: 10,
@@ -207,14 +212,8 @@ class _RetailerHelpState extends BaseState<
   }
 
   @override
-  RetailerDashboardNavigator getNavigator() {
-    return this;
-  }
-
-  @override
-  void loadPageData({value}) async {
-    uid = await viewModel.getuid();
-    setState(() {});
+  void loadPageData({value}) {
+    // TODO: implement loadPageData
   }
 
   @override
@@ -238,9 +237,7 @@ class _RetailerHelpState extends BaseState<
   }
 
   @override
-  void onAddressSavedSucessfully() {
-    // TODO: implement onAddressSavedSucessfully
+  MDistributorDashboardNavigator getNavigator() {
+    return this;
   }
-
-  void onRefresh() {}
 }

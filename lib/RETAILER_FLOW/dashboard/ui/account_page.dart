@@ -2,6 +2,7 @@ import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/Manage_address/add_address.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/Manage_address/saved_address.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
+import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../base/base_state.dart';
@@ -21,11 +22,11 @@ class _AccountPageState extends BaseState<
   String? uid;
   @override
   AppBar? buildAppBar() {
-    return AppBar(
-      backgroundColor: HexColor.fromHex("051E43"),
-      title: Text("Account Settings"),
-      centerTitle: true,
-    );
+    return commonAppbarForScreens(
+        title: "Account Settings",
+        onTap: () {},
+        centerTitle: true,
+        requireBackButton: false);
   }
 
   @override
@@ -38,11 +39,11 @@ class _AccountPageState extends BaseState<
             height: 10,
           ),
           CircleAvatar(
-            radius: 80,
+            radius: 60,
             backgroundColor: HexColor.fromHex("051E43"),
             child: Icon(
               Icons.account_circle,
-              size: 100,
+              size: 80,
             ),
           ),
           SizedBox(

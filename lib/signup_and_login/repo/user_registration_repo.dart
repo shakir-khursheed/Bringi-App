@@ -39,7 +39,7 @@ class UserRegistrationRepo extends BaseRepo<UserRegistrationWebApi> {
       String? createdAt,
       String? role}) async {
     return await webApi.registerUser(
-      uid: await getUid(),
+      uid: await getPhoneNo(),
       mobileNo: mobileNo,
       name: name,
       address: address,
@@ -51,13 +51,13 @@ class UserRegistrationRepo extends BaseRepo<UserRegistrationWebApi> {
 
   Future<UserModel> checkKYCstatus() async {
     return webApi.checkKYCstatus(
-      uid: await getUid(),
+      uid: await getPhoneNo(),
     );
   }
 
   Future<UserModel> checkDoesUserExists() async {
     return webApi.checkDoesUserExists(
-      uid: await getUid(),
+      uid: await getPhoneNo(),
     );
   }
 }

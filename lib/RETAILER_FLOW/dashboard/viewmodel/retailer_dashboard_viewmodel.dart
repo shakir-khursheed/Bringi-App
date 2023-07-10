@@ -26,6 +26,7 @@ class RetailerDashboardViewModel
   static List<Map<String, dynamic>> retailerAddress = [];
   List<Address> savedAddresses = List.empty(growable: true);
   FirebaseFirestore _db = FirebaseFirestore.instance;
+  String? defaultAddress;
 
   bool? get is12Selected => _Is12PackSelected;
   set setIs12Selected(bool? value) {
@@ -81,17 +82,10 @@ class RetailerDashboardViewModel
 
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PROFILE SECTION >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-  void getSavedAddress() async {
-    showLoading = true;
-    try {
-      var response = await repository.getSavedAddress();
-      savedAddresses = response.addresses;
-      notifyListeners();
-    } on SocketException {
-    } catch (e) {
-    } finally {
-      showLoading = false;
-    }
+  void getDefaultAddress() async {
+    var response = await repository.getDefaultAddress();
+    defaultAddress = response;
+    notifyListeners();
   }
 
   void saveAddress({
@@ -100,17 +94,20 @@ class RetailerDashboardViewModel
     String? pincode,
   }) async {
     showLoading = true;
-    retailerAddress.add({
-      "address": address,
-      "city": city,
-      "pincode": pincode,
-    });
     try {
-      await repository.saveAddress(
-        address: retailerAddress,
-      );
-      getNavigator().onAddressSavedSucessfully();
-      getNavigator().showMessage("Address saved successfully");
+      await _db
+          .collection("Addresses")
+          .doc(await repository.getPhoneNo())
+          .collection("SavedAddress")
+          .doc()
+          .set({
+        "Address": address,
+        "city": city,
+        "pincode": pincode,
+      }).whenComplete(() => {
+                getNavigator().onAddressSavedSucessfully(),
+                getNavigator().showMessage("Address saved successfully")
+              });
     } on SocketException {
     } catch (e) {
     } finally {
@@ -121,7 +118,7 @@ class RetailerDashboardViewModel
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CREATE ORDER SECTION >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   Future<String> getuid() async {
-    var response = await repository.getUid();
+    var response = await repository.getPhoneNo();
     return response ?? '';
   }
 
@@ -131,13 +128,14 @@ class RetailerDashboardViewModel
     int? count,
     String? imageUrl,
     String? productId,
+    String? productQuantity,
   }) async {
     loading = true;
     notifyListeners();
     try {
       await _db
           .collection("Retailer")
-          .doc(await repository.getUid())
+          .doc(await repository.getPhoneNo())
           .collection("inventory")
           .doc(productId)
           .set({
@@ -145,6 +143,7 @@ class RetailerDashboardViewModel
         "amount": amount,
         "count": count,
         "imageUrl": imageUrl,
+        "productQuantity": productQuantity,
         "productId": productId,
       }).whenComplete(() => {
                 getNavigator().showMessage(
@@ -153,7 +152,7 @@ class RetailerDashboardViewModel
               });
     } on SocketException catch (e) {
     } catch (e) {
-      getNavigator().showMessage("$e", color: Colors.red[900]);
+      // getNavigator().showMessage("$e", color: Colors.red[900]);
     } finally {
       loading = false;
       notifyListeners();
@@ -166,7 +165,7 @@ class RetailerDashboardViewModel
     try {
       await _db
           .collection("Retailer")
-          .doc(await repository.getUid())
+          .doc(await repository.getPhoneNo())
           .collection("inventory")
           .doc(productId)
           .delete()
@@ -175,6 +174,27 @@ class RetailerDashboardViewModel
                   "Item removed from invertory",
                 ),
               });
+    } on SocketException catch (e) {
+    } catch (e) {
+      getNavigator().showMessage("$e", color: Colors.red[900]);
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
+  }
+
+  void updateInventory({String? productId, int? count}) async {
+    loading = true;
+    notifyListeners();
+    try {
+      await _db
+          .collection("Retailer")
+          .doc(await repository.getPhoneNo())
+          .collection("inventory")
+          .doc(productId)
+          .update({
+        "count": count,
+      });
     } on SocketException catch (e) {
     } catch (e) {
       getNavigator().showMessage("$e", color: Colors.red[900]);

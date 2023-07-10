@@ -26,10 +26,19 @@ abstract class BaseRepo<W extends BaseWebApi> {
     _authTokenStorage.mSetPhoneNo(mobileNo);
   }
 
+  void setDefaultAddress(String address) {
+    _authTokenStorage.mSetAddress(address);
+  }
+
   //GETTERS
 
   Future<String?> getUid() async {
     var response = await _authTokenStorage.mGetUid();
+    return response;
+  }
+
+  Future<String?> getDefaultAddress() async {
+    var response = await _authTokenStorage.mGetDefaultAddress();
     return response;
   }
 
@@ -52,5 +61,6 @@ abstract class BaseRepo<W extends BaseWebApi> {
     _authTokenStorage.deleteROLE();
     _authTokenStorage.deleteUid();
     _authTokenStorage.deletePhoneNo();
+    _authTokenStorage.deleteAddress();
   }
 }

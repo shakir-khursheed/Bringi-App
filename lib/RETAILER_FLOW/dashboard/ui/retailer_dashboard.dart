@@ -1,5 +1,6 @@
 import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/create_order_process/product_details.dart';
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/notifications.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
 import 'package:bringi_app/common_resources/no_item_found.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -87,14 +88,22 @@ class _RetailerDashboardState extends BaseState<
               SizedBox(
                 width: 10,
               ),
-              Icon(
-                Icons.mic,
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.mic,
+                ),
               ),
               SizedBox(
                 width: 10,
               ),
-              Icon(
-                Icons.notifications,
+              IconButton(
+                onPressed: () {
+                  push(widget: Notifications());
+                },
+                icon: Icon(
+                  Icons.notifications,
+                ),
               ),
               SizedBox(
                 width: 10,
@@ -214,6 +223,8 @@ class _RetailerDashboardState extends BaseState<
                                   index,
                                   () {
                                     vm.addToInventory(
+                                      productQuantity:
+                                          vm.productList[index].packOf12,
                                       productName:
                                           vm.productList[index].productName,
                                       amount: vm.productList[index].price,

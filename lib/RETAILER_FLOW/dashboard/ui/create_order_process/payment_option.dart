@@ -10,9 +10,11 @@ import '../../../../base/base_state.dart';
 
 class PaymentOptionPage extends StatefulWidget {
   final String productQuantity;
+  final String? count;
   const PaymentOptionPage({
     super.key,
     required this.productQuantity,
+    this.count,
   });
 
   @override
@@ -84,7 +86,7 @@ class _PaymentOptionPageState extends BaseState<
                 children: [
                   Expanded(
                     child: ButtonFactory.buildUniversalButtonWithText(
-                      "Pay with Razorpay",
+                      "Pay ₹ ${vm.checkoutProductResponse?.amount}",
                       context,
                       () {},
                       buttonColor: HexColor.fromHex("F2C357"),
@@ -207,29 +209,34 @@ class _PaymentOptionPageState extends BaseState<
           fixedAtBottomChild: [
             Consumer<RetailerDashboardViewModel>(
               builder: (context, vm, child) => Expanded(
-                child: ButtonFactory.buildUniversalButtonWithText(
-                  "Place order ₹ ${vm.checkoutProductResponse?.amount}",
-                  context,
-                  () {
-                    (_options == PaymentOptions.COD)
-                        ? vm.CreateOrder(
-                            orderId: vm.checkoutProductResponse?.orderId,
-                            deliveryAddress:
-                                vm.checkoutProductResponse?.address,
-                            orderAmount: vm.checkoutProductResponse?.amount,
-                            orderCount: "1",
-                            productName:
-                                vm.checkoutProductResponse?.productName,
-                            productQuantity: widget.productQuantity,
-                            orderStatus: "PENDING",
-                            AssignedTo: "",
-                            createdAt: DateTime.now().toString(),
-                            updatedAt: "",
-                          )
-                        : null;
-                  },
-                  buttonColor: HexColor.fromHex("F2C357"),
-                  showLoading: vm.showLoading,
+                child: Visibility(
+                  visible:
+                      (_options == PaymentOptions.payonline) ? false : true,
+                  child: ButtonFactory.buildUniversalButtonWithText(
+                    "Place order ₹ ${vm.checkoutProductResponse?.amount}",
+                    context,
+                    () {
+                      (_options == PaymentOptions.COD)
+                          ? vm.CreateOrder(
+                              orderId: vm.checkoutProductResponse?.orderId,
+                              deliveryAddress:
+                                  vm.checkoutProductResponse?.address,
+                              orderAmount: vm.checkoutProductResponse?.amount,
+                              orderCount:
+                                  (widget.count != null) ? widget.count : "1",
+                              productName:
+                                  vm.checkoutProductResponse?.productName,
+                              productQuantity: widget.productQuantity,
+                              orderStatus: "PENDING",
+                              AssignedTo: "",
+                              createdAt: DateTime.now().toString(),
+                              updatedAt: "",
+                            )
+                          : null;
+                    },
+                    buttonColor: HexColor.fromHex("F2C357"),
+                    showLoading: vm.showLoading,
+                  ),
                 ),
               ),
             ),

@@ -1,28 +1,28 @@
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/navigator/M-distributor_dashboard_navigator.dart';
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/m-distributor_dashboard.dart';
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/retailer_list.dart';
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/viewmodel/M-distributor_dashboard_viewmodel.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/account_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../../base/base_state.dart';
-import '../navigator/agent_dashboard_navigator.dart';
-import '../viewmodel/agent_dashboard_viewmodel.dart';
-import 'account_details.dart';
-import 'help_history.dart';
-import 'help_page.dart';
 
-class BottomNavbarView extends StatefulWidget {
-  const BottomNavbarView({super.key});
+class MDistriButorBottomNavbarView extends StatefulWidget {
+  const MDistriButorBottomNavbarView({super.key});
 
   @override
-  State<BottomNavbarView> createState() => _BottomNavbarViewState();
+  State<MDistriButorBottomNavbarView> createState() =>
+      _MDistriButorBottomNavbarViewState();
 }
 
-class _BottomNavbarViewState extends BaseState<
-    BottomNavbarView,
-    AgentDashboardViewModel,
-    AgentDashboardNavigator> implements AgentDashboardNavigator {
+class _MDistriButorBottomNavbarViewState extends BaseState<
+    MDistriButorBottomNavbarView,
+    MDistributorDashboardViewModel,
+    MDistributorDashboardNavigator> implements MDistributorDashboardNavigator {
   int? _selectedIndex;
   final screens = [
-    HelpScreen(),
-    HelpHistory(),
+    MDistributorDashboard(),
+    RetailerList(),
     RetailerAccountPage(),
   ];
   @override
@@ -49,11 +49,24 @@ class _BottomNavbarViewState extends BaseState<
       unselectedItemColor: Colors.white,
       type: BottomNavigationBarType.fixed,
       items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Help"),
         BottomNavigationBarItem(
-            icon: Icon(Icons.inventory), label: "Help History"),
+          icon: Icon(
+            Icons.home,
+          ),
+          label: "Home",
+        ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle), label: "Account"),
+          icon: Icon(
+            Icons.people,
+          ),
+          label: "Retailers",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.account_circle,
+          ),
+          label: "Account",
+        ),
       ],
     );
   }
@@ -69,7 +82,7 @@ class _BottomNavbarViewState extends BaseState<
   }
 
   @override
-  AgentDashboardNavigator getNavigator() {
+  MDistributorDashboardNavigator getNavigator() {
     return this;
   }
 

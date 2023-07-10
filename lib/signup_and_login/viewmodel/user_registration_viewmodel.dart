@@ -195,6 +195,7 @@ class UserRegistrationViewModel
       var response = await repository.checkKYCstatus();
       KYCstatus = response.kycStatus;
       role = response.role;
+      repository.setDefaultAddress(response.address);
       repository.setKYCSTATUS(KYCstatus ?? "PENDING");
       notifyListeners();
     } catch (e) {
@@ -205,13 +206,14 @@ class UserRegistrationViewModel
   }
 
   Future<bool> checkDoesUserExists() async {
-    var uid = await repository.getUid();
+    var mobileNo = await repository.getPhoneNo();
     try {
       var response = await repository.checkKYCstatus();
-      var responseUid = response.uid;
-      if (uid != null && uid == responseUid) {
+      var responseMobileNo = response.mobileNo;
+      var responseAddress = response.address;
+      if (mobileNo != null && mobileNo == responseMobileNo) {
         repository.setRole(response.role);
-        role = response.role;
+        repository.setDefaultAddress(responseAddress);
         return true;
       } else {
         return false;

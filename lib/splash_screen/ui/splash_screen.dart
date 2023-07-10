@@ -1,12 +1,23 @@
+<<<<<<< HEAD
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/M-distributor_dashboard.dart';
+=======
+import 'package:bringi_app/DISTRIBUTOR_FLOW/dashboard/ui/distributor_dashboard.dart';
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/m-distributor_dashboard.dart';
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/Mbottom_navbar_view.dart';
+>>>>>>> 246bdcabf763635a2add8a5cddcad5aeabb53209
 import 'package:bringi_app/signup_and_login/ui/kyc_approved_or_rejected_page.dart';
 import 'package:bringi_app/signup_and_login/ui/verify_user_flow/verify_user_flow.dart';
 import 'package:bringi_app/splash_screen/navigator/splash_navigator.dart';
 import 'package:bringi_app/splash_screen/viewmodel/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 
 import '../../AGENT_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import '../../DISTRIBUTOR_FLOW/dashboard/ui/bottom_nav_bar.dart';
+=======
+import 'package:provider/provider.dart';
+import '../../AGENT_FLOW/dashboard/ui/bottom_navbar_view.dart';
+>>>>>>> 246bdcabf763635a2add8a5cddcad5aeabb53209
 import '../../RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import '../../base/base_state.dart';
 import '../../common_resources/get_asset_image.dart';
@@ -46,7 +57,17 @@ class _SplashScreenState
           ),
         ),
         const SizedBox(
-          height: 10,
+          height: 20,
+        ),
+        Consumer<SplashviewModel>(
+          builder: (context, vm, child) => Visibility(
+            visible: vm.showLoading,
+            child: SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(),
+            ),
+          ),
         ),
       ],
     );
@@ -109,7 +130,7 @@ class _SplashScreenState
         }
       case "MASTER DISTRIBUTOR":
         {
-          pushandRemoveUntill(widget: MDistributorDashboard());
+          pushandRemoveUntill(widget: MDistriButorBottomNavbarView());
           break;
         }
       case "AGENT":
