@@ -1,28 +1,25 @@
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/navigator/M-distributor_dashboard_navigator.dart';
-import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/m-distributor_dashboard.dart';
-import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/retailer_list.dart';
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/viewmodel/M-distributor_dashboard_viewmodel.dart';
-import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/account_page.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:flutter/material.dart';
 
-import '../../../base/base_state.dart';
+import '../../../../base/base_state.dart';
 
-class ManageAgents extends StatefulWidget {
-  const ManageAgents({super.key});
+class Manageproducts extends StatefulWidget {
+  const Manageproducts({super.key});
 
   @override
-  State<ManageAgents> createState() => _ManageAgentsState();
+  State<Manageproducts> createState() => _ManageproductsState();
 }
 
-class _ManageAgentsState extends BaseState<
-    ManageAgents,
+class _ManageproductsState extends BaseState<
+    Manageproducts,
     MDistributorDashboardViewModel,
     MDistributorDashboardNavigator> implements MDistributorDashboardNavigator {
   @override
   AppBar? buildAppBar() {
     return commonAppbarForScreens(
-      title: "Manage Agents",
+      title: "Manage products",
       onTap: () {
         pop();
       },

@@ -1,5 +1,6 @@
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/Help_screen.dart';
-import 'package:bringi_app/common_resources/common_appbar.dart';
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/manage_agents.dart';
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/manage_inventory.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -18,20 +19,39 @@ class _MDistributorDashboardState extends BaseState<
     MDistributorDashboard,
     MDistributorDashboardViewModel,
     MDistributorDashboardNavigator> implements MDistributorDashboardNavigator {
+  String? uid;
   @override
   AppBar? buildAppBar() {
-    return commonAppbarForScreens(
-        title: "Areeb Malik",
-        onTap: () {},
-        centerTitle: true,
-        requireBackButton: false,
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.notifications,
-              ))
-        ]);
+    return AppBar(
+      centerTitle: true,
+      backgroundColor: HexColor.fromHex("051E43"),
+      title: StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("Users")
+              .doc(uid)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.data == null) {
+              return Text(
+                "Bringi Retailer",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                ),
+              );
+            }
+            if (snapshot.hasError) {
+              print(snapshot.error);
+            }
+            return Text(
+              "${snapshot.data?.get("ShopName")}",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+              ),
+            );
+          }),
+    );
   }
 
   @override
@@ -254,7 +274,9 @@ class _MDistributorDashboardState extends BaseState<
                     color: Colors.white,
                   ),
                   label: "Manage inventory",
-                  onTap: () {},
+                  onTap: () {
+                    push(widget: ManageInventory());
+                  },
                 ),
                 helpListCard(
                   Hexcolor: "B694A6",
@@ -263,7 +285,9 @@ class _MDistributorDashboardState extends BaseState<
                     color: Colors.white,
                   ),
                   label: "Manage agents",
-                  onTap: () {},
+                  onTap: () {
+                    push(widget: ManageAgents());
+                  },
                 ),
               ],
             ),
@@ -367,8 +391,9 @@ class _MDistributorDashboardState extends BaseState<
   }
 
   @override
-  void loadPageData({value}) {
-    // TODO: implement loadPageData
+  void loadPageData({value}) async {
+    uid = await viewModel.getuid();
+    setState(() {});
   }
 
   @override

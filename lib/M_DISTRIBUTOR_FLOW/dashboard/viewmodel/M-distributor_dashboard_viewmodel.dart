@@ -7,6 +7,8 @@ class MDistributorDashboardViewModel extends BaseViewModel<
     MDistributorDashboardNavigator, MDistributorDashboardRepo> {
   FirebaseFirestore _db = FirebaseFirestore.instance;
 
-
-  
+  Future<String> getuid() async {
+    var response = await repository.getPhoneNo();
+    return response ?? '';
+  }
 }

@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../../AGENT_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import '../../../DISTRIBUTOR_FLOW/dashboard/ui/distributor_dashboard.dart';
-import '../../../M_DISTRIBUTOR_FLOW/dashboard/ui/M-distributor_dashboard.dart';
+import '../../../M_DISTRIBUTOR_FLOW/dashboard/ui/m-distributor_dashboard.dart';
 import '../../../RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import '../../../base/base_state.dart';
 

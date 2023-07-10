@@ -1,5 +1,5 @@
 import 'package:bringi_app/DISTRIBUTOR_FLOW/dashboard/ui/distributor_dashboard.dart';
-import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/M-distributor_dashboard.dart';
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/m-distributor_dashboard.dart';
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/Mbottom_navbar_view.dart';
 import 'package:bringi_app/signup_and_login/ui/kyc_approved_or_rejected_page.dart';
 import 'package:bringi_app/signup_and_login/ui/verify_user_flow/verify_user_flow.dart';
