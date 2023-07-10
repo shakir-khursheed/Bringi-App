@@ -263,6 +263,8 @@ class _ProductDetailPageState extends BaseState<
                             color: HexColor.fromHex("F2C357"),
                             onPressed: () {
                               vm.addToInventory(
+                                productQuantity:
+                                    productQuantity ?? "Pack of 12",
                                 productName: vm.product?.productName,
                                 amount: orderAmount ?? vm.product?.price ?? "",
                                 count: 1,
@@ -290,7 +292,8 @@ class _ProductDetailPageState extends BaseState<
                           onPressed: () {
                             push(
                               widget: CheckoutPage(
-                                productQuantity: productQuantity ?? "1",
+                                productQuantity:
+                                    productQuantity ?? "Pack of 12",
                                 productName: vm.product?.productName ?? "",
                                 Amount: orderAmount ?? vm.product?.price ?? "",
                               ),

@@ -32,66 +32,72 @@ class _HelpListState extends BaseState<HelpList, MDistributorDashboardViewModel,
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection("Retailer")
-              .doc()
-              .collection("orders")
-              .snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.data?.docs.length == 0) {
-              return Center(child: NoitemFoundPage(title: "No Help found"));
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            return ListView.builder(
-              itemCount: snapshot.data?.docs.length,
-              itemBuilder: (context, index) => Card(
-                elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.person),
-                          Gap(10),
-                          Text(
-                            snapshot.data?.docs[index].get("OrderId"),
-                          ),
-                        ],
+        stream: FirebaseFirestore.instance.collection("Orders").snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.data?.docs.length == 0) {
+            return Center(child: NoitemFoundPage(title: "No Help found"));
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return ListView.separated(
+            separatorBuilder: (context, index) => SizedBox(
+              height: 10,
+            ),
+            itemCount: snapshot.data?.docs.length ?? 0,
+            itemBuilder: (context, index) => Card(
+              elevation: 5,
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      "Order ID",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(
-                        height: 5,
+                    ),
+                    subtitle: Text(
+                      "${snapshot.data?.docs[index].get("orderId")}",
+                    ),
+                    trailing: Container(
+                      decoration: BoxDecoration(
+                        color: HexColor.fromHex("F2C357").withOpacity(.3),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      Row(
-                        children: [
-                          Icon(Icons.mobile_screen_share),
-                          Gap(10),
-                          Text(
-                            snapshot.data?.docs[index].get("productName"),
-                          ),
-                        ],
+                      padding: EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        top: 5,
+                        bottom: 5,
                       ),
-                      SizedBox(
-                        height: 5,
+                      child: Text(
+                        "${snapshot.data?.docs[index].get("orderStatus")}",
+                        style: TextStyle(
+                          color: HexColor.fromHex("EDA944"),
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Icon(Icons.location_pin),
-                          Gap(10),
-                          Text(
-                            snapshot.data?.docs[index].get("orderAmount"),
-                          ),
-                        ],
-                      )
-                    ],
+                    ),
                   ),
-                ),
+                  ListTile(
+                    title: Text(
+                      "₹ ${snapshot.data?.docs[index].get("orderAmount")}",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                        "${snapshot.data?.docs[index].get("productName")}"),
+                    trailing:
+                        Text("${snapshot.data?.docs[index].get("createdAt")}"),
+                  )
+                ],
               ),
-            );
-          }),
+            ),
+          );
+        },
+      ),
     );
   }
 

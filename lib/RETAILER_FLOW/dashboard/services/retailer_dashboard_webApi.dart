@@ -39,7 +39,6 @@ abstract class RetailerDashboardWebApi extends BaseWebApi {
     String? updatedAt,
     String? uid,
   });
-
 }
 
 class RetailerDashboardWebApiImpl implements RetailerDashboardWebApi {
@@ -104,8 +103,8 @@ class RetailerDashboardWebApiImpl implements RetailerDashboardWebApi {
     String? updatedAt,
     String? uid,
   }) async {
-    await _db.collection("Retailer").doc(uid).collection("orders").doc().set({
-      "OrderId": orderId,
+    await _db.collection("Orders").doc().set({
+      "orderId": orderId,
       "deliveryAddress": deliveryAddress,
       "orderAmount": orderAmount,
       "orderCount": orderCount,
@@ -117,5 +116,4 @@ class RetailerDashboardWebApiImpl implements RetailerDashboardWebApi {
       "updatedAt": updatedAt,
     });
   }
-
 }

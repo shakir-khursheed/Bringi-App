@@ -107,11 +107,8 @@ class _RetailerHelpState extends BaseState<
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection("Retailer")
-                  .doc("${uid}")
-                  .collection("orders")
-                  .snapshots(),
+              stream:
+                  FirebaseFirestore.instance.collection("Orders").snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.data?.docs.length == 0) {
                   return NoitemFoundPage(title: "No Help Found");
@@ -145,7 +142,8 @@ class _RetailerHelpState extends BaseState<
                                 ),
                               ),
                               subtitle: Text(
-                                  "${snapshot.data?.docs[index].get("OrderId")}"),
+                                "${snapshot.data?.docs[index].get("orderId")}",
+                              ),
                               trailing: Container(
                                 decoration: BoxDecoration(
                                   color: HexColor.fromHex("F2C357")

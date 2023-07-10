@@ -1,4 +1,5 @@
 import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/create_order_process/checkout_screen.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
 import 'package:bringi_app/common_resources/no_item_found.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,7 +30,7 @@ class _RetailerInventoryState extends BaseState<
   @override
   Widget buildBody() {
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 20,
         vertical: 20,
       ),
@@ -50,76 +51,136 @@ class _RetailerInventoryState extends BaseState<
           return ListView.separated(
             itemBuilder: (context, index) => Card(
               elevation: 5,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              child: Column(
                 children: [
-                  Expanded(
-                    flex: 0,
-                    child: Image(
-                      image: NetworkImage(
-                        snapshot.data?.docs[index].get(
-                          "imageUrl",
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        flex: 0,
+                        child: Image(
+                          image: NetworkImage(
+                            snapshot.data?.docs[index].get(
+                              "imageUrl",
+                            ),
+                          ),
+                          height: 120,
                         ),
                       ),
-                      height: 120,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          snapshot.data?.docs[index].get(
-                            "productName",
-                          ),
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          "₹ ${snapshot.data?.docs[index].get(
-                            "amount",
-                          )}",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Row(
+                      Expanded(
+                        flex: 4,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.remove_circle),
+                            Text(
+                              snapshot.data?.docs[index].get(
+                                "productName",
+                              ),
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            Text("${snapshot.data?.docs[index].get(
-                              "count",
-                            )}"),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.add_circle),
+                            Text(
+                              "₹ ${int.parse("${snapshot.data?.docs[index].get(
+                                    "amount",
+                                  )}") * snapshot.data?.docs[index].get(
+                                    "count",
+                                  )}",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    (snapshot.data?.docs[index].get("count") ==
+                                            1)
+                                        ? viewModel.removeFromInventory(
+                                            productId: snapshot
+                                                .data?.docs[index]
+                                                .get("productId"),
+                                          )
+                                        : viewModel.updateInventory(
+                                            productId: snapshot
+                                                .data?.docs[index]
+                                                .get("productId"),
+                                            count: snapshot.data?.docs[index]
+                                                    .get("count") -
+                                                1,
+                                          );
+                                  },
+                                  icon: Icon(Icons.remove_circle),
+                                ),
+                                Text("${snapshot.data?.docs[index].get(
+                                  "count",
+                                )}"),
+                                IconButton(
+                                  onPressed: () {
+                                    viewModel.updateInventory(
+                                      productId: snapshot.data?.docs[index]
+                                          .get("productId"),
+                                      count: snapshot.data?.docs[index]
+                                              .get("count") +
+                                          1,
+                                    );
+                                  },
+                                  icon: Icon(Icons.add_circle),
+                                ),
+                              ],
+                            )
                           ],
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: IconButton(
-                      onPressed: () {
-                        viewModel.removeFromInventory(
-                          productId:
-                              snapshot.data?.docs[index].get("productId"),
-                        );
-                      },
-                      icon: Icon(
-                        Icons.delete,
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        color: HexColor.fromHex("F2C357"),
+                        onPressed: () {
+                          viewModel.removeFromInventory(
+                            productId:
+                                snapshot.data?.docs[index].get("productId"),
+                          );
+                        },
+                        child: Text("Remove"),
+                      ),
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        color: HexColor.fromHex("F2C357"),
+                        onPressed: () {
+                          push(
+                            widget: CheckoutPage(
+                              count: "${snapshot.data?.docs[index].get(
+                                "count",
+                              )}",
+                              productQuantity: snapshot.data?.docs[index]
+                                  .get("productQuantity"),
+                              productName:
+                                  snapshot.data?.docs[index].get("productName"),
+                              Amount:
+                                  "${int.parse("${snapshot.data?.docs[index].get(
+                                        "amount",
+                                      )}") * snapshot.data?.docs[index].get(
+                                        "count",
+                                      )}",
+                            ),
+                          );
+                        },
+                        child: Text("Checkout"),
+                      )
+                    ],
                   ),
                 ],
               ),

@@ -128,6 +128,7 @@ class RetailerDashboardViewModel
     int? count,
     String? imageUrl,
     String? productId,
+    String? productQuantity,
   }) async {
     loading = true;
     notifyListeners();
@@ -142,6 +143,7 @@ class RetailerDashboardViewModel
         "amount": amount,
         "count": count,
         "imageUrl": imageUrl,
+        "productQuantity": productQuantity,
         "productId": productId,
       }).whenComplete(() => {
                 getNavigator().showMessage(
@@ -150,7 +152,7 @@ class RetailerDashboardViewModel
               });
     } on SocketException catch (e) {
     } catch (e) {
-      getNavigator().showMessage("$e", color: Colors.red[900]);
+      // getNavigator().showMessage("$e", color: Colors.red[900]);
     } finally {
       loading = false;
       notifyListeners();
@@ -172,6 +174,27 @@ class RetailerDashboardViewModel
                   "Item removed from invertory",
                 ),
               });
+    } on SocketException catch (e) {
+    } catch (e) {
+      getNavigator().showMessage("$e", color: Colors.red[900]);
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
+  }
+
+  void updateInventory({String? productId, int? count}) async {
+    loading = true;
+    notifyListeners();
+    try {
+      await _db
+          .collection("Retailer")
+          .doc(await repository.getPhoneNo())
+          .collection("inventory")
+          .doc(productId)
+          .update({
+        "count": count,
+      });
     } on SocketException catch (e) {
     } catch (e) {
       getNavigator().showMessage("$e", color: Colors.red[900]);

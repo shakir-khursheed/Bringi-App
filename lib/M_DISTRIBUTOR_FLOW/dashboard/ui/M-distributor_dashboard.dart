@@ -1,6 +1,6 @@
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/Help_screen.dart';
-import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/account_page.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '../../../base/base_state.dart';
@@ -58,18 +58,55 @@ class _MDistributorDashboardState extends BaseState<
               crossAxisCount: 3,
               crossAxisSpacing: 10,
               children: [
-                helpGridCard(
-                  Hexcolor: "EDA944",
-                  count: Text(
-                    "0",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  label: "All Help",
-                  onTap: () {},
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection("Orders")
+                      .snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.data?.docs.length == 0) {
+                      return helpGridCard(
+                        Hexcolor: "EDA944",
+                        count: Text(
+                          "0",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        label: "All Help",
+                        onTap: () {},
+                      );
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return helpGridCard(
+                        Hexcolor: "EDA944",
+                        count: Text(
+                          "0",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        label: "All Help",
+                        onTap: () {},
+                      );
+                    }
+                    return helpGridCard(
+                      Hexcolor: "EDA944",
+                      count: Text(
+                        "${snapshot.data?.docs.length}",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      label: "All Help",
+                      onTap: () {},
+                    );
+                  },
                 ),
                 helpGridCard(
                   Hexcolor: "4872A4",
@@ -140,20 +177,57 @@ class _MDistributorDashboardState extends BaseState<
                   ),
                 ),
                 Gap(5),
-                helpListCard(
-                  Hexcolor: "4872A4",
-                  count: Text(
-                    "0",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  label: "Help",
-                  onTap: () {
-                    push(
-                      widget: HelpList(),
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection("Orders")
+                      .snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.data?.docs.length == 0) {
+                      return helpListCard(
+                        Hexcolor: "4872A4",
+                        count: Text(
+                          "0",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        label: "Help",
+                        onTap: () {},
+                      );
+                    }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return helpListCard(
+                        Hexcolor: "4872A4",
+                        count: Text(
+                          "0",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        label: "Help",
+                        onTap: () {},
+                      );
+                    }
+                    return helpListCard(
+                      Hexcolor: "4872A4",
+                      count: Text(
+                        "${snapshot.data?.docs.length}",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      label: "Help",
+                      onTap: () {
+                        push(
+                          widget: HelpList(),
+                        );
+                      },
                     );
                   },
                 ),

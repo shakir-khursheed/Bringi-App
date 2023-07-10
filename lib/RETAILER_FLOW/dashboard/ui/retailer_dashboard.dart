@@ -214,6 +214,8 @@ class _RetailerDashboardState extends BaseState<
                                   index,
                                   () {
                                     vm.addToInventory(
+                                      productQuantity:
+                                          vm.productList[index].packOf12,
                                       productName:
                                           vm.productList[index].productName,
                                       amount: vm.productList[index].price,

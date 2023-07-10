@@ -14,11 +14,13 @@ class CheckoutPage extends StatefulWidget {
   final String productName;
   final String Amount;
   final String productQuantity;
+  final String? count;
   const CheckoutPage({
     super.key,
     required this.Amount,
     required this.productName,
     required this.productQuantity,
+    this.count,
   });
 
   @override
@@ -128,6 +130,7 @@ class _CheckoutPageState extends BaseState<
                     );
                     push(
                       widget: PaymentOptionPage(
+                        count: widget.count,
                         productQuantity: widget.productQuantity,
                       ),
                     );
