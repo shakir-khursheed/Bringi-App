@@ -5,7 +5,6 @@ import 'package:bringi_app/common_resources/common_button.dart';
 import 'package:bringi_app/common_resources/common_input_field.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../base/base_state.dart';

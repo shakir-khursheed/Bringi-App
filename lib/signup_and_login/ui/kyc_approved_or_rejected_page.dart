@@ -1,5 +1,4 @@
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
-import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/retailer_dashboard.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
@@ -7,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../AGENT_FLOW/dashboard/ui/bottom_navbar_view.dart';
-import '../../DISTRIBUTOR_FLOW/dashboard/ui/distributor_dashboard.dart';
+import '../../DISTRIBUTOR_FLOW/dashboard/ui/bottom_nav_bar.dart';
 import '../../M_DISTRIBUTOR_FLOW/dashboard/ui/M-distributor_dashboard.dart';
 import '../../base/base_state.dart';
 import '../../common_resources/common_appbar.dart';
@@ -168,7 +167,7 @@ class _KYCstatusPageState extends BaseState<
         }
       case "DISTRIBUTOR":
         {
-          pushandRemoveUntill(widget: DistributorDashboard());
+          pushandRemoveUntill(widget: BottomNavbarDistributor());
           break;
         }
       case "MASTER DISTRIBUTOR":
@@ -225,7 +224,7 @@ class _KYCstatusPageState extends BaseState<
   void navigateTOKYCscreen() {
     // TODO: implement navigateTOKYCscreen
   }
-  
+
   @override
   void onOrderCreatedSuccessfully() {
     // TODO: implement onOrderCreatedSuccessfully
