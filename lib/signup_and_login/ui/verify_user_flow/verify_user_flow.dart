@@ -152,7 +152,6 @@ class _VerifyUserFlowState extends BaseState<
       case "DISTRIBUTOR":
         {
           pushandRemoveUntill(widget: BottomNavbarDistributor());
-
           break;
         }
       case "MASTER DISTRIBUTOR":
