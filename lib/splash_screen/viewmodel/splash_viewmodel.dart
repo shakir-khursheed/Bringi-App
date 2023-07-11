@@ -13,9 +13,9 @@ class SplashviewModel extends BaseViewModel<SplashNavigator, SplashRepo> {
     String? role = await repository.getUserRole();
     String? mobileNo = await repository.getPhoneNo();
     Timer(const Duration(seconds: 1), () async {
-      var response = await checkKYCstatus(mobileNO: mobileNo);
-      KycStatus = response.kycStatus;
       if (uid != null && uid.isNotEmpty && role != null && role.isNotEmpty) {
+        var response = await checkKYCstatus(mobileNO: mobileNo);
+        KycStatus = response.kycStatus;
         switch (role) {
           case "RETAILER":
             {

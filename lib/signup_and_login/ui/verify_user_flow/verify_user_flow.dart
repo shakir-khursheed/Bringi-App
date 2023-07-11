@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-=======
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/Mbottom_navbar_view.dart';
-import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/retailer_dashboard.dart';
->>>>>>> 246bdcabf763635a2add8a5cddcad5aeabb53209
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/ui/user_registration_flow/user_resgistration_flow.dart';
@@ -11,15 +7,8 @@ import 'package:bringi_app/signup_and_login/ui/verify_user_flow_screens/verify_o
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../AGENT_FLOW/dashboard/ui/bottom_navbar_view.dart';
-<<<<<<< HEAD
 import '../../../DISTRIBUTOR_FLOW/dashboard/ui/bottom_nav_bar.dart';
-import '../../../M_DISTRIBUTOR_FLOW/dashboard/ui/M-distributor_dashboard.dart';
-=======
-import '../../../DISTRIBUTOR_FLOW/dashboard/ui/distributor_dashboard.dart';
-import '../../../M_DISTRIBUTOR_FLOW/dashboard/ui/m-distributor_dashboard.dart';
->>>>>>> 246bdcabf763635a2add8a5cddcad5aeabb53209
 import '../../../RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import '../../../base/base_state.dart';
 
@@ -162,13 +151,8 @@ class _VerifyUserFlowState extends BaseState<
         }
       case "DISTRIBUTOR":
         {
-<<<<<<< HEAD
           pushandRemoveUntill(widget: BottomNavbarDistributor());
-=======
-          pushandRemoveUntill(
-            widget: DistributorDashboard(),
-          );
->>>>>>> 246bdcabf763635a2add8a5cddcad5aeabb53209
+
           break;
         }
       case "MASTER DISTRIBUTOR":
@@ -178,9 +162,7 @@ class _VerifyUserFlowState extends BaseState<
         }
       case "AGENT":
         {
-          pushandRemoveUntill(
-            widget: BottomNavbarView(),
-          );
+          pushandRemoveUntill(widget: BottomNavbarView());
           break;
         }
     }

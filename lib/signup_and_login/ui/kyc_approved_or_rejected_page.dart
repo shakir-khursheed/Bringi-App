@@ -1,18 +1,12 @@
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/Mbottom_navbar_view.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
 import 'package:bringi_app/signup_and_login/navigator/user_registration_navigator.dart';
 import 'package:bringi_app/signup_and_login/viewmodel/user_registration_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../AGENT_FLOW/dashboard/ui/bottom_navbar_view.dart';
-<<<<<<< HEAD
 import '../../DISTRIBUTOR_FLOW/dashboard/ui/bottom_nav_bar.dart';
-import '../../M_DISTRIBUTOR_FLOW/dashboard/ui/M-distributor_dashboard.dart';
-=======
-import '../../DISTRIBUTOR_FLOW/dashboard/ui/distributor_dashboard.dart';
-import '../../M_DISTRIBUTOR_FLOW/dashboard/ui/m-distributor_dashboard.dart';
->>>>>>> 246bdcabf763635a2add8a5cddcad5aeabb53209
 import '../../base/base_state.dart';
 import '../../common_resources/common_appbar.dart';
 import '../../common_resources/common_button.dart';
@@ -177,14 +171,12 @@ class _KYCstatusPageState extends BaseState<
         }
       case "MASTER DISTRIBUTOR":
         {
-          pushandRemoveUntill(widget: MDistributorDashboard());
+          pushandRemoveUntill(widget: MDistriButorBottomNavbarView());
           break;
         }
       case "AGENT":
         {
-          pushandRemoveUntill(
-            widget: BottomNavbarView(),
-          );
+          pushandRemoveUntill(widget: BottomNavbarView());
           break;
         }
     }

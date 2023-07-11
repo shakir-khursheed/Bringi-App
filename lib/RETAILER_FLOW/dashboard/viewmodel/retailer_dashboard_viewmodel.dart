@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_navigator.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/repo/retailer_repo.dart';
 import 'package:bringi_app/Response_model/checked_out_product_response.dart';
-import 'package:bringi_app/Response_model/orders_response.dart';
 import 'package:bringi_app/Response_model/product_list_response.dart';
 import 'package:bringi_app/Response_model/saved_address_response.dart';
 import 'package:bringi_app/base/base_viewmodel.dart';
@@ -204,16 +203,26 @@ class RetailerDashboardViewModel
     }
   }
 
-  void addToCheckout(
-      {String? address, String? productName, String? totalAmount}) async {
+  void addToCheckout({
+    String? address,
+    String? productName,
+    String? totalAmount,
+    String? pincode,
+    String? city,
+  }) async {
     showLoading = true;
     try {
-      await repository.addTocheckOut(
-        orderId: "# ${await generateOrderId()}",
-        address: address,
-        productName: productName,
-        amount: totalAmount,
-      );
+      await _db
+          .collection("checkout_product")
+          .doc(await repository.getPhoneNo())
+          .set({
+        "orderId": await generateOrderId(),
+        "productName": productName,
+        "amount": totalAmount,
+        "address": address,
+        "pincode": pincode,
+        "city": city,
+      });
     } on SocketException {
     } catch (e) {
     } finally {
@@ -221,50 +230,52 @@ class RetailerDashboardViewModel
     }
   }
 
-  Future<String> generateOrderId() async {
-    var orderId = await Random().nextInt(9999999);
-    return orderId.toString();
-  }
-
-  void getCheckoutProduct() async {
+  Stream<QuerySnapshot> getCheckoutProduct() {
     showLoading = true;
-    try {
-      checkoutProductResponse = await repository.getcheckedOutProduct();
-      notifyListeners();
-    } on SocketException {
-    } catch (e) {
-      getNavigator().showMessage("$e", color: Colors.red[900]);
-    } finally {
-      showLoading = false;
-    }
+    var response = _db.collection("checkout_product").snapshots();
+    return response;
   }
 
-  void CreateOrder({
+  Future<void> CreateOrder({
     String? orderId,
     String? deliveryAddress,
+    String? pickupAddress,
+    String? deliveryPincode,
+    String? pickupPincode,
     String? orderAmount,
+    String? orderType,
     String? orderCount,
     String? productName,
+    String? retailerName,
     String? productQuantity,
     String? orderStatus,
     String? AssignedTo,
     String? createdAt,
     String? updatedAt,
+    bool? deliveryAccepted,
+    bool? OrderAccepted,
   }) async {
     showLoading = true;
     try {
-      await repository.createOrder(
-        orderId: orderId,
-        deliveryAddress: deliveryAddress,
-        orderAmount: orderAmount,
-        orderCount: orderCount,
-        productName: productName,
-        productQuantity: productQuantity,
-        orderStatus: orderStatus,
-        AssignedTo: AssignedTo,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-      );
+      await _db.collection("Orders").doc().set({
+        "orderId": orderId,
+        "deliveryAddress": deliveryAddress,
+        "pickupAddress": pickupAddress,
+        "deliveryPincode": deliveryPincode,
+        "pickupPincode": pickupPincode,
+        "orderAmount": orderAmount,
+        "orderCount": orderCount,
+        "orderType": orderType,
+        "productName": productName,
+        "productQuantity": productQuantity,
+        "RetailerName": retailerName,
+        "orderStatus": orderStatus,
+        "AssignedTo": AssignedTo,
+        "orderAccepted": OrderAccepted,
+        "deliveryAccepted": deliveryAccepted,
+        "createdAt": createdAt,
+        "updatedAt": updatedAt,
+      });
       getNavigator().onOrderCreatedSuccessfully();
       getNavigator().showMessage("Order created successfully");
     } on SocketException {
@@ -273,6 +284,11 @@ class RetailerDashboardViewModel
     } finally {
       showLoading = false;
     }
+  }
+
+  Future<String> generateOrderId() async {
+    var orderId = await Random().nextInt(1000000000000000);
+    return orderId.toString();
   }
 
   void logout() {

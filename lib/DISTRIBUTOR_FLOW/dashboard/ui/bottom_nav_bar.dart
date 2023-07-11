@@ -1,9 +1,8 @@
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/account_page.dart';
 import 'package:flutter/material.dart';
-
 import '../../../base/base_state.dart';
 import '../navigator/distributor_dashboard_navigator.dart';
 import '../viewmodel/distributor_dashboard_viewmodel.dart';
-import 'accountdetails.dart';
 import 'agents_view.dart';
 import 'distributor_dashboard.dart';
 import 'help.dart';
@@ -25,7 +24,7 @@ class _BottomNavbarDistributorState extends BaseState<
     DistributorDashboard(),
     Agents(),
     HelpView(),
-    AccountDetails(),
+    RetailerAccountPage(),
   ];
   @override
   AppBar? buildAppBar() {

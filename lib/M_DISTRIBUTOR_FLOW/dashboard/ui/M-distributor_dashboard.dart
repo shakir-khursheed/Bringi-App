@@ -51,6 +51,14 @@ class _MDistributorDashboardState extends BaseState<
               ),
             );
           }),
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.notifications,
+          ),
+        ),
+      ],
     );
   }
 
@@ -61,8 +69,7 @@ class _MDistributorDashboardState extends BaseState<
         vertical: 10.0,
         horizontal: 10,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
         children: [
           Text(
             "Help",
@@ -72,7 +79,8 @@ class _MDistributorDashboardState extends BaseState<
             ),
           ),
           Gap(10),
-          Expanded(
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 3,
             child: GridView.count(
               mainAxisSpacing: 10,
               crossAxisCount: 3,
@@ -184,58 +192,26 @@ class _MDistributorDashboardState extends BaseState<
             ),
           ),
           Gap(20),
-          Expanded(
-            flex: 0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Help List",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Help List",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                Gap(5),
-                StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection("Orders")
-                      .snapshots(),
-                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.data?.docs.length == 0) {
-                      return helpListCard(
-                        Hexcolor: "4872A4",
-                        count: Text(
-                          "0",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        label: "Help",
-                        onTap: () {},
-                      );
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return helpListCard(
-                        Hexcolor: "4872A4",
-                        count: Text(
-                          "0",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        label: "Help",
-                        onTap: () {},
-                      );
-                    }
+              ),
+              Gap(5),
+              StreamBuilder<QuerySnapshot>(
+                stream:
+                    FirebaseFirestore.instance.collection("Orders").snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.data?.docs.length == 0) {
                     return helpListCard(
                       Hexcolor: "4872A4",
                       count: Text(
-                        "${snapshot.data?.docs.length}",
+                        "0",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -249,48 +225,78 @@ class _MDistributorDashboardState extends BaseState<
                         );
                       },
                     );
-                  },
-                ),
-              ],
-            ),
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return helpListCard(
+                      Hexcolor: "4872A4",
+                      count: Text(
+                        "0",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      label: "Help",
+                      onTap: () {},
+                    );
+                  }
+                  return helpListCard(
+                    Hexcolor: "4872A4",
+                    count: Text(
+                      "${snapshot.data?.docs.length}",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    label: "Help",
+                    onTap: () {
+                      push(
+                        widget: HelpList(),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
           ),
           Gap(10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Master Management",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Master Management",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                Gap(10),
-                helpListCard(
-                  Hexcolor: "4872A4",
-                  count: Icon(
-                    Icons.inventory,
-                    color: Colors.white,
-                  ),
-                  label: "Manage inventory",
-                  onTap: () {
-                    push(widget: ManageInventory());
-                  },
+              ),
+              Gap(10),
+              helpListCard(
+                Hexcolor: "4872A4",
+                count: Icon(
+                  Icons.inventory,
+                  color: Colors.white,
                 ),
-                helpListCard(
-                  Hexcolor: "B694A6",
-                  count: Icon(
-                    Icons.people,
-                    color: Colors.white,
-                  ),
-                  label: "Manage agents",
-                  onTap: () {
-                    push(widget: ManageAgents());
-                  },
+                label: "Manage inventory",
+                onTap: () {
+                  push(widget: ManageInventory());
+                },
+              ),
+              helpListCard(
+                Hexcolor: "B694A6",
+                count: Icon(
+                  Icons.people,
+                  color: Colors.white,
                 ),
-              ],
-            ),
+                label: "Manage agents",
+                onTap: () {
+                  push(widget: ManageAgents());
+                },
+              ),
+            ],
           )
         ],
       ),
@@ -314,30 +320,24 @@ class _MDistributorDashboardState extends BaseState<
         ),
         elevation: 5,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           children: [
             Gap(20),
+            count,
             Expanded(
-              child: count,
-            ),
-            Row(
-              children: [
-                Expanded(
-                    child: Divider(
-                  thickness: 2,
-                  color: Colors.white,
-                )),
-              ],
-            ),
-            Expanded(
-                child: Text(
+                child: Divider(
+              thickness: 2,
+              color: Colors.white,
+            )),
+            Text(
               "$label",
               style: TextStyle(
-                fontSize: 15,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
-            )),
+            ),
+            Gap(10),
           ],
         ),
       ),

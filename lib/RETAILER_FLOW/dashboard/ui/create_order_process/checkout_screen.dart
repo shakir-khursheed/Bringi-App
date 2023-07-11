@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../base/base_state.dart';
+import '../../../../common_resources/common_dropdown_field.dart';
 
 class CheckoutPage extends StatefulWidget {
   final String productName;
@@ -32,6 +33,9 @@ class _CheckoutPageState extends BaseState<
     RetailerDashboardViewModel,
     RetailerDashboardNavigator> implements RetailerDashboardNavigator {
   String? uid;
+  String? address;
+  String? pincode;
+  String? city;
   @override
   AppBar? buildAppBar() {
     return commonAppbarForScreens(
@@ -71,12 +75,22 @@ class _CheckoutPageState extends BaseState<
                     return Text("Used Default address");
                   }
                   if (vm.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return DropdownInputField(
+                      dropdownlabel: "Select billing Address",
+                      dropdownListItem: vm,
+                      onValueSelected: (value) {},
+                    );
                   }
                   if (vm.hasError) {
                     print(vm.hasError);
                   }
-                  return addressCard(vm, 0);
+                  return DropdownInputField(
+                    dropdownlabel: "Select billing Address",
+                    dropdownListItem: vm,
+                    onValueSelected: (value) {
+                      address = value;
+                    },
+                  );
                 }),
             SizedBox(
               height: 10,
@@ -102,15 +116,23 @@ class _CheckoutPageState extends BaseState<
                     return Text("Used Default address");
                   }
                   if (vm.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return DropdownInputField(
+                      dropdownlabel: "Select Shipping Address",
+                      dropdownListItem: vm,
+                      onValueSelected: (value) {},
+                    );
                   }
                   if (vm.hasError) {
                     print(vm.hasError);
                   }
-                  return addressCard(vm, 0);
+                  return DropdownInputField(
+                    dropdownlabel: "Select shipping Address",
+                    dropdownListItem: vm,
+                    onValueSelected: (value) {},
+                  );
                 }),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
             productDetailCard(),
           ],
@@ -121,19 +143,18 @@ class _CheckoutPageState extends BaseState<
                   "Next",
                   context,
                   () {
-                    vm.addToCheckout(
-                      address: (vm.savedAddresses.length != 0)
-                          ? vm.savedAddresses.first.address
-                          : vm.defaultAddress,
-                      totalAmount: widget.Amount,
-                      productName: widget.productName,
-                    );
-                    push(
-                      widget: PaymentOptionPage(
-                        count: widget.count,
-                        productQuantity: widget.productQuantity,
-                      ),
-                    );
+                    if (address != null && city != null && pincode != null) {
+                      vm.addToCheckout();
+                      push(
+                        widget: PaymentOptionPage(
+                          count: widget.count,
+                          productQuantity: widget.productQuantity,
+                        ),
+                      );
+                    } else {
+                      showMessage("Address details cannot be empty",
+                          color: Colors.red[900]);
+                    }
                   },
                   buttonColor: HexColor.fromHex("F2C357"),
                   showLoading: vm.showLoading,

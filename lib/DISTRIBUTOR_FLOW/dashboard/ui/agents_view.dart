@@ -15,7 +15,6 @@ class Agents extends StatefulWidget {
 
 class _AgentsState extends BaseState<Agents, DistributorDashboardViewModel,
     DistributorDashboardNavigator> implements DistributorDashboardNavigator {
-  ScrollController? _scrollController;
   @override
   AppBar? buildAppBar() {
     return AppBar(

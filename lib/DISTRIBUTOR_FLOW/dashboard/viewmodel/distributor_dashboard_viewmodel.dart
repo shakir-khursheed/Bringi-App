@@ -4,4 +4,9 @@ import '../../../base/base_viewmodel.dart';
 import '../navigator/distributor_dashboard_navigator.dart';
 
 class DistributorDashboardViewModel extends BaseViewModel<
-    DistributorDashboardNavigator, DistributorDashboardRepo> {}
+    DistributorDashboardNavigator, DistributorDashboardRepo> {
+  Future<String> getuid() async {
+    var response = await repository.getPhoneNo();
+    return response ?? '';
+  }
+}

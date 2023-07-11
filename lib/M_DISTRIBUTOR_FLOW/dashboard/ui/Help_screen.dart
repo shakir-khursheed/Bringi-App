@@ -46,7 +46,7 @@ class _HelpListState extends BaseState<HelpList, MDistributorDashboardViewModel,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Icon(
-                    Icons.filter_alt,
+                    Icons.filter_list_outlined,
                   ),
                 ),
               ),

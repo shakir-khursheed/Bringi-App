@@ -16,7 +16,6 @@ class _AssignHelpState extends BaseState<
     AssignHelp,
     DistributorDashboardViewModel,
     DistributorDashboardNavigator> implements DistributorDashboardNavigator {
-  ScrollController? _scrollController;
   @override
   AppBar? buildAppBar() {
     return AppBar(
