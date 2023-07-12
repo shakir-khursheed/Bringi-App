@@ -96,9 +96,7 @@ class _ThankUPageState extends BaseState<ThankUPage, RetailerDashboardViewModel,
   }
 
   @override
-  void loadPageData({value}) {
-    viewModel.getCheckoutProduct();
-  }
+  void loadPageData({value}) {}
 
   @override
   void navigateToVerifyUserFlow() {

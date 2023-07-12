@@ -11,10 +11,16 @@ import '../../../../base/base_state.dart';
 
 class PaymentOptionPage extends StatefulWidget {
   final String productQuantity;
+  final String productName;
+  final String TotalAmount;
+  final String address;
   final String? count;
   const PaymentOptionPage({
     super.key,
     required this.productQuantity,
+    required this.TotalAmount,
+    required this.address,
+    required this.productName,
     this.count,
   });
 
@@ -33,6 +39,7 @@ class _PaymentOptionPageState extends BaseState<
     RetailerDashboardViewModel,
     RetailerDashboardNavigator> implements RetailerDashboardNavigator {
   PaymentOptions _options = PaymentOptions.COD;
+  String? uid;
   @override
   AppBar? buildAppBar() {
     return commonAppbarForScreens(
@@ -87,7 +94,7 @@ class _PaymentOptionPageState extends BaseState<
                 children: [
                   Expanded(
                     child: ButtonFactory.buildUniversalButtonWithText(
-                      "Pay ₹ ${vm.checkoutProductResponse?.amount}",
+                      "Pay ₹ ${widget.TotalAmount}",
                       context,
                       () {},
                       buttonColor: HexColor.fromHex("F2C357"),
@@ -99,219 +106,109 @@ class _PaymentOptionPageState extends BaseState<
             SizedBox(
               height: 30,
             ),
-            StreamBuilder<QuerySnapshot>(
-              stream: viewModel.getCheckoutProduct(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.data?.docs == null) {
-                  return Card(
-                    elevation: 5,
-                    child: Column(
+            Card(
+              elevation: 5,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "${vm.checkoutProductResponse?.productName}",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                "₹ ${vm.checkoutProductResponse?.amount}",
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Shipping",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                "Delivery charges : ₹ 50",
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Coupon  Applied",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                "Null",
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ListTile(
-                          title: Text(
-                            "Total amount",
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          trailing: Text(
-                            "₹ ${vm.checkoutProductResponse?.amount}",
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return Card(
-                  elevation: 5,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "${vm.checkoutProductResponse?.productName}",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              "₹ ${vm.checkoutProductResponse?.amount}",
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Shipping",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              "Delivery charges : ₹ 50",
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Coupon  Applied",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              "Null",
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      ListTile(
-                        title: Text(
-                          "Total amount",
+                        Text(
+                          "${widget.productName}",
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        trailing: Text(
-                          "₹ ${snapshot.data}",
+                        Text(
+                          "₹ ${widget.TotalAmount}",
                           style: TextStyle(
                             color: Colors.green,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                );
-              },
-            ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Shipping",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "Delivery charges : ₹ 50",
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Coupon  Applied",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "Null",
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ListTile(
+                    title: Text(
+                      "Total amount",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: Text(
+                      "₹ ${widget.TotalAmount}",
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
           fixedAtBottomChild: [
             Consumer<RetailerDashboardViewModel>(
@@ -320,24 +217,24 @@ class _PaymentOptionPageState extends BaseState<
                   visible:
                       (_options == PaymentOptions.payonline) ? false : true,
                   child: ButtonFactory.buildUniversalButtonWithText(
-                    "Place order ₹ ${vm.checkoutProductResponse?.amount}",
+                    "Place order ₹ ${widget.TotalAmount}",
                     context,
                     () {
                       (_options == PaymentOptions.COD)
                           ? vm.CreateOrder(
-                              orderId: vm.checkoutProductResponse?.orderId,
-                              deliveryAddress:
-                                  vm.checkoutProductResponse?.address,
-                              orderAmount: vm.checkoutProductResponse?.amount,
+                              deliveryAddress: widget.address,
+                              orderAmount: widget.TotalAmount,
                               orderCount:
                                   (widget.count != null) ? widget.count : "1",
-                              productName:
-                                  vm.checkoutProductResponse?.productName,
+                              productName: widget.productName,
                               productQuantity: widget.productQuantity,
                               orderStatus: "PENDING",
                               AssignedTo: "",
                               createdAt: DateTime.now().toString(),
                               updatedAt: "",
+                              orderType: (_options == PaymentOptions.COD)
+                                  ? "COD"
+                                  : "PREPAID",
                             )
                           : null;
                     },
@@ -374,8 +271,9 @@ class _PaymentOptionPageState extends BaseState<
   }
 
   @override
-  void loadPageData({value}) {
-    viewModel.getCheckoutProduct();
+  void loadPageData({value}) async {
+    uid = await viewModel.getuid();
+    setState(() {});
   }
 
   @override

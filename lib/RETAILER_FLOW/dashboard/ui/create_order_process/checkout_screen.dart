@@ -128,9 +128,21 @@ class _CheckoutPageState extends BaseState<
                   return DropdownInputField(
                     dropdownlabel: "Select shipping Address",
                     dropdownListItem: vm,
-                    onValueSelected: (value) {},
+                    onValueSelected: (value) {
+                      address = value;
+                    },
                   );
                 }),
+            SizedBox(
+              height: 20,
+            ),
+            Divider(),
+            ListTile(
+              onTap: () {},
+              title: Text("Apply coupon"),
+              trailing: Icon(Icons.keyboard_arrow_right),
+            ),
+            Divider(),
             SizedBox(
               height: 20,
             ),
@@ -143,17 +155,21 @@ class _CheckoutPageState extends BaseState<
                   "Next",
                   context,
                   () {
-                    if (address != null && city != null && pincode != null) {
-                      vm.addToCheckout();
+                    if (address != null) {
                       push(
                         widget: PaymentOptionPage(
                           count: widget.count,
                           productQuantity: widget.productQuantity,
+                          TotalAmount: "${int.parse(widget.Amount) + 50}",
+                          address: address ?? "",
+                          productName: widget.productName,
                         ),
                       );
                     } else {
-                      showMessage("Address details cannot be empty",
-                          color: Colors.red[900]);
+                      showMessage(
+                        "Address details cannot be empty",
+                        color: Colors.red[900],
+                      );
                     }
                   },
                   buttonColor: HexColor.fromHex("F2C357"),
@@ -188,7 +204,7 @@ class _CheckoutPageState extends BaseState<
                   ),
                 ),
                 Text(
-                  "₹ ${widget.Amount}",
+                  "₹ ${int.parse(widget.Amount)}",
                   style: TextStyle(
                     color: Colors.green,
                     fontSize: 15,
@@ -260,7 +276,7 @@ class _CheckoutPageState extends BaseState<
               ),
             ),
             trailing: Text(
-              "₹ ${widget.Amount}",
+              "₹ ${int.parse(widget.Amount) + 50}",
               style: TextStyle(
                 color: Colors.green,
                 fontSize: 20,
@@ -295,7 +311,6 @@ class _CheckoutPageState extends BaseState<
 
   @override
   void loadPageData({value}) async {
-    viewModel.getDefaultAddress();
     uid = await viewModel.getuid();
     setState(() {});
   }

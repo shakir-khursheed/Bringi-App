@@ -1,8 +1,10 @@
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/navigator/M-distributor_dashboard_navigator.dart';
-import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/manage_inventory_options/add_product.dart';
+import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/manage_inventory_options/add_product_process/add_product_details.dart';
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/manage_inventory_options/manage_product.dart';
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/viewmodel/M-distributor_dashboard_viewmodel.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
+import 'package:bringi_app/common_resources/no_item_found.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -75,8 +77,121 @@ class _ManageInventoryState extends BaseState<
               fontWeight: FontWeight.bold,
             ),
           ),
+          Gap(20),
+          Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: viewModel.getMasterProducts(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.data?.docs.length == 0) {
+                      return Center(
+                        child: NoitemFoundPage(
+                          title: "No products Found",
+                        ),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      print(snapshot.error);
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return GridView.builder(
+                      itemCount: snapshot.data?.docs.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        mainAxisExtent: 300.0,
+                      ),
+                      itemBuilder: (context, index) => InkWell(
+                        onTap: () {},
+                        child: ProductItem(
+                          snapshot,
+                          index,
+                          () {},
+                        ),
+                      ),
+                    );
+                  })),
         ],
       ),
+    );
+  }
+
+  Card ProductItem(
+      AsyncSnapshot<QuerySnapshot> vm, int index, Function addTocart) {
+    return Card(
+      elevation: 5,
+      shadowColor: Colors.grey,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Stack(alignment: AlignmentDirectional.topEnd, children: [
+        Center(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              (vm.data?.docs[index].get("imageUrl") != null)
+                  ? Image(
+                      image: NetworkImage(
+                        vm.data?.docs[index].get("imageUrl"),
+                      ),
+                      height: 130,
+                    )
+                  : Text("No image Available"),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                vm.data?.docs[index].get("productName"),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "PRICE ₹ ${vm.data?.docs[index].get("packof12Price")}",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "MRP ₹ ${vm.data?.docs[index].get("mrpf12Pack")}",
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                color: Colors.grey.withOpacity(.5),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    "Margin ₹ ${vm.data?.docs[index].get("marginof12Pack")}",
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ]),
     );
   }
 

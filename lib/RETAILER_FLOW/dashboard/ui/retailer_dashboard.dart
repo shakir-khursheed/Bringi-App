@@ -194,54 +194,65 @@ class _RetailerDashboardState extends BaseState<
             SizedBox(
               height: 10,
             ),
-            Consumer<RetailerDashboardViewModel>(
-              builder: (context, vm, child) => (!vm.showLoading)
-                  ? (vm.productList.length != 0)
-                      ? Expanded(
-                          child: RefreshIndicator(
-                            onRefresh: () async {
-                              onRefresh();
-                            },
-                            child: GridView.builder(
-                              itemCount: vm.productList.length,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
-                                mainAxisExtent: 290.0,
-                              ),
-                              itemBuilder: (context, index) => InkWell(
-                                onTap: () {
-                                  push(
-                                      widget: ProductDetailPage(
-                                    productId: vm.productList[index].userid,
-                                  ));
-                                },
-                                child: ProductItem(
-                                  vm,
-                                  index,
-                                  () {
-                                    vm.addToInventory(
-                                      productQuantity:
-                                          vm.productList[index].packOf12,
-                                      productName:
-                                          vm.productList[index].productName,
-                                      amount: vm.productList[index].price,
-                                      count: 1,
-                                      imageUrl: vm
-                                          .productList[index].imageUrls[index],
-                                      productId: vm.productList[index].userid,
-                                    );
-                                  },
+            Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: viewModel.getMasterProducts(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.data?.docs.length == 0) {
+                        return Center(
+                          child: NoitemFoundPage(
+                            title: "No products Found",
+                          ),
+                        );
+                      }
+                      if (snapshot.hasError) {
+                        print(snapshot.error);
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return GridView.builder(
+                        itemCount: snapshot.data?.docs.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          mainAxisExtent: 300.0,
+                        ),
+                        itemBuilder: (context, index) => InkWell(
+                          onTap: () {
+                            push(
+                              widget: ProductDetailPage(
+                                productId: snapshot.data?.docs[index].get(
+                                  "productId",
                                 ),
                               ),
-                            ),
+                            );
+                          },
+                          child: ProductItem(
+                            snapshot,
+                            index,
+                            () {
+                              viewModel.addToInventory(
+                                  productName: snapshot.data?.docs[index]
+                                      .get("productName"),
+                                  productId: snapshot.data?.docs[index]
+                                      .get("productId"),
+                                  productQuantity: snapshot.data?.docs[index]
+                                      .get("productQuantity"),
+                                  count: 1,
+                                  amount: snapshot.data?.docs[index]
+                                      .get("packof12Price"),
+                                  imageUrl: snapshot.data?.docs[index]
+                                      .get("imageUrl"));
+                            },
                           ),
-                        )
-                      : NoitemFoundPage(title: "No products found")
-                  : Center(child: CircularProgressIndicator()),
-            )
+                        ),
+                      );
+                    })),
           ],
         ),
       ),
@@ -249,7 +260,7 @@ class _RetailerDashboardState extends BaseState<
   }
 
   Card ProductItem(
-      RetailerDashboardViewModel vm, int index, Function addTocart) {
+      AsyncSnapshot<QuerySnapshot> vm, int index, Function addTocart) {
     return Card(
       elevation: 5,
       shadowColor: Colors.grey,
@@ -261,15 +272,19 @@ class _RetailerDashboardState extends BaseState<
               SizedBox(
                 height: 20,
               ),
-              Image(
-                image: NetworkImage(vm.productList[index].imageUrls.first),
-                height: 120,
-              ),
+              (vm.data?.docs[index].get("imageUrl") != null)
+                  ? Image(
+                      image: NetworkImage(
+                        vm.data?.docs[index].get("imageUrl"),
+                      ),
+                      height: 130,
+                    )
+                  : Text("No image Available"),
               SizedBox(
                 height: 20,
               ),
               Text(
-                vm.productList[index].productName,
+                vm.data?.docs[index].get("productName"),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -279,7 +294,7 @@ class _RetailerDashboardState extends BaseState<
                 height: 10,
               ),
               Text(
-                "PRICE ₹ ${vm.productList[index].price}",
+                "PRICE ₹ ${vm.data?.docs[index].get("packof12Price")}",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
@@ -289,7 +304,7 @@ class _RetailerDashboardState extends BaseState<
                 height: 10,
               ),
               Text(
-                "MRP ₹ ${vm.productList[index].mrp}",
+                "MRP ₹ ${vm.data?.docs[index].get("mrpf12Pack")}",
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
@@ -303,7 +318,7 @@ class _RetailerDashboardState extends BaseState<
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Text(
-                    "Margin ₹ ${vm.productList[index].margin}",
+                    "Margin ₹ ${vm.data?.docs[index].get("marginof12Pack")}",
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,

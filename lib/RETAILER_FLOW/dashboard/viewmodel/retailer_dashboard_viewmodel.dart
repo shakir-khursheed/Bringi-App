@@ -81,12 +81,6 @@ class RetailerDashboardViewModel
 
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PROFILE SECTION >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-  void getDefaultAddress() async {
-    var response = await repository.getDefaultAddress();
-    defaultAddress = response;
-    notifyListeners();
-  }
-
   void saveAddress({
     String? address,
     String? city,
@@ -112,6 +106,21 @@ class RetailerDashboardViewModel
     } finally {
       showLoading = false;
     }
+  }
+
+  Stream<QuerySnapshot> getMasterProducts() {
+    showLoading = true;
+    var response = _db.collection("Master-Products").snapshots();
+    try {
+      var response = _db.collection("Master-Products").snapshots();
+      return response;
+    } on SocketException catch (e) {
+    } catch (e) {
+      getNavigator().showMessage("$e", color: Colors.red[900]);
+    } finally {
+      showLoading = false;
+    }
+    return response;
   }
 
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CREATE ORDER SECTION >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -203,41 +212,7 @@ class RetailerDashboardViewModel
     }
   }
 
-  void addToCheckout({
-    String? address,
-    String? productName,
-    String? totalAmount,
-    String? pincode,
-    String? city,
-  }) async {
-    showLoading = true;
-    try {
-      await _db
-          .collection("checkout_product")
-          .doc(await repository.getPhoneNo())
-          .set({
-        "orderId": await generateOrderId(),
-        "productName": productName,
-        "amount": totalAmount,
-        "address": address,
-        "pincode": pincode,
-        "city": city,
-      });
-    } on SocketException {
-    } catch (e) {
-    } finally {
-      showLoading = false;
-    }
-  }
-
-  Stream<QuerySnapshot> getCheckoutProduct() {
-    showLoading = true;
-    var response = _db.collection("checkout_product").snapshots();
-    return response;
-  }
-
   Future<void> CreateOrder({
-    String? orderId,
     String? deliveryAddress,
     String? pickupAddress,
     String? deliveryPincode,
@@ -258,7 +233,7 @@ class RetailerDashboardViewModel
     showLoading = true;
     try {
       await _db.collection("Orders").doc().set({
-        "orderId": orderId,
+        "orderId": await generateOrderId(),
         "deliveryAddress": deliveryAddress,
         "pickupAddress": pickupAddress,
         "deliveryPincode": deliveryPincode,
@@ -287,7 +262,7 @@ class RetailerDashboardViewModel
   }
 
   Future<String> generateOrderId() async {
-    var orderId = await Random().nextInt(1000000000000000);
+    var orderId = await Random().nextInt(100000000) + 1000;
     return orderId.toString();
   }
 

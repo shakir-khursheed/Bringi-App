@@ -77,3 +77,80 @@ class _DropdownInputFieldState extends State<DropdownInputField> {
     );
   }
 }
+
+class SimpleDropdownInputField extends StatefulWidget {
+  final String dropdownlabel;
+  final List dropdownListItem;
+  final String? initialvalue;
+  final Function onValueSelected;
+  const SimpleDropdownInputField(
+      {Key? key,
+      required this.dropdownlabel,
+      required this.dropdownListItem,
+      required this.onValueSelected,
+      this.initialvalue})
+      : super(key: key);
+
+  @override
+  State<SimpleDropdownInputField> createState() =>
+      _SimpleDropdownInputFieldState();
+}
+
+class _SimpleDropdownInputFieldState extends State<SimpleDropdownInputField> {
+  String? dropdownValue;
+
+  @override
+  void initState() {
+    if (widget.initialvalue != null && widget.initialvalue!.isNotEmpty) {
+      try {
+        dropdownValue = widget.initialvalue;
+      } catch (e) {
+        dropdownValue = null;
+      }
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: Colors.black, width: 1),
+        color: Colors.white,
+      ),
+      width: MediaQuery.of(context).size.width,
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String?>(
+          icon: const Icon(Icons.keyboard_arrow_down_rounded),
+          isExpanded: true,
+          hint: Text(
+            widget.dropdownlabel,
+            style: TextStyle(
+                fontSize: 13,
+                color: HexColor.fromHex("#000000").withOpacity(.5)),
+          ),
+          value: dropdownValue,
+          items: widget.dropdownListItem
+              .map(
+                (e) => DropdownMenuItem<String>(
+                  value: e,
+                  child: Text(e),
+                ),
+              )
+              .toList(),
+          onChanged: (onSelectValue) {
+            widget.onValueSelected(onSelectValue);
+            setState(
+              () {
+                dropdownValue = onSelectValue;
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
