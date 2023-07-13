@@ -7,11 +7,13 @@ import 'package:bringi_app/base/base_viewmodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
 import '../navigator/M-distributor_dashboard_navigator.dart';
 import '../repo/M-distributor_repo.dart';
 
 class MDistributorDashboardViewModel extends BaseViewModel<
     MDistributorDashboardNavigator, MDistributorDashboardRepo> {
+  bool loading = false;
   FirebaseFirestore _db = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
   bool _isAllProductsAvailable = true;
@@ -174,5 +176,23 @@ class MDistributorDashboardViewModel extends BaseViewModel<
   Future<String> generateProductId() async {
     var orderId = await Random().nextInt(999999999);
     return orderId.toString();
+  }
+
+  Stream<QuerySnapshot> adminproducts() {
+    loading = true;
+    notifyListeners();
+    try {
+      return _db.collection('products').snapshots();
+    } on SocketException catch (e) {
+      // Handle socket exception
+      return Stream.error(e);
+    } catch (e) {
+      // Handle other exceptions
+      getNavigator().showMessage("$e", color: Colors.red[900]);
+      return Stream.empty();
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
   }
 }
