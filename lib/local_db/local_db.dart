@@ -9,6 +9,7 @@ abstract class AuthTokenStorage {
   static const String KYCSTATUS = "KYCSTATUS";
   static const String PHONENO = "PHONE";
   static const String DefaultAddress = "ADDRESS";
+  static const String UserName = "USERNAME";
 
   Future<Box> openHiveBox(String boxName) async {
     if (!kIsWeb && !Hive.isBoxOpen(boxName)) {
@@ -16,6 +17,8 @@ abstract class AuthTokenStorage {
     }
     return await Hive.openBox(boxName);
   }
+
+// SETTERS
 
   void mSetUserRole(var role) async {
     var box = await openHiveBox(USER);
@@ -40,6 +43,18 @@ abstract class AuthTokenStorage {
   void mSetPhoneNo(var mobileNo) async {
     var box = await openHiveBox(PHONENO);
     box.put(PHONENO, mobileNo);
+  }
+
+  void mSetUserName(var userName) async {
+    var box = await openHiveBox(UserName);
+    box.put(userName, userName);
+  }
+
+  // GETTER
+
+  Future<String?> mGetUserName() async {
+    var box = await openHiveBox(UserName);
+    return box.get(UserName) as String?;
   }
 
   Future<String?> mGetKYCSTATUS() async {
@@ -67,6 +82,8 @@ abstract class AuthTokenStorage {
     return box.get(PHONENO) as String?;
   }
 
+// DELETE
+
   void deleteUid() async {
     var box = await openHiveBox(USER);
     box.delete(UID);
@@ -85,6 +102,11 @@ abstract class AuthTokenStorage {
   void deleteAddress() async {
     var box = await openHiveBox(USER);
     box.delete(DefaultAddress);
+  }
+
+  void deleteUserName() async {
+    var box = await openHiveBox(USER);
+    box.delete(UserName);
   }
 }
 

@@ -2,7 +2,7 @@ import 'package:bringi_app/RETAILER_FLOW/dashboard/navigator/retailer_dashboard_
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/account_page.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/inventory_page.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/retailer_dashboard.dart';
-import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/retailer_order_page.dart';
+import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/order_tracking_and_details/retailer_order_page.dart';
 import 'package:bringi_app/RETAILER_FLOW/dashboard/viewmodel/retailer_dashboard_viewmodel.dart';
 import 'package:flutter/material.dart';
 import '../../../base/base_state.dart';

@@ -4,6 +4,7 @@ import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/common_resources/common_button.dart';
 import 'package:bringi_app/common_resources/list_with_fixed_button.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../base/base_state.dart';
@@ -229,8 +230,8 @@ class _PaymentOptionPageState extends BaseState<
                               productQuantity: widget.productQuantity,
                               orderStatus: "PENDING",
                               AssignedTo: "",
-                              createdAt: DateTime.now().toString(),
-                              updatedAt: "",
+                              createdAt:
+                                  DateFormat.yMEd().format(DateTime.now()),
                               orderType: (_options == PaymentOptions.COD)
                                   ? "COD"
                                   : "PREPAID",

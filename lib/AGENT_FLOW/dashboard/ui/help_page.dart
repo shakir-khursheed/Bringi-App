@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,6 +17,11 @@ class HelpScreen extends StatefulWidget {
 
 class _HelpScreenState extends BaseState<HelpScreen, AgentDashboardViewModel,
     AgentDashboardNavigator> implements AgentDashboardNavigator {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   AppBar? buildAppBar() {
     return null;
@@ -46,120 +52,168 @@ class _HelpScreenState extends BaseState<HelpScreen, AgentDashboardViewModel,
                   topRight: Radius.circular(20), topLeft: Radius.circular(20))),
           height: MediaQuery.of(context).size.height * 0.75,
           width: MediaQuery.of(context).size.width,
-          child: ListView(children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              height: MediaQuery.of(context).size.height * 0.27,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                        spreadRadius: 2,
-                        blurRadius: 2,
-                        offset: Offset(0, 2),
-                        color: Colors.grey)
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Order Id: #18388388383838',
-                          style:
-                              GoogleFonts.poppins(fontWeight: FontWeight.w700)),
-                      Text('30-05-2023',
-                          style: GoogleFonts.poppins(
-                              fontSize: 12, color: Colors.black54))
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Delivery location:',
-                          style: GoogleFonts.poppins(
-                              fontSize: 12, color: Colors.black54)),
-                      Text('Indo kashmir Carpet, Zaidagar\nSrinagar_',
-                          style: GoogleFonts.poppins(fontSize: 13))
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Delivery time:',
-                          style: GoogleFonts.poppins(
-                              fontSize: 12, color: Colors.black54)),
-                      Text('April 3, 11.00 am',
-                          style: GoogleFonts.poppins(fontSize: 13))
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Pickup Location:',
-                          style: GoogleFonts.poppins(
-                              fontSize: 12, color: Colors.black54)),
-                      Text('Lal chowk, Srinagar',
-                          style: GoogleFonts.poppins(fontSize: 13))
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        height: 30,
-                        width: 100,
-                        decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            color: Color(0xff80EB76)),
-                        child: Text(
-                          'Accept',
-                          style: GoogleFonts.poppins(),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: viewModel.vieworders(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List<QueryDocumentSnapshot> orders = snapshot.data!.docs;
+                return ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: orders.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot order = orders[index];
+                    String orderId = order['orderId'];
+                    String deliveryLocation = order['deliveryAddress'];
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        height: MediaQuery.of(context).size.height * 0.27,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              spreadRadius: 2,
+                              blurRadius: 2,
+                              offset: Offset(0, 2),
+                              color: Colors.grey,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Order Id: $orderId',
+                                  style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                Text(
+                                  '30-05-2023',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.black54),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Delivery location:',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.black54),
+                                ),
+                                Text(
+                                  deliveryLocation,
+                                  style: GoogleFonts.poppins(fontSize: 13),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Delivery time:',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.black54),
+                                ),
+                                Text(
+                                  "",
+                                  style: GoogleFonts.poppins(fontSize: 13),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Pickup Location:',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 12, color: Colors.black54),
+                                ),
+                                Text(
+                                  "",
+                                  style: GoogleFonts.poppins(fontSize: 13),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 30,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15)),
+                                    color: Color(0xff80EB76),
+                                  ),
+                                  child: Text(
+                                    'Accept',
+                                    style: GoogleFonts.poppins(),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 30,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15)),
+                                    color: Color(0xffD67676),
+                                  ),
+                                  child: Text(
+                                    'Reject',
+                                    style: GoogleFonts.poppins(),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              const HelpDetails())),
+                                    );
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 30,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(15)),
+                                      color: Color(0xffEFE5E5),
+                                    ),
+                                    child: Text(
+                                      'Details',
+                                      style: GoogleFonts.poppins(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 30,
-                        width: 100,
-                        decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            color: Color(0xffD67676)),
-                        child: Text(
-                          'Reject',
-                          style: GoogleFonts.poppins(),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => const HelpDetails())));
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 30,
-                          width: 100,
-                          decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)),
-                              color: Color(0xffEFE5E5)),
-                          child: Text(
-                            'Details',
-                            style: GoogleFonts.poppins(),
-                          ),
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ]),
-        )
+                    );
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ),
       ],
     );
   }

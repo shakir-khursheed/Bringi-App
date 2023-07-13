@@ -197,6 +197,7 @@ class UserRegistrationViewModel
       role = response.role;
       repository.setDefaultAddress(response.address);
       repository.setKYCSTATUS(KYCstatus ?? "PENDING");
+      repository.setUserName(response.shopName);
       notifyListeners();
     } catch (e) {
       getNavigator().showMessage(e.toString(), color: Colors.red.shade900);
@@ -214,6 +215,7 @@ class UserRegistrationViewModel
       if (mobileNo != null && mobileNo == responseMobileNo) {
         repository.setRole(response.role);
         repository.setDefaultAddress(responseAddress);
+        repository.setUserName(response.shopName);
         return true;
       } else {
         return false;

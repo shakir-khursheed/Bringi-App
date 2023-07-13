@@ -1,4 +1,3 @@
-import 'package:bringi_app/RETAILER_FLOW/dashboard/ui/account_page.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
 import 'package:bringi_app/common_resources/no_item_found.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

@@ -26,6 +26,13 @@ class RetailerDashboardViewModel
   List<Address> savedAddresses = List.empty(growable: true);
   FirebaseFirestore _db = FirebaseFirestore.instance;
   String? defaultAddress;
+  String? _orderSearchQuery;
+
+  String? get getProductName => _orderSearchQuery;
+  set setProductName(String? value) {
+    _orderSearchQuery = value;
+    notifyListeners();
+  }
 
   bool? get is12Selected => _Is12PackSelected;
   set setIs12Selected(bool? value) {
@@ -110,17 +117,16 @@ class RetailerDashboardViewModel
 
   Stream<QuerySnapshot> getMasterProducts() {
     showLoading = true;
-    var response = _db.collection("Master-Products").snapshots();
     try {
-      var response = _db.collection("Master-Products").snapshots();
-      return response;
+      return _db.collection("Master-Products").snapshots();
     } on SocketException catch (e) {
+      return Stream.error(e);
     } catch (e) {
       getNavigator().showMessage("$e", color: Colors.red[900]);
+      return Stream.empty();
     } finally {
       showLoading = false;
     }
-    return response;
   }
 
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CREATE ORDER SECTION >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -153,14 +159,14 @@ class RetailerDashboardViewModel
         "imageUrl": imageUrl,
         "productQuantity": productQuantity,
         "productId": productId,
-      }).whenComplete(() => {
-                getNavigator().showMessage(
-                  "Item Added to invertory",
-                ),
-              });
+      }).whenComplete(
+        () => getNavigator().showMessage(
+          "Item Added to invertory",
+        ),
+      );
     } on SocketException catch (e) {
     } catch (e) {
-      // getNavigator().showMessage("$e", color: Colors.red[900]);
+      getNavigator().showMessage("$e", color: Colors.red[900]);
     } finally {
       loading = false;
       notifyListeners();
@@ -177,11 +183,11 @@ class RetailerDashboardViewModel
           .collection("inventory")
           .doc(productId)
           .delete()
-          .whenComplete(() => {
-                getNavigator().showMessage(
-                  "Item removed from invertory",
-                ),
-              });
+          .whenComplete(
+            () => getNavigator().showMessage(
+              "Item removed from invertory",
+            ),
+          );
     } on SocketException catch (e) {
     } catch (e) {
       getNavigator().showMessage("$e", color: Colors.red[900]);
@@ -221,19 +227,16 @@ class RetailerDashboardViewModel
     String? orderType,
     String? orderCount,
     String? productName,
-    String? retailerName,
     String? productQuantity,
     String? orderStatus,
     String? AssignedTo,
     String? createdAt,
     String? updatedAt,
-    bool? deliveryAccepted,
-    bool? OrderAccepted,
   }) async {
     showLoading = true;
     try {
       await _db.collection("Orders").doc().set({
-        "orderId": await generateOrderId(),
+        "orderId": "#${await generateOrderId()}",
         "deliveryAddress": deliveryAddress,
         "pickupAddress": pickupAddress,
         "deliveryPincode": deliveryPincode,
@@ -243,11 +246,12 @@ class RetailerDashboardViewModel
         "orderType": orderType,
         "productName": productName,
         "productQuantity": productQuantity,
-        "RetailerName": retailerName,
+        "RetailerName": await repository.getUsername(),
+        "RetailerMobileNo": await repository.getPhoneNo(),
         "orderStatus": orderStatus,
         "AssignedTo": AssignedTo,
-        "orderAccepted": OrderAccepted,
-        "deliveryAccepted": deliveryAccepted,
+        "orderAccepted": false,
+        "deliveryAccepted": false,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
       });
@@ -264,6 +268,21 @@ class RetailerDashboardViewModel
   Future<String> generateOrderId() async {
     var orderId = await Random().nextInt(100000000) + 1000;
     return orderId.toString();
+  }
+
+  Stream<QuerySnapshot> getOrderDetails(String orderId) {
+    try {
+      return _db
+          .collection("Orders")
+          .where("orderId", isEqualTo: orderId)
+          .snapshots();
+    } on SocketException catch (e) {
+      getNavigator()
+          .showMessage(Stream.error(e).toString(), color: Colors.yellow[900]);
+      return Stream.error(e);
+    } catch (e) {
+      return Stream.empty();
+    }
   }
 
   void logout() {

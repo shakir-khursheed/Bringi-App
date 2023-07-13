@@ -30,7 +30,16 @@ abstract class BaseRepo<W extends BaseWebApi> {
     _authTokenStorage.mSetAddress(address);
   }
 
+  void setUserName(String userName) {
+    _authTokenStorage.mSetUserName(userName);
+  }
+
   //GETTERS
+
+  Future<String?> getUsername() async {
+    var response = await _authTokenStorage.mGetUserName();
+    return response;
+  }
 
   Future<String?> getUid() async {
     var response = await _authTokenStorage.mGetUid();
@@ -57,10 +66,13 @@ abstract class BaseRepo<W extends BaseWebApi> {
     return response;
   }
 
+  // DELETE
+
   deleteSession() {
     _authTokenStorage.deleteROLE();
     _authTokenStorage.deleteUid();
     _authTokenStorage.deletePhoneNo();
     _authTokenStorage.deleteAddress();
+    _authTokenStorage.deleteUserName();
   }
 }
