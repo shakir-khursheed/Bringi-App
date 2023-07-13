@@ -17,7 +17,6 @@ class _OrderInvoiceState extends BaseState<
     OrderInvoice,
     AgentDashboardViewModel,
     AgentDashboardNavigator> implements AgentDashboardNavigator {
-  ScrollController? _scrollController;
   @override
   AppBar? buildAppBar() {
     return AppBar(

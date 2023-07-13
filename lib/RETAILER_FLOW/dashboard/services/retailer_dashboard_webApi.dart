@@ -1,11 +1,8 @@
-import 'package:bringi_app/Response_model/checked_out_product_response.dart';
-import 'package:bringi_app/Response_model/orders_response.dart';
+
 import 'package:bringi_app/Response_model/saved_address_response.dart';
 import 'package:bringi_app/base/base_webApi.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../../../Response_model/product_list_response.dart';
-import '../../../signup_and_login/model/usermodel.dart';
 
 abstract class RetailerDashboardWebApi extends BaseWebApi {
   Future<ProductListResponse> getProducts();

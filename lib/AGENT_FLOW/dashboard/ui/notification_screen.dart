@@ -16,7 +16,6 @@ class _NotificationsState extends BaseState<
     Notifications,
     AgentDashboardViewModel,
     AgentDashboardNavigator> implements AgentDashboardNavigator {
-  ScrollController? _scrollController;
   @override
   AppBar? buildAppBar() {
     return AppBar(

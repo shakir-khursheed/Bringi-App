@@ -16,7 +16,7 @@ class OrderStatus extends StatefulWidget {
 
 class _OrderStatusState extends BaseState<OrderStatus, AgentDashboardViewModel,
     AgentDashboardNavigator> implements AgentDashboardNavigator {
-  ScrollController? _scrollController;
+
   @override
   AppBar? buildAppBar() {
     return null;

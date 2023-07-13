@@ -7,12 +7,6 @@ import 'package:flutter/material.dart';
 import '../../AGENT_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import '../../DISTRIBUTOR_FLOW/dashboard/ui/bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
-
-import 'package:provider/provider.dart';
-
-import '../../AGENT_FLOW/dashboard/ui/bottom_navbar_view.dart';
-import '../../DISTRIBUTOR_FLOW/dashboard/ui/bottom_nav_bar.dart';
-
 import '../../RETAILER_FLOW/dashboard/ui/bottom_navbar_view.dart';
 import '../../base/base_state.dart';
 import '../../common_resources/get_asset_image.dart';

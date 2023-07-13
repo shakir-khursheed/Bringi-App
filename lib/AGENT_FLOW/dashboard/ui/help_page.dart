@@ -16,7 +16,6 @@ class HelpScreen extends StatefulWidget {
 
 class _HelpScreenState extends BaseState<HelpScreen, AgentDashboardViewModel,
     AgentDashboardNavigator> implements AgentDashboardNavigator {
-  ScrollController? _scrollController;
   @override
   AppBar? buildAppBar() {
     return null;

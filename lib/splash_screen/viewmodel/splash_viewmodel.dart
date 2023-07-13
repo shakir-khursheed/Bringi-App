@@ -63,9 +63,9 @@ class SplashviewModel extends BaseViewModel<SplashNavigator, SplashRepo> {
   Future<UserModel> checkKYCstatus({String? mobileNO}) async {
     showLoading = true;
     var response =
-        await _db.collection("Users").doc(mobileNO).get().whenComplete(() => {
-              showLoading = false,
-            });
+        await _db.collection("Users").doc(mobileNO).get().whenComplete(
+              () => showLoading = false,
+            );
     return UserModel.fromJson(response);
   }
 }

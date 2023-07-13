@@ -16,7 +16,6 @@ class Account extends StatefulWidget {
 class _AccountState
     extends BaseState<Account, AgentDashboardViewModel, AgentDashboardNavigator>
     implements AgentDashboardNavigator {
-  ScrollController? _scrollController;
   @override
   AppBar? buildAppBar() {
     return AppBar(

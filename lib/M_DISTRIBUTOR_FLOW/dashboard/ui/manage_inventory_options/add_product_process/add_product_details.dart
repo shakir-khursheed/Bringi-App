@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/navigator/M-distributor_dashboard_navigator.dart';
-import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/ui/manage_inventory_options/add_product_process/add_product_pricing.dart';
 import 'package:bringi_app/M_DISTRIBUTOR_FLOW/dashboard/viewmodel/M-distributor_dashboard_viewmodel.dart';
 import 'package:bringi_app/common_resources/common_appbar.dart';
 
